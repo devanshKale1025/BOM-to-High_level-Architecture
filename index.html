@@ -1069,12 +1069,20 @@
         overflow: hidden;
       }
       #journey::before {
-        content: '';
+        content: "";
         position: absolute;
         inset: 0;
-        background: 
-          radial-gradient(ellipse 80% 60% at 20% 50%, rgba(255,160,30,0.04) 0%, transparent 60%),
-          radial-gradient(ellipse 60% 80% at 80% 50%, rgba(52,133,200,0.04) 0%, transparent 60%);
+        background:
+          radial-gradient(
+            ellipse 80% 60% at 20% 50%,
+            rgba(255, 160, 30, 0.04) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 60% 80% at 80% 50%,
+            rgba(52, 133, 200, 0.04) 0%,
+            transparent 60%
+          );
         pointer-events: none;
       }
 
@@ -1094,8 +1102,9 @@
         justify-content: center;
         gap: 12px;
       }
-      .journey-eyebrow::before, .journey-eyebrow::after {
-        content: '';
+      .journey-eyebrow::before,
+      .journey-eyebrow::after {
+        content: "";
         display: block;
         width: 40px;
         height: 1px;
@@ -1115,7 +1124,7 @@
       }
       .journey-title .glow {
         color: var(--amber);
-        text-shadow: 0 0 60px rgba(255,160,30,0.4);
+        text-shadow: 0 0 60px rgba(255, 160, 30, 0.4);
       }
       .journey-sub {
         font-size: 15px;
@@ -1132,8 +1141,8 @@
         gap: 2px;
         border-radius: 20px;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.04);
-        box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.8);
         margin-bottom: 4rem;
       }
 
@@ -1151,7 +1160,9 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), filter 0.6s ease;
+        transition:
+          transform 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+          filter 0.6s ease;
         filter: brightness(0.7) saturate(1.2);
       }
       .scene-card:hover img {
@@ -1161,7 +1172,12 @@
       .scene-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(to top, rgba(8,9,13,0.95) 0%, rgba(8,9,13,0.2) 50%, transparent 100%);
+        background: linear-gradient(
+          to top,
+          rgba(8, 9, 13, 0.95) 0%,
+          rgba(8, 9, 13, 0.2) 50%,
+          transparent 100%
+        );
         transition: opacity 0.4s;
       }
       .scene-card:hover .scene-overlay {
@@ -1191,7 +1207,7 @@
         gap: 8px;
       }
       .scene-number::before {
-        content: '';
+        content: "";
         display: block;
         width: 16px;
         height: 1px;
@@ -1212,7 +1228,9 @@
         line-height: 1.6;
         opacity: 0;
         transform: translateY(6px);
-        transition: opacity 0.3s 0.05s, transform 0.3s 0.05s;
+        transition:
+          opacity 0.3s 0.05s,
+          transform 0.3s 0.05s;
       }
       .scene-card:hover .scene-desc {
         opacity: 1;
@@ -1246,33 +1264,36 @@
         font-size: 22px;
         position: relative;
         z-index: 1;
-        transition: transform 0.3s, box-shadow 0.3s;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
       }
       .flow-step:hover .flow-step-icon {
         transform: translateY(-4px);
       }
       .flow-step-icon.amber {
-        background: rgba(255,160,30,0.12);
-        border: 1px solid rgba(255,160,30,0.3);
-        box-shadow: 0 4px 20px rgba(255,160,30,0.15);
+        background: rgba(255, 160, 30, 0.12);
+        border: 1px solid rgba(255, 160, 30, 0.3);
+        box-shadow: 0 4px 20px rgba(255, 160, 30, 0.15);
       }
-      .flow-step-icon.amber:hover, .flow-step:hover .flow-step-icon.amber {
-        box-shadow: 0 8px 30px rgba(255,160,30,0.35);
+      .flow-step-icon.amber:hover,
+      .flow-step:hover .flow-step-icon.amber {
+        box-shadow: 0 8px 30px rgba(255, 160, 30, 0.35);
       }
       .flow-step-icon.blue {
-        background: rgba(52,133,200,0.12);
-        border: 1px solid rgba(52,133,200,0.3);
-        box-shadow: 0 4px 20px rgba(52,133,200,0.15);
+        background: rgba(52, 133, 200, 0.12);
+        border: 1px solid rgba(52, 133, 200, 0.3);
+        box-shadow: 0 4px 20px rgba(52, 133, 200, 0.15);
       }
       .flow-step-icon.green {
-        background: rgba(74,222,128,0.12);
-        border: 1px solid rgba(74,222,128,0.3);
-        box-shadow: 0 4px 20px rgba(74,222,128,0.15);
+        background: rgba(74, 222, 128, 0.12);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        box-shadow: 0 4px 20px rgba(74, 222, 128, 0.15);
       }
       .flow-step-icon.violet {
-        background: rgba(167,139,250,0.12);
-        border: 1px solid rgba(167,139,250,0.3);
-        box-shadow: 0 4px 20px rgba(167,139,250,0.15);
+        background: rgba(167, 139, 250, 0.12);
+        border: 1px solid rgba(167, 139, 250, 0.3);
+        box-shadow: 0 4px 20px rgba(167, 139, 250, 0.15);
       }
       .flow-step-label {
         font-family: var(--font-mono);
@@ -1302,48 +1323,62 @@
       .flow-arrow-line {
         width: 40px;
         height: 1px;
-        background: linear-gradient(90deg, var(--border), rgba(255,160,30,0.3), var(--border));
+        background: linear-gradient(
+          90deg,
+          var(--border),
+          rgba(255, 160, 30, 0.3),
+          var(--border)
+        );
         position: relative;
         overflow: hidden;
       }
       .flow-arrow-line::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: -100%;
         width: 60%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, var(--amber), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--amber),
+          transparent
+        );
         animation: flowPulse 2.5s linear infinite;
       }
       @keyframes flowPulse {
-        to { left: 200%; }
+        to {
+          left: 200%;
+        }
       }
       .flow-arrow-head {
         width: 0;
         height: 0;
         border-top: 4px solid transparent;
         border-bottom: 4px solid transparent;
-        border-left: 6px solid rgba(255,160,30,0.4);
+        border-left: 6px solid rgba(255, 160, 30, 0.4);
       }
 
       /* ─── 3D CANVAS SHOWCASE ─────────────────────────────────────────────────────── */
       #journey-canvas-wrap {
         border-radius: 20px;
         overflow: hidden;
-        border: 1px solid rgba(255,160,30,0.12);
+        border: 1px solid rgba(255, 160, 30, 0.12);
         background: #080a10;
         position: relative;
         margin-bottom: 2rem;
-        box-shadow: 0 0 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02);
+        box-shadow:
+          0 0 80px rgba(0, 0, 0, 0.7),
+          0 0 0 1px rgba(255, 255, 255, 0.02);
       }
       #journey-canvas-wrap .topbar {
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 0.75rem 1.2rem;
-        background: rgba(255,255,255,0.02);
-        border-bottom: 1px solid rgba(255,255,255,0.04);
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       }
       #journey-3d {
         width: 100%;
@@ -1365,20 +1400,20 @@
         font-size: 10px;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: rgba(255,160,30,0.7);
+        color: rgba(255, 160, 30, 0.7);
       }
       .caption-title {
         font-family: var(--font-display);
         font-size: 1.8rem;
         font-weight: 800;
-        color: rgba(232,234,240,0.9);
+        color: rgba(232, 234, 240, 0.9);
         letter-spacing: -0.02em;
         line-height: 1.1;
       }
       .caption-hint {
         font-family: var(--font-mono);
         font-size: 10px;
-        color: rgba(255,255,255,0.25);
+        color: rgba(255, 255, 255, 0.25);
         letter-spacing: 0.1em;
       }
 
@@ -1390,8 +1425,8 @@
       .video-wrap {
         border-radius: 20px;
         overflow: hidden;
-        border: 1px solid rgba(255,160,30,0.12);
-        box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+        border: 1px solid rgba(255, 160, 30, 0.12);
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.8);
         position: relative;
       }
       .video-wrap video {
@@ -1408,8 +1443,8 @@
         text-transform: uppercase;
         padding: 6px 14px;
         border-radius: 6px;
-        background: rgba(8,9,13,0.8);
-        border: 1px solid rgba(255,160,30,0.3);
+        background: rgba(8, 9, 13, 0.8);
+        border: 1px solid rgba(255, 160, 30, 0.3);
         color: var(--amber);
         backdrop-filter: blur(8px);
       }
@@ -1419,7 +1454,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(8,9,13,0.3);
+        background: rgba(8, 9, 13, 0.3);
         opacity: 1;
         transition: opacity 0.3s;
         cursor: none;
@@ -1432,8 +1467,8 @@
         width: 80px;
         height: 80px;
         border-radius: 50%;
-        background: rgba(255,160,30,0.15);
-        border: 2px solid rgba(255,160,30,0.5);
+        background: rgba(255, 160, 30, 0.15);
+        border: 2px solid rgba(255, 160, 30, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1442,16 +1477,18 @@
         backdrop-filter: blur(12px);
       }
       .play-btn:hover {
-        background: rgba(255,160,30,0.3);
+        background: rgba(255, 160, 30, 0.3);
         transform: scale(1.1);
-        box-shadow: 0 0 60px rgba(255,160,30,0.4);
+        box-shadow: 0 0 60px rgba(255, 160, 30, 0.4);
       }
 
       /* Scroll-triggered scene animation */
       .scene-card {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1);
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
       }
       .scene-card.visible {
         opacity: 1;
@@ -1567,10 +1604,8 @@
           >
             ↑ Upload BOM
           </button>
-          <a href="#journey" style="text-decoration:none;">
-            <button class="btn-ghost interactive">
-              ▶ See How It Works
-            </button>
+          <a href="#journey" style="text-decoration: none">
+            <button class="btn-ghost interactive">▶ See How It Works</button>
           </a>
           <button class="btn-ghost interactive" onclick="loadDemo()">
             Load Demo
@@ -1608,74 +1643,108 @@
       <!-- HOW IT WORKS — VISUAL JOURNEY (all 3D, no external files) -->
       <!-- ═══════════════════════════════════════════════════════════════════════════ -->
       <section id="journey">
-
         <div class="journey-header reveal">
           <div class="journey-eyebrow">The Transformation</div>
-          <h2 class="journey-title">From <span class="glow">BOM</span> to Architecture</h2>
-          <p class="journey-sub">Watch your spreadsheet of components become a fully rendered DeltaV system diagram — automatically, in seconds.</p>
+          <h2 class="journey-title">
+            From <span class="glow">BOM</span> to Architecture
+          </h2>
+          <p class="journey-sub">
+            Watch your spreadsheet of components become a fully rendered DeltaV
+            system diagram — automatically, in seconds.
+          </p>
         </div>
 
         <!-- ── PIPELINE FLOW STEPS ── -->
         <div class="flow-connector reveal">
           <div class="flow-step">
             <div class="flow-step-icon amber">📄</div>
-            <div class="flow-step-label"><span>BOM Upload</span>.xlsx · .csv</div>
+            <div class="flow-step-label">
+              <span>BOM Upload</span>.xlsx · .csv
+            </div>
           </div>
-          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
           <div class="flow-step">
             <div class="flow-step-icon blue">⚙️</div>
-            <div class="flow-step-label"><span>Rule Engine</span>100% Offline</div>
+            <div class="flow-step-label">
+              <span>Rule Engine</span>100% Offline
+            </div>
           </div>
-          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
           <div class="flow-step">
             <div class="flow-step-icon violet">🧠</div>
-            <div class="flow-step-label"><span>Classification</span>4 Layers Deep</div>
+            <div class="flow-step-label">
+              <span>Classification</span>4 Layers Deep
+            </div>
           </div>
-          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
           <div class="flow-step">
             <div class="flow-step-icon green">🏗️</div>
-            <div class="flow-step-label"><span>Cabinet Layout</span>Auto-Grouped</div>
+            <div class="flow-step-label">
+              <span>Cabinet Layout</span>Auto-Grouped
+            </div>
           </div>
-          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
           <div class="flow-step">
             <div class="flow-step-icon amber">📐</div>
-            <div class="flow-step-label"><span>Architecture</span>PNG Export</div>
+            <div class="flow-step-label">
+              <span>Architecture</span>PNG Export
+            </div>
           </div>
         </div>
 
         <!-- ── HERO 3D: Full pipeline demo (replaces video) ── -->
-        <div class="reveal" style="margin-bottom:3rem;">
-          <div class="section-head" style="margin-bottom:2rem;">
+        <div class="reveal" style="margin-bottom: 3rem">
+          <div class="section-head" style="margin-bottom: 2rem">
             <span class="section-num">▶</span>
             <span class="section-title">Live Pipeline Demo</span>
             <div class="section-line"></div>
           </div>
           <div id="journey-canvas-wrap">
             <div class="topbar">
-              <div class="panel-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-              <div class="arch-label">LIVE 3D · BOM → ARCHITECTURE TRANSFORMATION</div>
+              <div class="panel-dots">
+                <div class="dot dot-r"></div>
+                <div class="dot dot-y"></div>
+                <div class="dot dot-g"></div>
+              </div>
+              <div class="arch-label">
+                LIVE 3D · BOM → ARCHITECTURE TRANSFORMATION
+              </div>
               <div class="panel-badge">● RENDERING</div>
             </div>
             <canvas id="journey-3d"></canvas>
             <div class="canvas-caption">
-              <div><div class="caption-label">Interactive Visualization</div><div class="caption-title">BOM → Architecture</div></div>
+              <div>
+                <div class="caption-label">Interactive Visualization</div>
+                <div class="caption-title">BOM → Architecture</div>
+              </div>
               <div class="caption-hint">Drag to rotate</div>
             </div>
           </div>
         </div>
 
         <!-- ── SCENE CARDS — each is a unique Three.js canvas ── -->
-        <div class="section-head reveal" style="margin-bottom:2rem;">
+        <div class="section-head reveal" style="margin-bottom: 2rem">
           <span class="section-num">◈</span>
           <span class="section-title">Step by Step</span>
           <div class="section-line"></div>
         </div>
 
         <div class="journey-scenes">
-
-          <!-- Scene 1: BOM Holographic Table -->
-          <div class="scene-card visible" id="sc0">
-            <canvas class="scene-canvas" id="sc-canvas-0"></canvas>
+          <!-- Scene 1 -->
+          <div class="scene-card sc-visible" id="sc0">
+            <div id="sc-wrap-0" style="position:absolute;inset:0;width:100%;height:100%;"></div>
             <div class="scene-overlay"></div>
             <div class="scene-content">
               <div class="scene-number">Scene 01 · Upload</div>
@@ -1683,10 +1752,9 @@
               <div class="scene-desc">Your spreadsheet appears as a glowing holographic table — every row a component waiting to be transformed.</div>
             </div>
           </div>
-
-          <!-- Scene 2: Particle Streams -->
-          <div class="scene-card visible" id="sc1">
-            <canvas class="scene-canvas" id="sc-canvas-1"></canvas>
+          <!-- Scene 2 -->
+          <div class="scene-card sc-visible" id="sc1">
+            <div id="sc-wrap-1" style="position:absolute;inset:0;width:100%;height:100%;"></div>
             <div class="scene-overlay"></div>
             <div class="scene-content">
               <div class="scene-number">Scene 02 · Parse</div>
@@ -1694,10 +1762,9 @@
               <div class="scene-desc">Amber and cyan particle streams erupt as the rule engine classifies every component at machine speed.</div>
             </div>
           </div>
-
-          <!-- Scene 3: Vortex tunnel -->
-          <div class="scene-card visible" id="sc2">
-            <canvas class="scene-canvas" id="sc-canvas-2"></canvas>
+          <!-- Scene 3 -->
+          <div class="scene-card sc-visible" id="sc2">
+            <div id="sc-wrap-2" style="position:absolute;inset:0;width:100%;height:100%;"></div>
             <div class="scene-overlay"></div>
             <div class="scene-content">
               <div class="scene-number">Scene 03 · Route</div>
@@ -1705,10 +1772,9 @@
               <div class="scene-desc">Classified items accelerate through the pipeline — each routing to its designated cabinet or software layer.</div>
             </div>
           </div>
-
-          <!-- Scene 4: Server racks rising -->
-          <div class="scene-card visible" id="sc3">
-            <canvas class="scene-canvas" id="sc-canvas-3"></canvas>
+          <!-- Scene 4 -->
+          <div class="scene-card sc-visible" id="sc3">
+            <div id="sc-wrap-3" style="position:absolute;inset:0;width:100%;height:100%;"></div>
             <div class="scene-overlay"></div>
             <div class="scene-content">
               <div class="scene-number">Scene 04 · Build</div>
@@ -1716,10 +1782,9 @@
               <div class="scene-desc">DeltaV racks, CIOC nodes, CHARM baseplates, and operator stations materialize wired by fiber-optic paths.</div>
             </div>
           </div>
-
-          <!-- Scene 5: Full system online -->
-          <div class="scene-card visible" id="sc4">
-            <canvas class="scene-canvas" id="sc-canvas-4"></canvas>
+          <!-- Scene 5 -->
+          <div class="scene-card sc-visible" id="sc4">
+            <div id="sc-wrap-4" style="position:absolute;inset:0;width:100%;height:100%;"></div>
             <div class="scene-overlay"></div>
             <div class="scene-content">
               <div class="scene-number">Scene 05 · Complete</div>
@@ -1727,9 +1792,7 @@
               <div class="scene-desc">Your complete DeltaV architecture — controllers, I/O modules, network topology, and operator desks — ready to export.</div>
             </div>
           </div>
-
         </div>
-
       </section>
       <!-- END JOURNEY -->
 
@@ -3351,14 +3414,18 @@
         btn.style.opacity = "0.7";
 
         // First scroll to the architecture canvas so user watches it build
-        document.getElementById("arch-section").scrollIntoView({ behavior: "smooth" });
+        document
+          .getElementById("arch-section")
+          .scrollIntoView({ behavior: "smooth" });
 
         setTimeout(() => {
           setStep(4);
           document.getElementById("arch-status").textContent = "✓ LIVE";
-          document.getElementById("arch-status").style.background = "rgba(74,222,128,0.08)";
+          document.getElementById("arch-status").style.background =
+            "rgba(74,222,128,0.08)";
           document.getElementById("arch-status").style.color = "var(--green)";
-          document.getElementById("arch-status").style.borderColor = "rgba(74,222,128,0.2)";
+          document.getElementById("arch-status").style.borderColor =
+            "rgba(74,222,128,0.2)";
           document.getElementById("download-card").style.display = "block";
           drawArchitecture(parsedData);
           btn.textContent = "⚡ Re-Generate";
@@ -3367,7 +3434,8 @@
           // Animate the canvas wrapper to draw attention
           const wrap = document.querySelector(".arch-canvas-wrap");
           wrap.style.transition = "box-shadow 0.6s ease";
-          wrap.style.boxShadow = "0 0 60px rgba(74,222,128,0.35), 0 0 0 1px rgba(74,222,128,0.2)";
+          wrap.style.boxShadow =
+            "0 0 60px rgba(74,222,128,0.35), 0 0 0 1px rgba(74,222,128,0.2)";
           setTimeout(() => {
             wrap.style.boxShadow = "";
           }, 2000);
@@ -3396,12 +3464,19 @@
         ectx.fillRect(0, 0, 1920, 72);
         ectx.strokeStyle = "rgba(255,160,30,0.3)";
         ectx.lineWidth = 1;
-        ectx.beginPath(); ectx.moveTo(0, 72); ectx.lineTo(1920, 72); ectx.stroke();
+        ectx.beginPath();
+        ectx.moveTo(0, 72);
+        ectx.lineTo(1920, 72);
+        ectx.stroke();
 
         // Title text
         ectx.fillStyle = "#ffa01e";
         ectx.font = 'bold 22px "Arial", sans-serif';
-        ectx.fillText("⚡ DeltaV Architecture — Auto-Generated from BOM", 40, 45);
+        ectx.fillText(
+          "⚡ DeltaV Architecture — Auto-Generated from BOM",
+          40,
+          45,
+        );
 
         // Timestamp right
         ectx.fillStyle = "rgba(255,255,255,0.3)";
@@ -3422,7 +3497,11 @@
         ectx.fillRect(0, 1062, 1920, 18);
         ectx.fillStyle = "rgba(255,255,255,0.2)";
         ectx.font = '11px "Courier New", monospace';
-        ectx.fillText("Emerson Automation Solutions · DeltaV Architecture Generator v2.0 · Emerson Pune", 40, 1075);
+        ectx.fillText(
+          "Emerson Automation Solutions · DeltaV Architecture Generator v2.0 · Emerson Pune",
+          40,
+          1075,
+        );
 
         // Trigger download as PNG
         exportCanvas.toBlob((blob) => {
@@ -3459,445 +3538,563 @@
     </script>
     <!-- ─── JOURNEY 3D VISUALIZATION ─────────────────────────────────────────── -->
     <script>
-    (function() {
-      'use strict';
+    window.addEventListener('load', function() {
 
-      // ── Scroll reveal for scene cards ─────────────────────────────────────────
+      // ── Scroll reveal ──────────────────────────────────────────────────────────
       const revObserver = new IntersectionObserver((entries) => {
-        entries.forEach((e, i) => {
-          if (e.isIntersecting) {
-            setTimeout(() => e.target.classList.add('visible'), i * 120);
-            revObserver.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      document.querySelectorAll('.reveal').forEach(c => revObserver.observe(c));
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed'); });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => revObserver.observe(el));
 
-      if (typeof THREE === 'undefined') return;
+      // ══════════════════════════════════════════════════════════════════════════
+      // HERO JOURNEY CANVAS — Canvas 2D pipeline demo
+      // ══════════════════════════════════════════════════════════════════════════
+      (function() {
+        const canvas = document.getElementById('journey-3d');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight || 420; }
+        resize();
+        window.addEventListener('resize', resize);
 
-      // ═══════════════════════════════════════════════════════════════════════════
-      // HERO CANVAS — Big BOM→Architecture pipeline (draggable)
-      // ═══════════════════════════════════════════════════════════════════════════
-      (function heroScene() {
-        const canvas3d = document.getElementById('journey-3d');
-        if (!canvas3d) return;
-        const W = canvas3d.offsetWidth, H = 420;
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas3d, antialias: true, alpha: false });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(W, H);
-        renderer.setClearColor(0x06080f, 1);
-
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x06080f, 0.018);
-        const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 200);
-        camera.position.set(0, 7, 20);
-        camera.lookAt(0, 0, 0);
-
-        scene.add(new THREE.AmbientLight(0x1a2040, 3));
-        const lAmber = new THREE.PointLight(0xffa01e, 5, 35); lAmber.position.set(-8, 5, 3); scene.add(lAmber);
-        const lBlue  = new THREE.PointLight(0x3485c8, 4, 30); lBlue.position.set(8, 4, -3);  scene.add(lBlue);
-        const lGreen = new THREE.PointLight(0x4ade80, 2, 20); lGreen.position.set(0, 8, -10); scene.add(lGreen);
-
-        // Grid
-        const grid = new THREE.GridHelper(80, 50, 0x0d1830, 0x080c18);
-        grid.position.y = -4; scene.add(grid);
-
-        // ── BOM Table (left) ────────────────────────────────────────────────────
-        const bomG = new THREE.Group(); bomG.position.set(-8, 0, 0); scene.add(bomG);
-        const plateGeo = new THREE.BoxGeometry(5, 3.8, 0.1);
-        const plateMat = new THREE.MeshPhongMaterial({ color: 0x061828, emissive: 0x0a3060, emissiveIntensity: 0.5, transparent: true, opacity: 0.92 });
-        bomG.add(new THREE.Mesh(plateGeo, plateMat));
-        bomG.add(new THREE.LineSegments(new THREE.EdgesGeometry(plateGeo), new THREE.LineBasicMaterial({ color: 0x3485c8 })));
-        // Row lines
-        for (let r = 0; r < 7; r++) {
-          const rGeo = new THREE.PlaneGeometry(4.4, 0.28);
-          const rMat = new THREE.MeshBasicMaterial({ color: r % 2 ? 0x0a1e38 : 0x061428, transparent: true, opacity: 0.9 });
-          const rm = new THREE.Mesh(rGeo, rMat); rm.position.set(0, 1.3 - r * 0.42, 0.06); bomG.add(rm);
-        }
-        // Header bar
-        const hGeo = new THREE.PlaneGeometry(4.4, 0.36);
-        const hMat = new THREE.MeshBasicMaterial({ color: 0x0a3060, transparent: true, opacity: 0.95 });
-        const hm = new THREE.Mesh(hGeo, hMat); hm.position.set(0, 1.72, 0.07); bomG.add(hm);
-        // Label glow
-        const lgGeo = new THREE.PlaneGeometry(2.2, 0.42);
-        const lgMat = new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.85 });
-        bomG.add(Object.assign(new THREE.Mesh(lgGeo, lgMat), { position: new THREE.Vector3(-0.9, 1.72, 0.09) }));
-
-        // ── Architecture (right) — rack cluster ────────────────────────────────
-        const archG = new THREE.Group(); archG.position.set(7, 0, 0); scene.add(archG);
-        const rackDefs = [
-          { x: -2.0, z:  0.0, col: 0x3485c8 }, { x:  0.0, z:  0.0, col: 0xffa01e },
-          { x:  2.0, z:  0.0, col: 0x4ade80 }, { x: -1.0, z: -2.2, col: 0xa78bfa },
-          { x:  1.0, z: -2.2, col: 0x3485c8 },
-        ];
-        rackDefs.forEach(({ x, z, col }, i) => {
-          const rkg = new THREE.Group(); rkg.position.set(x, 0, z); archG.add(rkg);
-          const bGeo = new THREE.BoxGeometry(1.1, 2.8, 0.7);
-          const bMat = new THREE.MeshPhongMaterial({ color: 0x0a1020, emissive: col, emissiveIntensity: 0.3 });
-          rkg.add(new THREE.Mesh(bGeo, bMat));
-          rkg.add(new THREE.LineSegments(new THREE.EdgesGeometry(bGeo), new THREE.LineBasicMaterial({ color: col })));
-          for (let j = 0; j < 6; j++) {
-            const ledG = new THREE.PlaneGeometry(0.7, 0.07);
-            const ledM = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8 });
-            const led = new THREE.Mesh(ledG, ledM); led.position.set(0, -0.9 + j * 0.38, 0.37); rkg.add(led);
-          }
-        });
-
-        // ── Particle stream ────────────────────────────────────────────────────
-        const N = 800;
-        const pPos = new Float32Array(N * 3);
-        const pCol = new Float32Array(N * 3);
-        const pData = Array.from({ length: N }, () => ({
-          t: Math.random(), speed: 0.003 + Math.random() * 0.004,
-          lane: Math.random() - 0.5, veer: (Math.random() - 0.5) * 0.6
+        const particles = Array.from({length:120}, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random()-0.5)*0.4,
+          vy: (Math.random()-0.5)*0.4,
+          r: Math.random()*1.5+0.5,
+          hue: Math.random()<0.5 ? 35 : 210
         }));
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-        pGeo.setAttribute('color', new THREE.BufferAttribute(pCol, 3));
-        scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
-          size: 0.13, vertexColors: true, transparent: true, opacity: 0.9,
-          blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
-        })));
-
-        // ── Beam tubes ─────────────────────────────────────────────────────────
-        const beams = [];
-        for (let i = 0; i < 6; i++) {
-          const pts = [
-            new THREE.Vector3(-5.5, (i - 2.5) * 0.5, 0),
-            new THREE.Vector3(0, Math.sin(i * 1.1) * 1.2, 0),
-            new THREE.Vector3(4.5, (i - 2.5) * 0.4, 0)
-          ];
-          const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, 0.025, 4, false);
-          const mat = new THREE.MeshBasicMaterial({
-            color: i % 2 ? 0xffa01e : 0x3485c8,
-            transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending
-          });
-          const m = new THREE.Mesh(geo, mat); scene.add(m);
-          beams.push({ mat, phase: i * 1.1 });
-        }
-
-        // ── Drag ───────────────────────────────────────────────────────────────
-        let drag = false, px = 0, py = 0, rotY = 0, rotX = 0;
-        canvas3d.addEventListener('mousedown', e => { drag = true; px = e.clientX; py = e.clientY; });
-        window.addEventListener('mousemove', e => {
-          if (!drag) return;
-          rotY += (e.clientX - px) * 0.005; rotX += (e.clientY - py) * 0.004;
-          rotX = Math.max(-0.45, Math.min(0.45, rotX)); px = e.clientX; py = e.clientY;
-        });
-        window.addEventListener('mouseup', () => drag = false);
-        window.addEventListener('resize', () => {
-          const w = canvas3d.offsetWidth;
-          renderer.setSize(w, H); camera.aspect = w / H; camera.updateProjectionMatrix();
-        });
 
         let t = 0;
-        (function loop() {
-          requestAnimationFrame(loop); t += 0.01;
-          const ay = rotY + t * 0.1;
-          camera.position.set(Math.sin(ay) * 20 * Math.cos(rotX), 7 + Math.sin(rotX) * 9, Math.cos(ay) * 20 * Math.cos(rotX));
-          camera.lookAt(0, 0, 0);
+        function draw() {
+          requestAnimationFrame(draw);
+          t += 0.012;
+          const W = canvas.width, H = canvas.height;
 
-          const pp = pGeo.attributes.position.array, pc = pGeo.attributes.color.array;
-          for (let i = 0; i < N; i++) {
-            const d = pData[i]; d.t += d.speed; if (d.t > 1.05) d.t = -0.05;
-            const ft = d.t, cx = -8 + ft * 16, cy = Math.sin(ft * Math.PI) * 2 * d.lane, cz = Math.sin(ft * Math.PI * 2.5) * 0.7;
-            pp[i * 3] = cx; pp[i * 3+1] = cy; pp[i * 3+2] = cz;
-            const a = Math.min(ft * 6, 1) * Math.min((1-ft) * 6, 1);
-            pc[i * 3] = (1 - ft * 0.5) * a; pc[i * 3+1] = ft * 0.5 * a; pc[i * 3+2] = (0.2 + ft * 0.8) * a;
+          ctx.fillStyle = 'rgba(6,8,15,0.18)';
+          ctx.fillRect(0,0,W,H);
+
+          // Grid
+          ctx.strokeStyle = 'rgba(255,160,30,0.04)';
+          ctx.lineWidth = 1;
+          for (let x=0; x<W; x+=50) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+          for (let y=0; y<H; y+=50) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+          // BOM table
+          const tx = W*0.08, ty = H*0.15, tw = W*0.28, th = H*0.65;
+          ctx.fillStyle = 'rgba(4,24,40,0.85)';
+          ctx.strokeStyle = `rgba(52,133,200,${0.5+0.2*Math.sin(t)})`;
+          ctx.lineWidth = 1.5;
+          roundRect2d(ctx, tx, ty, tw, th, 6);
+          ctx.fill(); ctx.stroke();
+          ctx.fillStyle = `rgba(255,160,30,${0.7+0.1*Math.sin(t*1.2)})`;
+          roundRect2d(ctx, tx+6, ty+6, tw-12, 20, 3);
+          ctx.fill();
+          for (let r=0;r<7;r++) {
+            ctx.fillStyle = r%2 ? 'rgba(10,30,56,0.8)' : 'rgba(6,20,40,0.8)';
+            roundRect2d(ctx, tx+6, ty+30+r*28, tw-12, 24, 2);
+            ctx.fill();
+            // scan glow on current row
+            if (Math.floor(((t*0.6)%7)) === r) {
+              ctx.strokeStyle = 'rgba(0,200,255,0.6)';
+              ctx.lineWidth = 1;
+              roundRect2d(ctx, tx+6, ty+30+r*28, tw-12, 24, 2);
+              ctx.stroke();
+            }
           }
-          pGeo.attributes.position.needsUpdate = true; pGeo.attributes.color.needsUpdate = true;
+          ctx.fillStyle = 'rgba(232,234,240,0.9)';
+          ctx.font = 'bold 9px monospace';
+          ctx.fillText('BILL OF MATERIALS', tx+12, ty+20);
 
-          bomG.position.y = Math.sin(t * 0.7) * 0.2; bomG.rotation.y = Math.sin(t * 0.25) * 0.07;
-          archG.rotation.y = Math.sin(t * 0.35) * 0.06;
-          beams.forEach(b => { b.mat.opacity = 0.1 + 0.3 * Math.abs(Math.sin(t * 1.1 + b.phase)); });
-          lAmber.intensity = 4 + 2.5 * Math.sin(t * 1.2);
-          lBlue.intensity  = 3 + 2 * Math.sin(t * 1.6 + 1);
-          renderer.render(scene, camera);
-        })();
+          // Flow arrow
+          const ax = tx+tw+12, ay = H/2;
+          ctx.strokeStyle = `rgba(255,160,30,${0.6+0.3*Math.sin(t*2)})`;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([6,4]);
+          ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(ax+W*0.12,ay); ctx.stroke();
+          ctx.setLineDash([]);
+          // arrowhead
+          ctx.fillStyle = `rgba(255,160,30,${0.8+0.2*Math.sin(t*2)})`;
+          ctx.beginPath();
+          ctx.moveTo(ax+W*0.12+8,ay);
+          ctx.lineTo(ax+W*0.12-2,ay-6);
+          ctx.lineTo(ax+W*0.12-2,ay+6);
+          ctx.fill();
+
+          // Architecture diagram
+          const dx = W*0.48, dy = H*0.1, dw = W*0.44, dh = H*0.78;
+          ctx.fillStyle = 'rgba(6,8,22,0.85)';
+          ctx.strokeStyle = `rgba(74,222,128,${0.4+0.15*Math.sin(t*0.7)})`;
+          ctx.lineWidth = 1.5;
+          roundRect2d(ctx, dx, dy, dw, dh, 8);
+          ctx.fill(); ctx.stroke();
+
+          // Cabinets
+          const cabColors = ['#3485c8','#ffa01e','#4ade80','#a78bfa'];
+          const cabW = dw/4 - 8;
+          cabColors.forEach((c,i) => {
+            const cx2 = dx+6+i*(cabW+6), cy2 = dy+20;
+            const ch = dh-40+Math.sin(t*1.2+i)*4;
+            ctx.fillStyle = 'rgba(10,16,34,0.9)';
+            roundRect2d(ctx, cx2, cy2, cabW, ch, 4);
+            ctx.fill();
+            ctx.strokeStyle = c;
+            ctx.lineWidth = 1.2;
+            roundRect2d(ctx, cx2, cy2, cabW, ch, 4);
+            ctx.stroke();
+            // LED rows
+            for (let r=0;r<6;r++) {
+              ctx.fillStyle = `rgba(${hexToRgb(c)},${0.3+0.4*Math.abs(Math.sin(t*1.5+i+r*0.7))})`;
+              ctx.fillRect(cx2+4, cy2+14+r*16, cabW-8, 10);
+            }
+            // Label
+            ctx.fillStyle = c;
+            ctx.font = 'bold 7px monospace';
+            ctx.fillText(['SRV','I/O1','I/O2','OPS'][i], cx2+4, cy2+12);
+          });
+
+          // Particles
+          particles.forEach(p => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x<0||p.x>W) p.vx*=-1;
+            if (p.y<0||p.y>H) p.vy*=-1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fillStyle = `hsla(${p.hue},100%,65%,0.4)`;
+            ctx.fill();
+          });
+
+          // Animated data packet flowing arrow
+          const prog = (t*0.6) % 1;
+          const px2 = ax + prog * (W*0.12 + 8);
+          ctx.beginPath();
+          ctx.arc(px2, ay, 3, 0, Math.PI*2);
+          ctx.fillStyle = '#ffa01e';
+          ctx.fill();
+        }
+        draw();
       })();
 
-      // ═══════════════════════════════════════════════════════════════════════════
-      // SCENE CARD CANVASES — 5 unique Three.js mini-scenes
-      // ═══════════════════════════════════════════════════════════════════════════
+      // ══════════════════════════════════════════════════════════════════════════
+      // SCENE CARD CANVASES — 5 pure Canvas 2D mini-scenes
+      // ══════════════════════════════════════════════════════════════════════════
 
-      function initSceneCanvas(id, setupFn) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const parent = el.parentElement;
-        const W = parent.offsetWidth || 400, H = parent.offsetHeight || 280;
-        el.width = W; el.height = H;
-        const renderer = new THREE.WebGLRenderer({ canvas: el, antialias: true, alpha: false });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-        renderer.setSize(W, H);
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 100);
-        setupFn(renderer, scene, camera, W, H);
+      function makeCanvas(wrapId) {
+        const wrap = document.getElementById(wrapId);
+        if (!wrap) return null;
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;';
+        wrap.appendChild(canvas);
+        function resize() {
+          canvas.width = wrap.offsetWidth || 600;
+          canvas.height = wrap.offsetHeight || 300;
+        }
+        resize();
+        new ResizeObserver(resize).observe(wrap);
+        return canvas;
       }
 
-      // ── Scene 1: Holographic BOM table floating in space ──────────────────────
-      initSceneCanvas('sc-canvas-0', (renderer, scene, camera, W, H) => {
-        renderer.setClearColor(0x060810, 1);
-        scene.fog = new THREE.FogExp2(0x060810, 0.025);
-        camera.position.set(0, 3, 12);
-        scene.add(new THREE.AmbientLight(0x1a2040, 2));
-        const l1 = new THREE.PointLight(0x3485c8, 5, 25); l1.position.set(-3, 4, 4); scene.add(l1);
-        const l2 = new THREE.PointLight(0xffa01e, 3, 18); l2.position.set(3, 2, 2); scene.add(l2);
+      function hexToRgb(hex) {
+        const r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+        return r+','+g+','+b;
+      }
 
-        const grid = new THREE.GridHelper(30, 24, 0x0a1830, 0x060c18); grid.position.y = -4; scene.add(grid);
+      function roundRect2d(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
+        ctx.arcTo(x+w,y,x+w,y+r,r); ctx.lineTo(x+w,y+h-r);
+        ctx.arcTo(x+w,y+h,x+w-r,y+h,r); ctx.lineTo(x+r,y+h);
+        ctx.arcTo(x,y+h,x,y+h-r,r); ctx.lineTo(x,y+r);
+        ctx.arcTo(x,y,x+r,y,r); ctx.closePath();
+      }
 
-        // Floating table
-        const tg = new THREE.Group(); scene.add(tg);
-        const base = new THREE.BoxGeometry(7, 5, 0.12);
-        const bMat = new THREE.MeshPhongMaterial({ color: 0x041828, emissive: 0x0a3a6a, emissiveIntensity: 0.6, transparent: true, opacity: 0.88 });
-        tg.add(new THREE.Mesh(base, bMat));
-        tg.add(new THREE.LineSegments(new THREE.EdgesGeometry(base), new THREE.LineBasicMaterial({ color: 0x00aaff, linewidth: 2 })));
-
-        // Glowing rows
-        const rowColors = [0x003388, 0x003388, 0x002266, 0x003388, 0x002266, 0x003388, 0x002266];
-        rowColors.forEach((c, i) => {
-          const rg = new THREE.PlaneGeometry(6.4, 0.52);
-          const rm = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.7 });
-          const r = new THREE.Mesh(rg, rm); r.position.set(0, 1.8 - i * 0.58, 0.07); tg.add(r);
-        });
-        // Header
-        const hm = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 0.58), new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.75 }));
-        hm.position.set(0, 2.16, 0.08); tg.add(hm);
-
-        // Floating scan line
-        const scanGeo = new THREE.PlaneGeometry(6.6, 0.04);
-        const scanMat = new THREE.MeshBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
-        const scan = new THREE.Mesh(scanGeo, scanMat); tg.add(scan);
-
-        // Ambient particles
-        const starN = 120, sp = new Float32Array(starN * 3);
-        for (let i = 0; i < starN * 3; i++) sp[i] = (Math.random() - 0.5) * 30;
-        const starGeo = new THREE.BufferGeometry(); starGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
-        scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.06, color: 0x4488cc, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending })));
-
+      // ── Scene 1: Holographic BOM table ────────────────────────────────────────
+      (function() {
+        const c = makeCanvas('sc-wrap-0'); if (!c) return;
+        const ctx = c.getContext('2d');
         let t = 0;
-        (function loop() { requestAnimationFrame(loop); t += 0.012;
-          tg.position.y = Math.sin(t * 0.6) * 0.3; tg.rotation.x = Math.sin(t * 0.4) * 0.06; tg.rotation.y = Math.sin(t * 0.3) * 0.04;
-          scan.position.y = 2.4 - ((t * 0.8) % 5); scan.material.opacity = 0.4 + 0.4 * Math.abs(Math.sin(t * 1.5));
-          l1.intensity = 4 + 2 * Math.sin(t * 1.4); l2.intensity = 2 + 1.5 * Math.sin(t * 0.9);
-          renderer.render(scene, camera);
-        })();
-      });
+        function draw() {
+          requestAnimationFrame(draw); t += 0.015;
+          const W=c.width, H=c.height;
+          ctx.fillStyle='#060810'; ctx.fillRect(0,0,W,H);
 
-      // ── Scene 2: Particle explosion / data streams ────────────────────────────
-      initSceneCanvas('sc-canvas-1', (renderer, scene, camera, W, H) => {
-        renderer.setClearColor(0x04060c, 1);
-        camera.position.set(0, 0, 14);
-        scene.add(new THREE.AmbientLight(0x0a0f20, 1));
+          // Grid
+          ctx.strokeStyle='rgba(52,133,200,0.08)'; ctx.lineWidth=1;
+          for(let x=0;x<W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+          for(let y=0;y<H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
-        const N = 1000, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
-        const data = Array.from({ length: N }, () => {
-          const angle = Math.random() * Math.PI * 2;
-          const speed = 0.02 + Math.random() * 0.05;
-          return { angle, speed, r: 0.1 + Math.random() * 0.2, life: Math.random(), lane: Math.floor(Math.random() * 5) };
-        });
-        const geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-        geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-        scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
-          size: 0.12, vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
-        })));
+          // Floating table
+          const tw=W*0.72, th=H*0.68;
+          const tx=(W-tw)/2 + Math.sin(t*0.4)*4;
+          const ty=(H-th)/2 + Math.sin(t*0.6)*5;
 
-        // Central source glow
-        const sphereGeo = new THREE.SphereGeometry(0.6, 16, 16);
-        const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
-        scene.add(new THREE.Mesh(sphereGeo, sphereMat));
-        const l = new THREE.PointLight(0xffa01e, 6, 20); scene.add(l);
+          // Glow
+          const g=ctx.createRadialGradient(tx+tw/2,ty+th/2,0,tx+tw/2,ty+th/2,tw*0.7);
+          g.addColorStop(0,'rgba(52,133,200,0.12)'); g.addColorStop(1,'transparent');
+          ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
 
-        let t = 0;
-        (function loop() { requestAnimationFrame(loop); t += 0.015;
-          for (let i = 0; i < N; i++) {
-            const d = data[i]; d.life += d.speed; if (d.life > 1) { d.life = 0; d.angle = Math.random() * Math.PI * 2; }
-            const r = d.life * 8, lf = Math.min(d.life * 4, 1) * (1 - d.life);
-            // 5 lanes forming streams
-            const laneAngle = d.angle + (d.lane * Math.PI * 2 / 5);
-            pos[i*3]   = Math.cos(laneAngle) * r + (Math.random() - 0.5) * 0.3;
-            pos[i*3+1] = Math.sin(laneAngle) * r * 0.5 + (Math.random() - 0.5) * 0.3;
-            pos[i*3+2] = (Math.random() - 0.5) * 1.5;
-            const amberBias = d.lane < 2 ? 1 : 0;
-            col[i*3]   = (amberBias + (1-amberBias) * 0.1) * lf;
-            col[i*3+1] = 0.3 * lf;
-            col[i*3+2] = ((1-amberBias) * 0.9 + 0.1) * lf;
+          // Table body
+          ctx.fillStyle='rgba(4,24,40,0.88)';
+          ctx.strokeStyle=`rgba(52,133,200,${0.6+0.2*Math.sin(t)})`;
+          ctx.lineWidth=1.5;
+          roundRect2d(ctx,tx,ty,tw,th,8); ctx.fill(); ctx.stroke();
+
+          // Header row
+          ctx.fillStyle=`rgba(255,160,30,${0.8+0.1*Math.sin(t*1.3)})`;
+          roundRect2d(ctx,tx+6,ty+6,tw-12,22,3); ctx.fill();
+          ctx.fillStyle='rgba(6,8,13,0.9)'; ctx.font='bold 9px monospace';
+          ctx.fillText('  SR#   DESCRIPTION                 QTY   CLASS', tx+10, ty+21);
+
+          // Data rows
+          const rowData=['CHARM Baseplate','PK Controller','FOPP Panel','CIOC Module','DeltaV Switch','APC UPS 3kVA','Rack Workstation'];
+          const rowColors=['#3485c8','#ffa01e','#a78bfa','#3485c8','#4ade80','#ffa01e','#4ade80'];
+          for(let r=0;r<7;r++){
+            ctx.fillStyle=r%2?'rgba(10,30,56,0.7)':'rgba(6,20,40,0.7)';
+            roundRect2d(ctx,tx+6,ty+32+r*26,tw-12,22,2); ctx.fill();
+            // Highlight scanned row
+            const scanRow=Math.floor(((t*0.5)%7));
+            if(scanRow===r){
+              ctx.strokeStyle=`rgba(0,200,255,${0.7+0.3*Math.sin(t*4)})`;
+              ctx.lineWidth=1;
+              roundRect2d(ctx,tx+6,ty+32+r*26,tw-12,22,2); ctx.stroke();
+            }
+            ctx.fillStyle=rowColors[r]; ctx.font='8px monospace';
+            ctx.fillText(`  0${r+1}    ${rowData[r]}`, tx+10, ty+47+r*26);
+            ctx.fillStyle='rgba(232,234,240,0.5)'; ctx.font='8px monospace';
+            ctx.fillText(`${[31,2,2,1,2,1,1][r]}      ${['CHARM_BASE','CONTROLLER','FOPP','CIOC','SWITCH','UPS','WORKSTATION'][r]}`, tx+tw*0.55, ty+47+r*26);
           }
-          geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true;
-          sphereMat.opacity = 0.4 + 0.35 * Math.sin(t * 2);
-          l.intensity = 5 + 4 * Math.sin(t * 1.8);
-          camera.position.x = Math.sin(t * 0.15) * 2;
-          camera.lookAt(0, 0, 0);
-          renderer.render(scene, camera);
-        })();
-      });
 
-      // ── Scene 3: Vortex tunnel / data routing ────────────────────────────────
-      initSceneCanvas('sc-canvas-2', (renderer, scene, camera, W, H) => {
-        renderer.setClearColor(0x030508, 1);
-        camera.position.set(0, 0, 0.1);
-        camera.lookAt(0, 0, -10);
+          // Scan beam
+          const scanY = ty+32 + (Math.floor(((t*0.5)%7)))*26;
+          const sg=ctx.createLinearGradient(tx,scanY,tx+tw,scanY);
+          sg.addColorStop(0,'transparent'); sg.addColorStop(0.3,`rgba(0,200,255,${0.15+0.1*Math.sin(t*3)})`);
+          sg.addColorStop(0.7,`rgba(0,200,255,${0.15+0.1*Math.sin(t*3)})`); sg.addColorStop(1,'transparent');
+          ctx.fillStyle=sg; ctx.fillRect(tx,scanY,tw,22);
 
-        const N = 1200, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
-        const data = Array.from({ length: N }, () => ({
-          angle: Math.random() * Math.PI * 2,
-          z: -(Math.random() * 20),
-          r: 1.5 + Math.random() * 3,
-          speed: 0.15 + Math.random() * 0.25,
-          spin: (Math.random() - 0.5) * 0.04
-        }));
-        const geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-        geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
-        scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
-          size: 0.1, vertexColors: true, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
-        })));
-
-        // Tunnel rings
-        for (let i = 0; i < 12; i++) {
-          const rg = new THREE.RingGeometry(1.4, 1.45, 48);
-          const rm = new THREE.MeshBasicMaterial({ color: i % 2 ? 0x3485c8 : 0xffa01e, transparent: true, opacity: 0.15, side: THREE.DoubleSide, blending: THREE.AdditiveBlending });
-          const r = new THREE.Mesh(rg, rm); r.position.z = -(i * 2); scene.add(r);
+          // Ambient particles
+          for(let i=0;i<20;i++){
+            const px=tx-40+Math.sin(t*0.3+i*1.1)*(tw+80);
+            const py=ty-20+Math.cos(t*0.2+i*0.8)*(th+40);
+            ctx.beginPath(); ctx.arc(px,py,1,0,Math.PI*2);
+            ctx.fillStyle=`rgba(52,133,200,${0.2+0.2*Math.sin(t+i)})`; ctx.fill();
+          }
         }
+        draw();
+      })();
 
-        let t = 0;
-        (function loop() { requestAnimationFrame(loop); t += 0.014;
-          for (let i = 0; i < N; i++) {
-            const d = data[i]; d.z += d.speed; d.angle += d.spin;
-            if (d.z > 2) d.z = -20;
-            const depth = Math.abs(d.z) / 20;
-            const r = d.r * (1 - depth * 0.6);
-            pos[i*3]   = Math.cos(d.angle + t * 0.5) * r;
-            pos[i*3+1] = Math.sin(d.angle + t * 0.5) * r;
-            pos[i*3+2] = d.z;
-            const bright = depth * 0.9;
-            col[i*3]   = i % 3 === 0 ? bright : bright * 0.2;
-            col[i*3+1] = bright * 0.4;
-            col[i*3+2] = i % 3 !== 0 ? bright : bright * 0.2;
-          }
-          geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true;
-          camera.rotation.z = Math.sin(t * 0.3) * 0.08;
-          renderer.render(scene, camera);
-        })();
-      });
+      // ── Scene 2: Particle streams / classification engine ─────────────────────
+      (function() {
+        const c = makeCanvas('sc-wrap-1'); if (!c) return;
+        const ctx = c.getContext('2d');
+        const N=300;
+        const pts=Array.from({length:N},()=>({
+          life:Math.random(), speed:0.008+Math.random()*0.012,
+          lane:Math.floor(Math.random()*5), angle:Math.random()*Math.PI*2
+        }));
+        let t=0;
+        function draw(){
+          requestAnimationFrame(draw); t+=0.015;
+          const W=c.width, H=c.height, cx=W/2, cy=H/2;
+          ctx.fillStyle='rgba(4,6,12,0.25)'; ctx.fillRect(0,0,W,H);
 
-      // ── Scene 4: Server racks rising from grid ────────────────────────────────
-      initSceneCanvas('sc-canvas-3', (renderer, scene, camera, W, H) => {
-        renderer.setClearColor(0x060810, 1);
-        scene.fog = new THREE.FogExp2(0x060810, 0.028);
-        camera.position.set(6, 6, 12);
-        camera.lookAt(0, 1, 0);
+          // Central glow
+          const mg=ctx.createRadialGradient(cx,cy,0,cx,cy,80);
+          mg.addColorStop(0,`rgba(255,160,30,${0.25+0.15*Math.sin(t*2)})`);
+          mg.addColorStop(0.5,`rgba(255,120,0,${0.05+0.05*Math.sin(t*1.5)})`);
+          mg.addColorStop(1,'transparent');
+          ctx.fillStyle=mg; ctx.fillRect(cx-80,cy-80,160,160);
 
-        scene.add(new THREE.AmbientLight(0x1a2040, 2));
-        const l1 = new THREE.PointLight(0x3485c8, 5, 25); l1.position.set(-4, 6, 4); scene.add(l1);
-        const l2 = new THREE.PointLight(0xffa01e, 3, 20); l2.position.set(4, 3, -2); scene.add(l2);
-        scene.add(new THREE.GridHelper(30, 25, 0x0a1830, 0x060c18));
+          // Core orb
+          const og=ctx.createRadialGradient(cx,cy,0,cx,cy,18);
+          og.addColorStop(0,'rgba(255,200,100,0.9)');
+          og.addColorStop(0.5,'rgba(255,160,30,0.6)');
+          og.addColorStop(1,'rgba(255,100,0,0)');
+          ctx.fillStyle=og; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill();
 
-        const rackConfig = [
-          { x:-3,z:0, h:3.0, c:0x3485c8 }, { x:0,z:0, h:3.5, c:0xffa01e },
-          { x:3,z:0, h:2.5, c:0x4ade80 }, { x:-1.5,z:-3, h:2.8, c:0xa78bfa },
-          { x:1.5,z:-3, h:3.2, c:0x3485c8 }, { x:0,z:-5.5, h:2.2, c:0xffa01e },
-        ];
-        const racks = rackConfig.map(({ x, z, h, c }) => {
-          const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
-          const bGeo = new THREE.BoxGeometry(1.2, h, 0.8);
-          const bMat = new THREE.MeshPhongMaterial({ color: 0x0a1020, emissive: c, emissiveIntensity: 0.25 });
-          g.add(new THREE.Mesh(bGeo, bMat));
-          g.add(new THREE.LineSegments(new THREE.EdgesGeometry(bGeo), new THREE.LineBasicMaterial({ color: c })));
-          g.userData = { targetH: h, mat: bMat, c, phase: Math.random() * Math.PI * 2 };
-          g.scale.y = 0;
-          return g;
-        });
-
-        // Connecting beams between racks
-        const connectors = [];
-        [[0,1],[1,2],[0,3],[1,4],[3,4],[4,5]].forEach(([a,b]) => {
-          const pa = new THREE.Vector3(rackConfig[a].x, rackConfig[a].h/2, rackConfig[a].z);
-          const pb = new THREE.Vector3(rackConfig[b].x, rackConfig[b].h/2, rackConfig[b].z);
-          const mid = pa.clone().add(pb).multiplyScalar(0.5); mid.y += 0.5;
-          const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([pa, mid, pb]), 12, 0.018, 4, false);
-          const mat = new THREE.MeshBasicMaterial({ color: 0x3485c8, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending });
-          scene.add(new THREE.Mesh(geo, mat));
-          connectors.push({ mat, phase: Math.random() * Math.PI * 2 });
-        });
-
-        let t = 0;
-        (function loop() { requestAnimationFrame(loop); t += 0.013;
-          racks.forEach(r => {
-            if (r.scale.y < 1) r.scale.y = Math.min(1, r.scale.y + 0.008);
-            r.userData.mat.emissiveIntensity = 0.2 + 0.2 * Math.sin(t * 1.5 + r.userData.phase);
+          pts.forEach((p,i)=>{
+            p.life+=p.speed; if(p.life>1){p.life=0;p.angle=Math.random()*Math.PI*2;}
+            const laneAngle=p.angle+(p.lane*Math.PI*2/5);
+            const r=p.life*Math.min(W,H)*0.45;
+            const px=cx+Math.cos(laneAngle)*r;
+            const py=cy+Math.sin(laneAngle)*r*0.6;
+            const alpha=Math.min(p.life*5,1)*(1-p.life)*1.5;
+            const amber=p.lane<2;
+            ctx.beginPath(); ctx.arc(px,py,1.5,0,Math.PI*2);
+            ctx.fillStyle=amber?`rgba(255,160,30,${alpha})`:`rgba(52,133,200,${alpha})`;
+            ctx.fill();
           });
-          connectors.forEach(c => { c.mat.opacity = 0.2 + 0.3 * Math.abs(Math.sin(t + c.phase)); });
-          l1.intensity = 4 + 2.5 * Math.sin(t * 1.3); l2.intensity = 2.5 + 2 * Math.sin(t * 1.7 + 1);
-          camera.position.x = 6 + Math.sin(t * 0.2) * 2; camera.position.z = 12 + Math.cos(t * 0.15) * 2;
-          camera.lookAt(0, 1.5, 0);
-          renderer.render(scene, camera);
-        })();
-      });
 
-      // ── Scene 5: Complete system — full isometric city ────────────────────────
-      initSceneCanvas('sc-canvas-4', (renderer, scene, camera, W, H) => {
-        renderer.setClearColor(0x05070e, 1);
-        scene.fog = new THREE.FogExp2(0x05070e, 0.022);
-        camera.position.set(10, 10, 14);
-        camera.lookAt(0, 0, 0);
+          // Labels at 5 lane tips
+          const labels=['CONTROLLER','CHARM','CIOC','POWER','SOFTWARE'];
+          const lColors=['#ffa01e','#ffa01e','#3485c8','#3485c8','#4ade80'];
+          for(let l=0;l<5;l++){
+            const la=l*Math.PI*2/5 - Math.PI/2 + t*0.05;
+            const lr=Math.min(W,H)*0.42;
+            const lx=cx+Math.cos(la)*lr, ly=cy+Math.sin(la)*lr*0.6;
+            ctx.fillStyle=lColors[l]; ctx.font='bold 8px monospace';
+            ctx.textAlign='center'; ctx.fillText(labels[l],lx,ly);
+          }
+          ctx.textAlign='left';
+        }
+        draw();
+      })();
 
-        scene.add(new THREE.AmbientLight(0x1a2050, 3));
-        const l1 = new THREE.PointLight(0x4ade80, 4, 28); l1.position.set(-5, 8, 3); scene.add(l1);
-        const l2 = new THREE.PointLight(0x3485c8, 3, 22); l2.position.set(5, 5, -4); scene.add(l2);
-        const l3 = new THREE.PointLight(0xffa01e, 3, 18); l3.position.set(0, 6, 6); scene.add(l3);
-        scene.add(new THREE.GridHelper(40, 30, 0x0d1e30, 0x081018));
+      // ── Scene 3: Vortex tunnel ─────────────────────────────────────────────────
+      (function() {
+        const c = makeCanvas('sc-wrap-2'); if (!c) return;
+        const ctx = c.getContext('2d');
+        const RINGS=14, PTS=120;
+        const pts=Array.from({length:PTS},()=>({
+          angle:Math.random()*Math.PI*2, z:Math.random(),
+          r:0.3+Math.random()*0.5, speed:0.003+Math.random()*0.005
+        }));
+        let t=0;
+        function draw(){
+          requestAnimationFrame(draw); t+=0.018;
+          const W=c.width, H=c.height, cx=W/2, cy=H/2;
+          ctx.fillStyle='rgba(3,5,8,0.3)'; ctx.fillRect(0,0,W,H);
 
-        // Full rack city
-        const cityRacks = [];
-        const positions = [
-          [-4,0],[−2,0],[0,0],[2,0],[4,0],
-          [-3,-3],[−1,-3],[1,-3],[3,-3],
-          [-2,-6],[0,-6],[2,-6],
-          [0,-9]
-        ].filter(Boolean);
-        // manually define since template literals in array init break
-        const px = [-4,-2,0,2,4,-3,-1,1,3,-2,0,2,0];
-        const pz = [0,0,0,0,0,-3,-3,-3,-3,-6,-6,-6,-9];
-        const cols = [0x3485c8,0xffa01e,0x4ade80,0x3485c8,0xa78bfa,0xffa01e,0x4ade80,0x3485c8,0xffa01e,0x4ade80,0x3485c8,0xffa01e,0x4ade80];
-        px.forEach((x, i) => {
-          const c = cols[i], h = 1.5 + Math.random() * 2.5;
-          const g = new THREE.Group(); g.position.set(x, 0, pz[i]); scene.add(g);
-          const geo = new THREE.BoxGeometry(0.9, h, 0.6);
-          const mat = new THREE.MeshPhongMaterial({ color: 0x0a1022, emissive: c, emissiveIntensity: 0.3 });
-          g.add(new THREE.Mesh(geo, mat));
-          g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: c })));
-          cityRacks.push({ mat, phase: Math.random() * Math.PI * 2 });
-        });
+          // Tunnel rings
+          for(let i=0;i<RINGS;i++){
+            const depth=(i+((t*0.4)%1))/RINGS;
+            const scale=Math.pow(depth,1.4);
+            const rx=Math.min(W,H)*0.48*scale;
+            const ry=rx*0.45;
+            const alpha=(1-depth)*0.5;
+            const amber=i%2===0;
+            ctx.strokeStyle=amber?`rgba(255,160,30,${alpha})`:`rgba(52,133,200,${alpha})`;
+            ctx.lineWidth=1;
+            ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.stroke();
+          }
 
-        // Floating dashboard panels
-        const panelDefs = [
-          { x:-5, y:3.5, z:0 }, { x:5, y:4, z:-2 }, { x:0, y:5, z:-7 }
+          // Particles flying through tunnel
+          pts.forEach(p=>{
+            p.z+=p.speed; if(p.z>1){p.z=0;p.angle=Math.random()*Math.PI*2;}
+            const scale=Math.pow(p.z,1.4);
+            const px=cx+Math.cos(p.angle+t*0.3)*Math.min(W,H)*0.48*scale*p.r;
+            const py=cy+Math.sin(p.angle+t*0.3)*Math.min(W,H)*0.48*0.45*scale*p.r;
+            const alpha=p.z*(1-p.z)*4;
+            const sz=Math.max(0.5,p.z*3);
+            ctx.beginPath(); ctx.arc(px,py,sz,0,Math.PI*2);
+            ctx.fillStyle=p.r>0.6?`rgba(255,160,30,${alpha})`:`rgba(52,133,200,${alpha})`;
+            ctx.fill();
+          });
+
+          // Center glow
+          const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,30);
+          cg.addColorStop(0,`rgba(100,180,255,${0.15+0.1*Math.sin(t*2)})`);
+          cg.addColorStop(1,'transparent');
+          ctx.fillStyle=cg; ctx.fillRect(cx-30,cy-30,60,60);
+        }
+        draw();
+      })();
+
+      // ── Scene 4: Server racks rising ───────────────────────────────────────────
+      (function() {
+        const c = makeCanvas('sc-wrap-3'); if (!c) return;
+        const ctx = c.getContext('2d');
+        const RACKS=[
+          {x:0.18,w:0.10,color:'#3485c8',h:0,targetH:0.55,phase:0},
+          {x:0.31,w:0.10,color:'#ffa01e',h:0,targetH:0.68,phase:0.5},
+          {x:0.44,w:0.10,color:'#4ade80',h:0,targetH:0.48,phase:1.0},
+          {x:0.57,w:0.10,color:'#a78bfa',h:0,targetH:0.60,phase:1.5},
+          {x:0.70,w:0.10,color:'#3485c8',h:0,targetH:0.52,phase:2.0},
         ];
-        panelDefs.forEach(({ x, y, z }) => {
-          const pg = new THREE.Group(); pg.position.set(x, y, z); scene.add(pg);
-          const pGeo = new THREE.PlaneGeometry(2.4, 1.5);
-          const pMat = new THREE.MeshPhongMaterial({ color: 0x061828, emissive: 0x0a3060, emissiveIntensity: 0.5, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
-          pg.add(new THREE.Mesh(pGeo, pMat));
-          pg.add(new THREE.LineSegments(new THREE.EdgesGeometry(pGeo), new THREE.LineBasicMaterial({ color: 0x3485c8 })));
-          pg.userData = { baseY: y, phase: Math.random() * Math.PI * 2 };
-        });
+        let t=0;
+        function draw(){
+          requestAnimationFrame(draw); t+=0.014;
+          const W=c.width, H=c.height;
+          ctx.fillStyle='rgba(6,8,16,0.22)'; ctx.fillRect(0,0,W,H);
 
-        // Green check glow on top of center rack
-        const checkLight = new THREE.PointLight(0x4ade80, 6, 10); checkLight.position.set(0, 5, 0); scene.add(checkLight);
+          // Grid floor
+          const gY=H*0.82;
+          ctx.strokeStyle='rgba(52,133,200,0.15)'; ctx.lineWidth=1;
+          for(let x=0;x<W;x+=30){
+            const px=((x-t*8)%W+W)%W;
+            ctx.beginPath(); ctx.moveTo(px,gY);
+            ctx.lineTo(cx2(px,gY,W,H)); ctx.stroke();
+          }
+          for(let y=0;y<H-gY;y+=20){
+            ctx.globalAlpha=0.3*(y/(H-gY));
+            ctx.beginPath(); ctx.moveTo(0,gY+y); ctx.lineTo(W,gY+y); ctx.stroke();
+            ctx.globalAlpha=1;
+          }
 
-        let t = 0;
-        (function loop() { requestAnimationFrame(loop); t += 0.011;
-          cityRacks.forEach(r => { r.mat.emissiveIntensity = 0.2 + 0.2 * Math.sin(t * 1.4 + r.phase); });
-          checkLight.intensity = 4 + 3 * Math.abs(Math.sin(t * 0.8));
-          l1.intensity = 3 + 2 * Math.sin(t * 1.1); l2.intensity = 2.5 + 1.5 * Math.sin(t * 0.9 + 1);
-          camera.position.x = 10 + Math.sin(t * 0.18) * 2; camera.position.z = 14 + Math.cos(t * 0.14) * 2;
-          camera.lookAt(0, 0, 0);
-          renderer.render(scene, camera);
-        })();
-      });
+          RACKS.forEach(rack=>{
+            if(rack.h<rack.targetH) rack.h=Math.min(rack.targetH, rack.h+0.008);
+            const rx=rack.x*W, rw=rack.w*W, rh=rack.h*H;
+            const ry=gY-rh;
+            const pulse=0.5+0.3*Math.sin(t*1.5+rack.phase);
 
-    })();
+            // Shadow
+            ctx.fillStyle='rgba(0,0,0,0.4)';
+            ctx.beginPath(); ctx.ellipse(rx+rw/2,gY+4,rw*0.5,6,0,0,Math.PI*2); ctx.fill();
+
+            // Cabinet body
+            ctx.fillStyle='rgba(10,16,34,0.95)';
+            roundRect2d(ctx,rx,ry,rw,rh,3); ctx.fill();
+
+            // Color border glow
+            ctx.strokeStyle=rack.color;
+            ctx.lineWidth=1.5+pulse;
+            ctx.globalAlpha=0.4+0.3*pulse;
+            roundRect2d(ctx,rx,ry,rw,rh,3); ctx.stroke();
+            ctx.globalAlpha=1;
+
+            // Top cap
+            ctx.fillStyle=rack.color;
+            ctx.globalAlpha=0.8+0.2*pulse;
+            ctx.fillRect(rx,ry,rw,4);
+            ctx.globalAlpha=1;
+
+            // LED rows
+            const rows=Math.floor(rh/16)-1;
+            for(let r=0;r<rows;r++){
+              ctx.fillStyle=rack.color;
+              ctx.globalAlpha=(0.2+0.5*Math.abs(Math.sin(t*2+rack.phase+r*0.5)))*rack.h/rack.targetH;
+              ctx.fillRect(rx+4,ry+8+r*14,rw-8,8);
+              ctx.globalAlpha=1;
+            }
+
+            // Glow on top
+            const tg=ctx.createRadialGradient(rx+rw/2,ry,0,rx+rw/2,ry,rw);
+            tg.addColorStop(0,rack.color.replace('#','rgba(')+','+((0.15+0.1*pulse)+')').replace('rgba(','rgba(').replace('#',''));
+            tg.addColorStop(1,'transparent');
+            try {
+              const [r2,g2,b2]=rack.color.match(/\w\w/g).map(x=>parseInt(x,16));
+              const tg2=ctx.createRadialGradient(rx+rw/2,ry,0,rx+rw/2,ry,rw*1.5);
+              tg2.addColorStop(0,`rgba(${r2},${g2},${b2},${0.12+0.08*pulse})`);
+              tg2.addColorStop(1,'transparent');
+              ctx.fillStyle=tg2; ctx.fillRect(rx-rw,ry-rw,rw*3,rw*2);
+            } catch(e){}
+          });
+
+          // Connection beams between racks
+          ctx.setLineDash([4,4]);
+          ctx.lineWidth=1;
+          for(let i=0;i<RACKS.length-1;i++){
+            const a=RACKS[i], b=RACKS[i+1];
+            const ax=a.x*W+a.w*W/2, ay=gY-a.h*H*0.5;
+            const bx=b.x*W+b.w*W/2, by=gY-b.h*H*0.5;
+            const alpha=Math.min(a.h/a.targetH,b.h/b.targetH);
+            ctx.strokeStyle=`rgba(52,133,200,${0.2+0.2*Math.abs(Math.sin(t+i))*alpha})`;
+            ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+          }
+          ctx.setLineDash([]);
+        }
+        function cx2(x,y,W,H){ return W/2+(x-W/2)*0.3+W*0.5*(1-0.3); }
+        draw();
+      })();
+
+      // ── Scene 5: Full system city ──────────────────────────────────────────────
+      (function() {
+        const c = makeCanvas('sc-wrap-4'); if (!c) return;
+        const ctx = c.getContext('2d');
+        const CITY=[
+          {col:0.15,row:0,color:'#3485c8'},{col:0.30,row:0,color:'#ffa01e'},{col:0.45,row:0,color:'#4ade80'},
+          {col:0.60,row:0,color:'#a78bfa'},{col:0.75,row:0,color:'#3485c8'},
+          {col:0.22,row:1,color:'#ffa01e'},{col:0.37,row:1,color:'#4ade80'},{col:0.52,row:1,color:'#3485c8'},{col:0.67,row:1,color:'#ffa01e'},
+          {col:0.30,row:2,color:'#4ade80'},{col:0.45,row:2,color:'#3485c8'},{col:0.60,row:2,color:'#a78bfa'},
+          {col:0.45,row:3,color:'#4ade80'},
+        ];
+        const heights=CITY.map(()=>0);
+        const targetH=CITY.map(()=>0.08+Math.random()*0.18);
+        const phases=CITY.map(()=>Math.random()*Math.PI*2);
+        // Floating panels
+        const panels=[{x:0.08,y:0.15},{x:0.82,y:0.12},{x:0.15,y:0.55}];
+        let t=0;
+        function draw(){
+          requestAnimationFrame(draw); t+=0.011;
+          const W=c.width, H=c.height;
+          ctx.fillStyle='rgba(5,7,14,0.2)'; ctx.fillRect(0,0,W,H);
+
+          // Grid
+          ctx.strokeStyle='rgba(13,30,48,0.8)'; ctx.lineWidth=1;
+          for(let x=0;x<W;x+=35){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+          for(let y=0;y<H;y+=35){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+          const baseY=H*0.85;
+          const RW=W*0.055, GAP=W*0.005;
+
+          CITY.forEach((rack,i)=>{
+            if(heights[i]<targetH[i]) heights[i]=Math.min(targetH[i],heights[i]+0.003);
+            const rx=rack.col*W - RW/2;
+            const rh=heights[i]*H;
+            const ry=baseY - rh - rack.row*H*0.18;
+            const pulse=0.5+0.3*Math.sin(t*1.4+phases[i]);
+
+            // Body
+            ctx.fillStyle='rgba(10,16,34,0.92)';
+            roundRect2d(ctx,rx,ry,RW,rh,2); ctx.fill();
+
+            // Glow border
+            const [r2,g2,b2]=rack.color.match(/\w\w/g).map(x=>parseInt(x,16));
+            ctx.strokeStyle=`rgba(${r2},${g2},${b2},${0.5+0.3*pulse})`;
+            ctx.lineWidth=1;
+            roundRect2d(ctx,rx,ry,RW,rh,2); ctx.stroke();
+
+            // Top glow cap
+            ctx.fillStyle=`rgba(${r2},${g2},${b2},${0.6+0.3*pulse})`;
+            ctx.fillRect(rx,ry,RW,2);
+
+            // LED blink
+            ctx.fillStyle=`rgba(${r2},${g2},${b2},${0.2+0.5*Math.abs(Math.sin(t*2+phases[i]))})`;
+            ctx.fillRect(rx+2,ry+4,RW-4,Math.max(2,rh*0.15));
+
+            // Top light bloom
+            const bloom=ctx.createRadialGradient(rx+RW/2,ry,0,rx+RW/2,ry,RW*2);
+            bloom.addColorStop(0,`rgba(${r2},${g2},${b2},${0.08+0.06*pulse})`);
+            bloom.addColorStop(1,'transparent');
+            ctx.fillStyle=bloom; ctx.fillRect(rx-RW,ry-RW*1.5,RW*3,RW*2);
+          });
+
+          // Connecting network lines
+          ctx.setLineDash([3,5]); ctx.lineWidth=0.8;
+          for(let i=0;i<CITY.length;i++){
+            for(let j=i+1;j<CITY.length;j++){
+              if(Math.abs(CITY[i].row-CITY[j].row)>1) continue;
+              if(Math.abs(CITY[i].col-CITY[j].col)>0.2) continue;
+              const ax=CITY[i].col*W, ay=H*0.85-heights[i]*H-CITY[i].row*H*0.18;
+              const bx=CITY[j].col*W, by=H*0.85-heights[j]*H-CITY[j].row*H*0.18;
+              ctx.strokeStyle=`rgba(52,133,200,${0.08+0.12*Math.abs(Math.sin(t+i*0.3))})`;
+              ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+            }
+          }
+          ctx.setLineDash([]);
+
+          // HUD panels floating
+          panels.forEach((p,i)=>{
+            const px=p.x*W, py=(p.y+Math.sin(t*0.6+i)*0.02)*H;
+            const pw=W*0.13, ph=H*0.12;
+            ctx.fillStyle='rgba(6,24,40,0.85)';
+            roundRect2d(ctx,px,py,pw,ph,4); ctx.fill();
+            ctx.strokeStyle='rgba(52,133,200,0.4)';
+            ctx.lineWidth=1;
+            roundRect2d(ctx,px,py,pw,ph,4); ctx.stroke();
+            ctx.fillStyle='rgba(74,222,128,0.8)'; ctx.font='7px monospace';
+            ctx.fillText(['SYSTEM OK','ONLINE','READY'][i],px+5,py+12);
+            ctx.fillStyle='rgba(74,222,128,0.4)';
+            ctx.fillRect(px+4,py+16,pw-8,3);
+            ctx.fillStyle='rgba(74,222,128,0.9)';
+            ctx.fillRect(px+4,py+16,(pw-8)*(0.7+0.3*Math.sin(t+i)),3);
+          });
+
+          // Green "complete" pulse at center top
+          const checkX=W/2, checkY=H*0.08;
+          const cpg=ctx.createRadialGradient(checkX,checkY,0,checkX,checkY,40);
+          cpg.addColorStop(0,`rgba(74,222,128,${0.2+0.15*Math.abs(Math.sin(t*0.8))})`);
+          cpg.addColorStop(1,'transparent');
+          ctx.fillStyle=cpg; ctx.fillRect(checkX-40,checkY-40,80,80);
+          ctx.fillStyle=`rgba(74,222,128,${0.8+0.2*Math.sin(t*0.8)})`;
+          ctx.font='bold 14px monospace'; ctx.textAlign='center';
+          ctx.fillText('✓ SYSTEM ONLINE', checkX, checkY);
+          ctx.textAlign='left';
+        }
+        draw();
+      })();
+
+    });
     </script>
   </body>
 </html>
