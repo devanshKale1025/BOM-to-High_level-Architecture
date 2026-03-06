@@ -1457,6 +1457,13 @@
         opacity: 1;
         transform: translateY(0);
       }
+      .scene-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
 
       /* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
       @media (max-width: 900px) {
@@ -1598,7 +1605,7 @@
       </div>
 
       <!-- ═══════════════════════════════════════════════════════════════════════════ -->
-      <!-- HOW IT WORKS — VISUAL JOURNEY -->
+      <!-- HOW IT WORKS — VISUAL JOURNEY (all 3D, no external files) -->
       <!-- ═══════════════════════════════════════════════════════════════════════════ -->
       <section id="journey">
 
@@ -1608,156 +1615,119 @@
           <p class="journey-sub">Watch your spreadsheet of components become a fully rendered DeltaV system diagram — automatically, in seconds.</p>
         </div>
 
-        <!-- Flow steps -->
+        <!-- ── PIPELINE FLOW STEPS ── -->
         <div class="flow-connector reveal">
           <div class="flow-step">
             <div class="flow-step-icon amber">📄</div>
-            <div class="flow-step-label">
-              <span>BOM Upload</span>
-              .xlsx · .csv
-            </div>
+            <div class="flow-step-label"><span>BOM Upload</span>.xlsx · .csv</div>
           </div>
-          <div class="flow-arrow">
-            <div class="flow-arrow-line"></div>
-            <div class="flow-arrow-head"></div>
-          </div>
+          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
           <div class="flow-step">
             <div class="flow-step-icon blue">⚙️</div>
-            <div class="flow-step-label">
-              <span>Rule Engine</span>
-              100% Offline
-            </div>
+            <div class="flow-step-label"><span>Rule Engine</span>100% Offline</div>
           </div>
-          <div class="flow-arrow">
-            <div class="flow-arrow-line"></div>
-            <div class="flow-arrow-head"></div>
-          </div>
+          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
           <div class="flow-step">
             <div class="flow-step-icon violet">🧠</div>
-            <div class="flow-step-label">
-              <span>Classification</span>
-              4 Layers Deep
-            </div>
+            <div class="flow-step-label"><span>Classification</span>4 Layers Deep</div>
           </div>
-          <div class="flow-arrow">
-            <div class="flow-arrow-line"></div>
-            <div class="flow-arrow-head"></div>
-          </div>
+          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
           <div class="flow-step">
             <div class="flow-step-icon green">🏗️</div>
-            <div class="flow-step-label">
-              <span>Cabinet Layout</span>
-              Auto-Grouped
-            </div>
+            <div class="flow-step-label"><span>Cabinet Layout</span>Auto-Grouped</div>
           </div>
-          <div class="flow-arrow">
-            <div class="flow-arrow-line"></div>
-            <div class="flow-arrow-head"></div>
-          </div>
+          <div class="flow-arrow"><div class="flow-arrow-line"></div><div class="flow-arrow-head"></div></div>
           <div class="flow-step">
             <div class="flow-step-icon amber">📐</div>
-            <div class="flow-step-label">
-              <span>Architecture</span>
-              PPTX Export
+            <div class="flow-step-label"><span>Architecture</span>PNG Export</div>
+          </div>
+        </div>
+
+        <!-- ── HERO 3D: Full pipeline demo (replaces video) ── -->
+        <div class="reveal" style="margin-bottom:3rem;">
+          <div class="section-head" style="margin-bottom:2rem;">
+            <span class="section-num">▶</span>
+            <span class="section-title">Live Pipeline Demo</span>
+            <div class="section-line"></div>
+          </div>
+          <div id="journey-canvas-wrap">
+            <div class="topbar">
+              <div class="panel-dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+              <div class="arch-label">LIVE 3D · BOM → ARCHITECTURE TRANSFORMATION</div>
+              <div class="panel-badge">● RENDERING</div>
+            </div>
+            <canvas id="journey-3d"></canvas>
+            <div class="canvas-caption">
+              <div><div class="caption-label">Interactive Visualization</div><div class="caption-title">BOM → Architecture</div></div>
+              <div class="caption-hint">Drag to rotate</div>
             </div>
           </div>
         </div>
 
-        <!-- 3D Three.js live visualization -->
-        <div id="journey-canvas-wrap" class="reveal">
-          <div class="topbar">
-            <div class="panel-dots">
-              <div class="dot dot-r"></div>
-              <div class="dot dot-y"></div>
-              <div class="dot dot-g"></div>
-            </div>
-            <div class="arch-label">LIVE 3D · DATA TRANSFORMATION ENGINE</div>
-            <div class="panel-badge">● RENDERING</div>
-          </div>
-          <canvas id="journey-3d"></canvas>
-          <div class="canvas-caption">
-            <div>
-              <div class="caption-label">Visualization</div>
-              <div class="caption-title">BOM → Architecture</div>
-            </div>
-            <div class="caption-hint">Interactive · Drag to rotate</div>
-          </div>
+        <!-- ── SCENE CARDS — each is a unique Three.js canvas ── -->
+        <div class="section-head reveal" style="margin-bottom:2rem;">
+          <span class="section-num">◈</span>
+          <span class="section-title">Step by Step</span>
+          <div class="section-line"></div>
         </div>
 
-        <!-- Scene image cards -->
         <div class="journey-scenes">
 
-          <!-- Scene A: BOM materializes (frames 1-4 = big feature frame) -->
-          <div class="scene-card" id="sc0">
-            <img src="/mnt/user-data/uploads/sceneA_frame_01.png" alt="BOM materializes as holographic table" />
+          <!-- Scene 1: BOM Holographic Table -->
+          <div class="scene-card visible" id="sc0">
+            <canvas class="scene-canvas" id="sc-canvas-0"></canvas>
             <div class="scene-overlay"></div>
             <div class="scene-content">
-              <div class="scene-number">Scene 01 · 0–2s</div>
+              <div class="scene-number">Scene 01 · Upload</div>
               <div class="scene-title">The BOM Materializes</div>
-              <div class="scene-desc">Your spreadsheet appears as a glowing holographic table floating in space — every row a component waiting to be transformed.</div>
+              <div class="scene-desc">Your spreadsheet appears as a glowing holographic table — every row a component waiting to be transformed.</div>
             </div>
           </div>
 
-          <!-- Scene A mid: data streams ignite -->
-          <div class="scene-card" id="sc1">
-            <img src="/mnt/user-data/uploads/sceneA_frame_04.png" alt="Data streams ignite" />
+          <!-- Scene 2: Particle Streams -->
+          <div class="scene-card visible" id="sc1">
+            <canvas class="scene-canvas" id="sc-canvas-1"></canvas>
             <div class="scene-overlay"></div>
             <div class="scene-content">
-              <div class="scene-number">Scene 02 · 2–5s</div>
+              <div class="scene-number">Scene 02 · Parse</div>
               <div class="scene-title">Data Streams Ignite</div>
-              <div class="scene-desc">Blue and amber particle streams erupt from every row as the rule engine begins parsing and classifying components at machine speed.</div>
+              <div class="scene-desc">Amber and cyan particle streams erupt as the rule engine classifies every component at machine speed.</div>
             </div>
           </div>
 
-          <!-- Scene A late: BOM shrinks into the distance -->
-          <div class="scene-card" id="sc2">
-            <img src="/mnt/user-data/uploads/sceneA_frame_07.png" alt="BOM streams into the system" />
+          <!-- Scene 3: Vortex tunnel -->
+          <div class="scene-card visible" id="sc2">
+            <canvas class="scene-canvas" id="sc-canvas-2"></canvas>
             <div class="scene-overlay"></div>
             <div class="scene-content">
-              <div class="scene-number">Scene 03 · 5–7s</div>
+              <div class="scene-number">Scene 03 · Route</div>
               <div class="scene-title">Into the Engine</div>
-              <div class="scene-desc">The BOM data accelerates down the pipeline, each particle representing a classified item routing to its designated cabinet or software layer.</div>
+              <div class="scene-desc">Classified items accelerate through the pipeline — each routing to its designated cabinet or software layer.</div>
             </div>
           </div>
 
-          <!-- Scene B: server racks and dashboards emerge -->
-          <div class="scene-card" id="sc3">
-            <img src="/mnt/user-data/uploads/sceneB_frame_02.png" alt="Architecture emerges" />
+          <!-- Scene 4: Server racks rising -->
+          <div class="scene-card visible" id="sc3">
+            <canvas class="scene-canvas" id="sc-canvas-3"></canvas>
             <div class="scene-overlay"></div>
             <div class="scene-content">
-              <div class="scene-number">Scene 04 · 7–10s</div>
+              <div class="scene-number">Scene 04 · Build</div>
               <div class="scene-title">Architecture Emerges</div>
-              <div class="scene-desc">DeltaV server racks, CIOC nodes, CHARM baseplates, and operator workstations materialize — wired together by glowing fiber-optic data paths.</div>
+              <div class="scene-desc">DeltaV racks, CIOC nodes, CHARM baseplates, and operator stations materialize wired by fiber-optic paths.</div>
             </div>
           </div>
 
-          <!-- Scene B: full system rendered -->
-          <div class="scene-card" id="sc4">
-            <img src="/mnt/user-data/uploads/sceneB_frame_04.png" alt="Full DeltaV system rendered" />
+          <!-- Scene 5: Full system online -->
+          <div class="scene-card visible" id="sc4">
+            <canvas class="scene-canvas" id="sc-canvas-4"></canvas>
             <div class="scene-overlay"></div>
             <div class="scene-content">
               <div class="scene-number">Scene 05 · Complete</div>
               <div class="scene-title">Full System Online</div>
-              <div class="scene-desc">Your complete DeltaV architecture — controllers, I/O modules, network topology, and operator desks — ready to export as a single-slide PPTX.</div>
+              <div class="scene-desc">Your complete DeltaV architecture — controllers, I/O modules, network topology, and operator desks — ready to export.</div>
             </div>
           </div>
 
-        </div>
-
-        <!-- Video showcase -->
-        <div id="video-section" class="reveal" style="padding: 0 0 4rem;">
-          <div class="section-head" style="margin-bottom: 2rem;">
-            <span class="section-num">▶</span>
-            <span class="section-title">Full Transformation Demo</span>
-            <div class="section-line"></div>
-          </div>
-          <div class="video-wrap">
-            <video id="demo-video" src="/mnt/user-data/uploads/emerson_animation_4k.mp4" loop muted playsinline preload="metadata"></video>
-            <div class="video-badge">⚡ 4K · EMERSON ANIMATION</div>
-            <div class="video-play-overlay" id="video-overlay" onclick="toggleVideo()">
-              <div class="play-btn" id="play-btn">▶</div>
-            </div>
-          </div>
         </div>
 
       </section>
@@ -3492,287 +3462,440 @@
     (function() {
       'use strict';
 
-      // ── Video toggle ──────────────────────────────────────────────────────────
-      window.toggleVideo = function() {
-        const v = document.getElementById('demo-video');
-        const overlay = document.getElementById('video-overlay');
-        const btn = document.getElementById('play-btn');
-        if (v.paused) {
-          v.play();
-          overlay.classList.add('hidden');
-          btn.textContent = '⏸';
-        } else {
-          v.pause();
-          overlay.classList.remove('hidden');
-          btn.textContent = '▶';
-        }
-      };
-      document.getElementById('demo-video').addEventListener('click', window.toggleVideo);
-
       // ── Scroll reveal for scene cards ─────────────────────────────────────────
-      const observer = new IntersectionObserver((entries) => {
+      const revObserver = new IntersectionObserver((entries) => {
         entries.forEach((e, i) => {
           if (e.isIntersecting) {
             setTimeout(() => e.target.classList.add('visible'), i * 120);
-            observer.unobserve(e.target);
+            revObserver.unobserve(e.target);
           }
         });
-      }, { threshold: 0.15 });
-      document.querySelectorAll('.scene-card').forEach(c => observer.observe(c));
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(c => revObserver.observe(c));
 
-      // ── Three.js Journey Visualization ───────────────────────────────────────
-      const canvas3d = document.getElementById('journey-3d');
-      if (!canvas3d || typeof THREE === 'undefined') return;
+      if (typeof THREE === 'undefined') return;
 
-      const renderer = new THREE.WebGLRenderer({ canvas: canvas3d, antialias: true, alpha: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(canvas3d.offsetWidth, 420);
-      renderer.setClearColor(0x080a10, 1);
-      renderer.shadowMap.enabled = true;
+      // ═══════════════════════════════════════════════════════════════════════════
+      // HERO CANVAS — Big BOM→Architecture pipeline (draggable)
+      // ═══════════════════════════════════════════════════════════════════════════
+      (function heroScene() {
+        const canvas3d = document.getElementById('journey-3d');
+        if (!canvas3d) return;
+        const W = canvas3d.offsetWidth, H = 420;
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas3d, antialias: true, alpha: false });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(W, H);
+        renderer.setClearColor(0x06080f, 1);
 
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(55, canvas3d.offsetWidth / 420, 0.1, 200);
-      camera.position.set(0, 6, 18);
-      camera.lookAt(0, 0, 0);
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x06080f, 0.018);
+        const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 200);
+        camera.position.set(0, 7, 20);
+        camera.lookAt(0, 0, 0);
 
-      // Fog
-      scene.fog = new THREE.FogExp2(0x080a10, 0.022);
+        scene.add(new THREE.AmbientLight(0x1a2040, 3));
+        const lAmber = new THREE.PointLight(0xffa01e, 5, 35); lAmber.position.set(-8, 5, 3); scene.add(lAmber);
+        const lBlue  = new THREE.PointLight(0x3485c8, 4, 30); lBlue.position.set(8, 4, -3);  scene.add(lBlue);
+        const lGreen = new THREE.PointLight(0x4ade80, 2, 20); lGreen.position.set(0, 8, -10); scene.add(lGreen);
 
-      // ── Lights ────────────────────────────────────────────────────────────────
-      scene.add(new THREE.AmbientLight(0x1a1f3a, 2));
-      const amber = new THREE.PointLight(0xffa01e, 4, 30);
-      amber.position.set(-6, 4, 2);
-      scene.add(amber);
-      const blue = new THREE.PointLight(0x3485c8, 3, 25);
-      blue.position.set(6, 3, -2);
-      scene.add(blue);
-      const green = new THREE.PointLight(0x4ade80, 2, 20);
-      green.position.set(0, 5, -8);
-      scene.add(green);
+        // Grid
+        const grid = new THREE.GridHelper(80, 50, 0x0d1830, 0x080c18);
+        grid.position.y = -4; scene.add(grid);
 
-      // ── Grid floor ────────────────────────────────────────────────────────────
-      const gridHelper = new THREE.GridHelper(60, 40, 0x1a2040, 0x0d1025);
-      gridHelper.position.y = -3;
-      scene.add(gridHelper);
-
-      // ── BOM table (left) ─────────────────────────────────────────────────────
-      const bomGroup = new THREE.Group();
-      scene.add(bomGroup);
-      bomGroup.position.set(-7, 0, 0);
-
-      // Table frame
-      const frameGeo = new THREE.BoxGeometry(4, 3, 0.08);
-      const frameMat = new THREE.MeshPhongMaterial({ color: 0x0d2040, emissive: 0x003366, emissiveIntensity: 0.4, transparent: true, opacity: 0.9 });
-      const frame = new THREE.Mesh(frameGeo, frameMat);
-      bomGroup.add(frame);
-
-      // Table border glow
-      const edgesGeo = new THREE.EdgesGeometry(frameGeo);
-      const edgesMat = new THREE.LineBasicMaterial({ color: 0x3485c8, linewidth: 2 });
-      const edges = new THREE.LineSegments(edgesGeo, edgesMat);
-      bomGroup.add(edges);
-
-      // Rows as thin planes inside table
-      for (let i = 0; i < 6; i++) {
-        const rowGeo = new THREE.PlaneGeometry(3.4, 0.3);
-        const rowMat = new THREE.MeshBasicMaterial({ 
-          color: i % 2 === 0 ? 0x0a1a30 : 0x081520, 
-          transparent: true, 
-          opacity: 0.8 
-        });
-        const row = new THREE.Mesh(rowGeo, rowMat);
-        row.position.set(0, 1 - i * 0.38, 0.05);
-        bomGroup.add(row);
-      }
-
-      // BOM label (glowing plane)
-      const labelGeo = new THREE.PlaneGeometry(1.8, 0.4);
-      const labelMat = new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.9 });
-      const label = new THREE.Mesh(labelGeo, labelMat);
-      label.position.set(-0.8, 1.3, 0.06);
-      bomGroup.add(label);
-
-      // ── Architecture (right) — server racks ───────────────────────────────────
-      const archGroup = new THREE.Group();
-      scene.add(archGroup);
-      archGroup.position.set(6, 0, 0);
-
-      const rackPositions = [
-        [-1.5, 0, 0], [0, 0, 0], [1.5, 0, 0],
-        [-0.75, 0, -1.8], [0.75, 0, -1.8]
-      ];
-      const rackColors = [0x0a2540, 0x0d2a4a, 0x0a2540, 0x0d2a4a, 0x0a2540];
-      const rackGlows = [0x3485c8, 0xffa01e, 0x4ade80, 0x3485c8, 0xa78bfa];
-
-      rackPositions.forEach(([x, y, z], i) => {
-        const rackGeo = new THREE.BoxGeometry(1.0, 2.5, 0.6);
-        const rackMat = new THREE.MeshPhongMaterial({ color: rackColors[i], emissive: rackGlows[i], emissiveIntensity: 0.25 });
-        const rack = new THREE.Mesh(rackGeo, rackMat);
-        rack.position.set(x, y, z);
-        rack.castShadow = true;
-        archGroup.add(rack);
-
-        // LED strip
-        const ledGeo = new THREE.PlaneGeometry(0.8, 0.06);
-        const ledMat = new THREE.MeshBasicMaterial({ color: rackGlows[i], transparent: true, opacity: 0.9 });
-        for (let j = 0; j < 5; j++) {
-          const led = new THREE.Mesh(ledGeo, ledMat);
-          led.position.set(x, y - 0.8 + j * 0.4, z + 0.32);
-          archGroup.add(led);
+        // ── BOM Table (left) ────────────────────────────────────────────────────
+        const bomG = new THREE.Group(); bomG.position.set(-8, 0, 0); scene.add(bomG);
+        const plateGeo = new THREE.BoxGeometry(5, 3.8, 0.1);
+        const plateMat = new THREE.MeshPhongMaterial({ color: 0x061828, emissive: 0x0a3060, emissiveIntensity: 0.5, transparent: true, opacity: 0.92 });
+        bomG.add(new THREE.Mesh(plateGeo, plateMat));
+        bomG.add(new THREE.LineSegments(new THREE.EdgesGeometry(plateGeo), new THREE.LineBasicMaterial({ color: 0x3485c8 })));
+        // Row lines
+        for (let r = 0; r < 7; r++) {
+          const rGeo = new THREE.PlaneGeometry(4.4, 0.28);
+          const rMat = new THREE.MeshBasicMaterial({ color: r % 2 ? 0x0a1e38 : 0x061428, transparent: true, opacity: 0.9 });
+          const rm = new THREE.Mesh(rGeo, rMat); rm.position.set(0, 1.3 - r * 0.42, 0.06); bomG.add(rm);
         }
+        // Header bar
+        const hGeo = new THREE.PlaneGeometry(4.4, 0.36);
+        const hMat = new THREE.MeshBasicMaterial({ color: 0x0a3060, transparent: true, opacity: 0.95 });
+        const hm = new THREE.Mesh(hGeo, hMat); hm.position.set(0, 1.72, 0.07); bomG.add(hm);
+        // Label glow
+        const lgGeo = new THREE.PlaneGeometry(2.2, 0.42);
+        const lgMat = new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.85 });
+        bomG.add(Object.assign(new THREE.Mesh(lgGeo, lgMat), { position: new THREE.Vector3(-0.9, 1.72, 0.09) }));
 
-        // Rack edges
-        const rEdges = new THREE.LineSegments(
-          new THREE.EdgesGeometry(rackGeo),
-          new THREE.LineBasicMaterial({ color: rackGlows[i], linewidth: 1 })
-        );
-        rEdges.position.set(x, y, z);
-        archGroup.add(rEdges);
-      });
-
-      // ── Particle stream (BOM → Architecture) ─────────────────────────────────
-      const PARTICLES = 600;
-      const positions = new Float32Array(PARTICLES * 3);
-      const colors = new Float32Array(PARTICLES * 3);
-      const particleData = [];
-
-      for (let i = 0; i < PARTICLES; i++) {
-        const t = Math.random();
-        const lane = Math.floor(Math.random() * 5);
-        const spread = (Math.random() - 0.5) * 1.5;
-        particleData.push({ t, lane, spread, speed: 0.003 + Math.random() * 0.004, delay: Math.random() });
-        positions[i * 3] = -7 + t * 14;
-        positions[i * 3 + 1] = spread;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * 2;
-
-        // color: amber to blue gradient based on position
-        const frac = t;
-        colors[i * 3]     = 1.0 - frac * 0.6;  // R
-        colors[i * 3 + 1] = frac * 0.5;          // G
-        colors[i * 3 + 2] = 0.1 + frac * 0.9;    // B
-      }
-
-      const streamGeo = new THREE.BufferGeometry();
-      streamGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      streamGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-      const streamMat = new THREE.PointsMaterial({
-        size: 0.12,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.85,
-        sizeAttenuation: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
-      });
-      const particles = new THREE.Points(streamGeo, streamMat);
-      scene.add(particles);
-
-      // ── Connecting light beams ─────────────────────────────────────────────────
-      const beamCount = 5;
-      const beams = [];
-      for (let i = 0; i < beamCount; i++) {
-        const points = [
-          new THREE.Vector3(-5, (i - 2) * 0.5, 0),
-          new THREE.Vector3(0, Math.sin(i) * 0.5, 0),
-          new THREE.Vector3(5, (i - 2) * 0.4, 0)
+        // ── Architecture (right) — rack cluster ────────────────────────────────
+        const archG = new THREE.Group(); archG.position.set(7, 0, 0); scene.add(archG);
+        const rackDefs = [
+          { x: -2.0, z:  0.0, col: 0x3485c8 }, { x:  0.0, z:  0.0, col: 0xffa01e },
+          { x:  2.0, z:  0.0, col: 0x4ade80 }, { x: -1.0, z: -2.2, col: 0xa78bfa },
+          { x:  1.0, z: -2.2, col: 0x3485c8 },
         ];
-        const curve = new THREE.CatmullRomCurve3(points);
-        const beamGeo = new THREE.TubeGeometry(curve, 20, 0.02, 4, false);
-        const beamMat = new THREE.MeshBasicMaterial({
-          color: i % 2 === 0 ? 0x3485c8 : 0xffa01e,
-          transparent: true,
-          opacity: 0.3,
-          blending: THREE.AdditiveBlending
-        });
-        const beam = new THREE.Mesh(beamGeo, beamMat);
-        scene.add(beam);
-        beams.push({ mesh: beam, mat: beamMat, phase: i * 1.2 });
-      }
-
-      // ── Orbit controls (manual drag) ──────────────────────────────────────────
-      let isDragging = false, prevX = 0, prevY = 0, rotX = 0, rotY = 0;
-      canvas3d.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; prevY = e.clientY; });
-      window.addEventListener('mousemove', e => {
-        if (!isDragging) return;
-        rotY += (e.clientX - prevX) * 0.005;
-        rotX += (e.clientY - prevY) * 0.005;
-        rotX = Math.max(-0.5, Math.min(0.5, rotX));
-        prevX = e.clientX; prevY = e.clientY;
-      });
-      window.addEventListener('mouseup', () => isDragging = false);
-
-      // ── Resize ────────────────────────────────────────────────────────────────
-      window.addEventListener('resize', () => {
-        const w = canvas3d.offsetWidth;
-        renderer.setSize(w, 420);
-        camera.aspect = w / 420;
-        camera.updateProjectionMatrix();
-      });
-
-      // ── Animation loop ────────────────────────────────────────────────────────
-      let frame3d = 0;
-      function animate3d() {
-        requestAnimationFrame(animate3d);
-        frame3d += 0.01;
-
-        // Auto-rotate + manual override
-        const targetY = rotY + frame3d * 0.12;
-        const pivot = new THREE.Vector3(0, 0, 0);
-        camera.position.x = Math.sin(targetY) * 18 * Math.cos(rotX);
-        camera.position.y = 6 + Math.sin(rotX) * 8;
-        camera.position.z = Math.cos(targetY) * 18 * Math.cos(rotX);
-        camera.lookAt(pivot);
-
-        // Update particles
-        const pos = streamGeo.attributes.position.array;
-        const col = streamGeo.attributes.color.array;
-        for (let i = 0; i < PARTICLES; i++) {
-          const pd = particleData[i];
-          pd.t += pd.speed;
-          if (pd.t > 1.05) pd.t = -0.05;
-          const t = pd.t;
-          // Curved path through S-shape
-          const x = -7 + t * 14;
-          const y = Math.sin(t * Math.PI) * 1.5 + pd.spread * 0.4;
-          const z = Math.sin(t * Math.PI * 2 + pd.phase || 0) * 0.8;
-          pos[i * 3]     = x;
-          pos[i * 3 + 1] = y;
-          pos[i * 3 + 2] = z;
-          // Fade in/out at edges
-          const alpha = Math.min(t * 8, 1) * Math.min((1-t) * 8, 1);
-          col[i * 3]     = (1.0 - t * 0.6) * alpha;
-          col[i * 3 + 1] = (t * 0.55) * alpha;
-          col[i * 3 + 2] = (0.1 + t * 0.9) * alpha;
-        }
-        streamGeo.attributes.position.needsUpdate = true;
-        streamGeo.attributes.color.needsUpdate = true;
-
-        // Pulse BOM glow
-        bomGroup.position.y = Math.sin(frame3d * 0.8) * 0.15;
-        bomGroup.rotation.y = Math.sin(frame3d * 0.3) * 0.08;
-        edges.material.color.setHSL(0.58, 1, 0.5 + 0.15 * Math.sin(frame3d * 2));
-
-        // Pulse arch racks
-        archGroup.rotation.y = Math.sin(frame3d * 0.4) * 0.05;
-        archGroup.children.forEach((c, i) => {
-          if (c.material && c.material.emissiveIntensity !== undefined) {
-            c.material.emissiveIntensity = 0.2 + 0.15 * Math.sin(frame3d * 1.5 + i * 0.8);
+        rackDefs.forEach(({ x, z, col }, i) => {
+          const rkg = new THREE.Group(); rkg.position.set(x, 0, z); archG.add(rkg);
+          const bGeo = new THREE.BoxGeometry(1.1, 2.8, 0.7);
+          const bMat = new THREE.MeshPhongMaterial({ color: 0x0a1020, emissive: col, emissiveIntensity: 0.3 });
+          rkg.add(new THREE.Mesh(bGeo, bMat));
+          rkg.add(new THREE.LineSegments(new THREE.EdgesGeometry(bGeo), new THREE.LineBasicMaterial({ color: col })));
+          for (let j = 0; j < 6; j++) {
+            const ledG = new THREE.PlaneGeometry(0.7, 0.07);
+            const ledM = new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.8 });
+            const led = new THREE.Mesh(ledG, ledM); led.position.set(0, -0.9 + j * 0.38, 0.37); rkg.add(led);
           }
         });
 
-        // Pulse beams
-        beams.forEach(b => {
-          b.mat.opacity = 0.15 + 0.25 * Math.abs(Math.sin(frame3d * 1.2 + b.phase));
+        // ── Particle stream ────────────────────────────────────────────────────
+        const N = 800;
+        const pPos = new Float32Array(N * 3);
+        const pCol = new Float32Array(N * 3);
+        const pData = Array.from({ length: N }, () => ({
+          t: Math.random(), speed: 0.003 + Math.random() * 0.004,
+          lane: Math.random() - 0.5, veer: (Math.random() - 0.5) * 0.6
+        }));
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        pGeo.setAttribute('color', new THREE.BufferAttribute(pCol, 3));
+        scene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
+          size: 0.13, vertexColors: true, transparent: true, opacity: 0.9,
+          blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+        })));
+
+        // ── Beam tubes ─────────────────────────────────────────────────────────
+        const beams = [];
+        for (let i = 0; i < 6; i++) {
+          const pts = [
+            new THREE.Vector3(-5.5, (i - 2.5) * 0.5, 0),
+            new THREE.Vector3(0, Math.sin(i * 1.1) * 1.2, 0),
+            new THREE.Vector3(4.5, (i - 2.5) * 0.4, 0)
+          ];
+          const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, 0.025, 4, false);
+          const mat = new THREE.MeshBasicMaterial({
+            color: i % 2 ? 0xffa01e : 0x3485c8,
+            transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending
+          });
+          const m = new THREE.Mesh(geo, mat); scene.add(m);
+          beams.push({ mat, phase: i * 1.1 });
+        }
+
+        // ── Drag ───────────────────────────────────────────────────────────────
+        let drag = false, px = 0, py = 0, rotY = 0, rotX = 0;
+        canvas3d.addEventListener('mousedown', e => { drag = true; px = e.clientX; py = e.clientY; });
+        window.addEventListener('mousemove', e => {
+          if (!drag) return;
+          rotY += (e.clientX - px) * 0.005; rotX += (e.clientY - py) * 0.004;
+          rotX = Math.max(-0.45, Math.min(0.45, rotX)); px = e.clientX; py = e.clientY;
+        });
+        window.addEventListener('mouseup', () => drag = false);
+        window.addEventListener('resize', () => {
+          const w = canvas3d.offsetWidth;
+          renderer.setSize(w, H); camera.aspect = w / H; camera.updateProjectionMatrix();
         });
 
-        // Pulse lights
-        amber.intensity = 3 + 2 * Math.sin(frame3d * 1.3);
-        blue.intensity  = 2 + 1.5 * Math.sin(frame3d * 1.7 + 1);
+        let t = 0;
+        (function loop() {
+          requestAnimationFrame(loop); t += 0.01;
+          const ay = rotY + t * 0.1;
+          camera.position.set(Math.sin(ay) * 20 * Math.cos(rotX), 7 + Math.sin(rotX) * 9, Math.cos(ay) * 20 * Math.cos(rotX));
+          camera.lookAt(0, 0, 0);
 
-        renderer.render(scene, camera);
+          const pp = pGeo.attributes.position.array, pc = pGeo.attributes.color.array;
+          for (let i = 0; i < N; i++) {
+            const d = pData[i]; d.t += d.speed; if (d.t > 1.05) d.t = -0.05;
+            const ft = d.t, cx = -8 + ft * 16, cy = Math.sin(ft * Math.PI) * 2 * d.lane, cz = Math.sin(ft * Math.PI * 2.5) * 0.7;
+            pp[i * 3] = cx; pp[i * 3+1] = cy; pp[i * 3+2] = cz;
+            const a = Math.min(ft * 6, 1) * Math.min((1-ft) * 6, 1);
+            pc[i * 3] = (1 - ft * 0.5) * a; pc[i * 3+1] = ft * 0.5 * a; pc[i * 3+2] = (0.2 + ft * 0.8) * a;
+          }
+          pGeo.attributes.position.needsUpdate = true; pGeo.attributes.color.needsUpdate = true;
+
+          bomG.position.y = Math.sin(t * 0.7) * 0.2; bomG.rotation.y = Math.sin(t * 0.25) * 0.07;
+          archG.rotation.y = Math.sin(t * 0.35) * 0.06;
+          beams.forEach(b => { b.mat.opacity = 0.1 + 0.3 * Math.abs(Math.sin(t * 1.1 + b.phase)); });
+          lAmber.intensity = 4 + 2.5 * Math.sin(t * 1.2);
+          lBlue.intensity  = 3 + 2 * Math.sin(t * 1.6 + 1);
+          renderer.render(scene, camera);
+        })();
+      })();
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // SCENE CARD CANVASES — 5 unique Three.js mini-scenes
+      // ═══════════════════════════════════════════════════════════════════════════
+
+      function initSceneCanvas(id, setupFn) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const parent = el.parentElement;
+        const W = parent.offsetWidth || 400, H = parent.offsetHeight || 280;
+        el.width = W; el.height = H;
+        const renderer = new THREE.WebGLRenderer({ canvas: el, antialias: true, alpha: false });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        renderer.setSize(W, H);
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 100);
+        setupFn(renderer, scene, camera, W, H);
       }
-      animate3d();
+
+      // ── Scene 1: Holographic BOM table floating in space ──────────────────────
+      initSceneCanvas('sc-canvas-0', (renderer, scene, camera, W, H) => {
+        renderer.setClearColor(0x060810, 1);
+        scene.fog = new THREE.FogExp2(0x060810, 0.025);
+        camera.position.set(0, 3, 12);
+        scene.add(new THREE.AmbientLight(0x1a2040, 2));
+        const l1 = new THREE.PointLight(0x3485c8, 5, 25); l1.position.set(-3, 4, 4); scene.add(l1);
+        const l2 = new THREE.PointLight(0xffa01e, 3, 18); l2.position.set(3, 2, 2); scene.add(l2);
+
+        const grid = new THREE.GridHelper(30, 24, 0x0a1830, 0x060c18); grid.position.y = -4; scene.add(grid);
+
+        // Floating table
+        const tg = new THREE.Group(); scene.add(tg);
+        const base = new THREE.BoxGeometry(7, 5, 0.12);
+        const bMat = new THREE.MeshPhongMaterial({ color: 0x041828, emissive: 0x0a3a6a, emissiveIntensity: 0.6, transparent: true, opacity: 0.88 });
+        tg.add(new THREE.Mesh(base, bMat));
+        tg.add(new THREE.LineSegments(new THREE.EdgesGeometry(base), new THREE.LineBasicMaterial({ color: 0x00aaff, linewidth: 2 })));
+
+        // Glowing rows
+        const rowColors = [0x003388, 0x003388, 0x002266, 0x003388, 0x002266, 0x003388, 0x002266];
+        rowColors.forEach((c, i) => {
+          const rg = new THREE.PlaneGeometry(6.4, 0.52);
+          const rm = new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.7 });
+          const r = new THREE.Mesh(rg, rm); r.position.set(0, 1.8 - i * 0.58, 0.07); tg.add(r);
+        });
+        // Header
+        const hm = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 0.58), new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.75 }));
+        hm.position.set(0, 2.16, 0.08); tg.add(hm);
+
+        // Floating scan line
+        const scanGeo = new THREE.PlaneGeometry(6.6, 0.04);
+        const scanMat = new THREE.MeshBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending });
+        const scan = new THREE.Mesh(scanGeo, scanMat); tg.add(scan);
+
+        // Ambient particles
+        const starN = 120, sp = new Float32Array(starN * 3);
+        for (let i = 0; i < starN * 3; i++) sp[i] = (Math.random() - 0.5) * 30;
+        const starGeo = new THREE.BufferGeometry(); starGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+        scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.06, color: 0x4488cc, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending })));
+
+        let t = 0;
+        (function loop() { requestAnimationFrame(loop); t += 0.012;
+          tg.position.y = Math.sin(t * 0.6) * 0.3; tg.rotation.x = Math.sin(t * 0.4) * 0.06; tg.rotation.y = Math.sin(t * 0.3) * 0.04;
+          scan.position.y = 2.4 - ((t * 0.8) % 5); scan.material.opacity = 0.4 + 0.4 * Math.abs(Math.sin(t * 1.5));
+          l1.intensity = 4 + 2 * Math.sin(t * 1.4); l2.intensity = 2 + 1.5 * Math.sin(t * 0.9);
+          renderer.render(scene, camera);
+        })();
+      });
+
+      // ── Scene 2: Particle explosion / data streams ────────────────────────────
+      initSceneCanvas('sc-canvas-1', (renderer, scene, camera, W, H) => {
+        renderer.setClearColor(0x04060c, 1);
+        camera.position.set(0, 0, 14);
+        scene.add(new THREE.AmbientLight(0x0a0f20, 1));
+
+        const N = 1000, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+        const data = Array.from({ length: N }, () => {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 0.02 + Math.random() * 0.05;
+          return { angle, speed, r: 0.1 + Math.random() * 0.2, life: Math.random(), lane: Math.floor(Math.random() * 5) };
+        });
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+        scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
+          size: 0.12, vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+        })));
+
+        // Central source glow
+        const sphereGeo = new THREE.SphereGeometry(0.6, 16, 16);
+        const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
+        scene.add(new THREE.Mesh(sphereGeo, sphereMat));
+        const l = new THREE.PointLight(0xffa01e, 6, 20); scene.add(l);
+
+        let t = 0;
+        (function loop() { requestAnimationFrame(loop); t += 0.015;
+          for (let i = 0; i < N; i++) {
+            const d = data[i]; d.life += d.speed; if (d.life > 1) { d.life = 0; d.angle = Math.random() * Math.PI * 2; }
+            const r = d.life * 8, lf = Math.min(d.life * 4, 1) * (1 - d.life);
+            // 5 lanes forming streams
+            const laneAngle = d.angle + (d.lane * Math.PI * 2 / 5);
+            pos[i*3]   = Math.cos(laneAngle) * r + (Math.random() - 0.5) * 0.3;
+            pos[i*3+1] = Math.sin(laneAngle) * r * 0.5 + (Math.random() - 0.5) * 0.3;
+            pos[i*3+2] = (Math.random() - 0.5) * 1.5;
+            const amberBias = d.lane < 2 ? 1 : 0;
+            col[i*3]   = (amberBias + (1-amberBias) * 0.1) * lf;
+            col[i*3+1] = 0.3 * lf;
+            col[i*3+2] = ((1-amberBias) * 0.9 + 0.1) * lf;
+          }
+          geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true;
+          sphereMat.opacity = 0.4 + 0.35 * Math.sin(t * 2);
+          l.intensity = 5 + 4 * Math.sin(t * 1.8);
+          camera.position.x = Math.sin(t * 0.15) * 2;
+          camera.lookAt(0, 0, 0);
+          renderer.render(scene, camera);
+        })();
+      });
+
+      // ── Scene 3: Vortex tunnel / data routing ────────────────────────────────
+      initSceneCanvas('sc-canvas-2', (renderer, scene, camera, W, H) => {
+        renderer.setClearColor(0x030508, 1);
+        camera.position.set(0, 0, 0.1);
+        camera.lookAt(0, 0, -10);
+
+        const N = 1200, pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+        const data = Array.from({ length: N }, () => ({
+          angle: Math.random() * Math.PI * 2,
+          z: -(Math.random() * 20),
+          r: 1.5 + Math.random() * 3,
+          speed: 0.15 + Math.random() * 0.25,
+          spin: (Math.random() - 0.5) * 0.04
+        }));
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+        scene.add(new THREE.Points(geo, new THREE.PointsMaterial({
+          size: 0.1, vertexColors: true, blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+        })));
+
+        // Tunnel rings
+        for (let i = 0; i < 12; i++) {
+          const rg = new THREE.RingGeometry(1.4, 1.45, 48);
+          const rm = new THREE.MeshBasicMaterial({ color: i % 2 ? 0x3485c8 : 0xffa01e, transparent: true, opacity: 0.15, side: THREE.DoubleSide, blending: THREE.AdditiveBlending });
+          const r = new THREE.Mesh(rg, rm); r.position.z = -(i * 2); scene.add(r);
+        }
+
+        let t = 0;
+        (function loop() { requestAnimationFrame(loop); t += 0.014;
+          for (let i = 0; i < N; i++) {
+            const d = data[i]; d.z += d.speed; d.angle += d.spin;
+            if (d.z > 2) d.z = -20;
+            const depth = Math.abs(d.z) / 20;
+            const r = d.r * (1 - depth * 0.6);
+            pos[i*3]   = Math.cos(d.angle + t * 0.5) * r;
+            pos[i*3+1] = Math.sin(d.angle + t * 0.5) * r;
+            pos[i*3+2] = d.z;
+            const bright = depth * 0.9;
+            col[i*3]   = i % 3 === 0 ? bright : bright * 0.2;
+            col[i*3+1] = bright * 0.4;
+            col[i*3+2] = i % 3 !== 0 ? bright : bright * 0.2;
+          }
+          geo.attributes.position.needsUpdate = true; geo.attributes.color.needsUpdate = true;
+          camera.rotation.z = Math.sin(t * 0.3) * 0.08;
+          renderer.render(scene, camera);
+        })();
+      });
+
+      // ── Scene 4: Server racks rising from grid ────────────────────────────────
+      initSceneCanvas('sc-canvas-3', (renderer, scene, camera, W, H) => {
+        renderer.setClearColor(0x060810, 1);
+        scene.fog = new THREE.FogExp2(0x060810, 0.028);
+        camera.position.set(6, 6, 12);
+        camera.lookAt(0, 1, 0);
+
+        scene.add(new THREE.AmbientLight(0x1a2040, 2));
+        const l1 = new THREE.PointLight(0x3485c8, 5, 25); l1.position.set(-4, 6, 4); scene.add(l1);
+        const l2 = new THREE.PointLight(0xffa01e, 3, 20); l2.position.set(4, 3, -2); scene.add(l2);
+        scene.add(new THREE.GridHelper(30, 25, 0x0a1830, 0x060c18));
+
+        const rackConfig = [
+          { x:-3,z:0, h:3.0, c:0x3485c8 }, { x:0,z:0, h:3.5, c:0xffa01e },
+          { x:3,z:0, h:2.5, c:0x4ade80 }, { x:-1.5,z:-3, h:2.8, c:0xa78bfa },
+          { x:1.5,z:-3, h:3.2, c:0x3485c8 }, { x:0,z:-5.5, h:2.2, c:0xffa01e },
+        ];
+        const racks = rackConfig.map(({ x, z, h, c }) => {
+          const g = new THREE.Group(); g.position.set(x, 0, z); scene.add(g);
+          const bGeo = new THREE.BoxGeometry(1.2, h, 0.8);
+          const bMat = new THREE.MeshPhongMaterial({ color: 0x0a1020, emissive: c, emissiveIntensity: 0.25 });
+          g.add(new THREE.Mesh(bGeo, bMat));
+          g.add(new THREE.LineSegments(new THREE.EdgesGeometry(bGeo), new THREE.LineBasicMaterial({ color: c })));
+          g.userData = { targetH: h, mat: bMat, c, phase: Math.random() * Math.PI * 2 };
+          g.scale.y = 0;
+          return g;
+        });
+
+        // Connecting beams between racks
+        const connectors = [];
+        [[0,1],[1,2],[0,3],[1,4],[3,4],[4,5]].forEach(([a,b]) => {
+          const pa = new THREE.Vector3(rackConfig[a].x, rackConfig[a].h/2, rackConfig[a].z);
+          const pb = new THREE.Vector3(rackConfig[b].x, rackConfig[b].h/2, rackConfig[b].z);
+          const mid = pa.clone().add(pb).multiplyScalar(0.5); mid.y += 0.5;
+          const geo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3([pa, mid, pb]), 12, 0.018, 4, false);
+          const mat = new THREE.MeshBasicMaterial({ color: 0x3485c8, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending });
+          scene.add(new THREE.Mesh(geo, mat));
+          connectors.push({ mat, phase: Math.random() * Math.PI * 2 });
+        });
+
+        let t = 0;
+        (function loop() { requestAnimationFrame(loop); t += 0.013;
+          racks.forEach(r => {
+            if (r.scale.y < 1) r.scale.y = Math.min(1, r.scale.y + 0.008);
+            r.userData.mat.emissiveIntensity = 0.2 + 0.2 * Math.sin(t * 1.5 + r.userData.phase);
+          });
+          connectors.forEach(c => { c.mat.opacity = 0.2 + 0.3 * Math.abs(Math.sin(t + c.phase)); });
+          l1.intensity = 4 + 2.5 * Math.sin(t * 1.3); l2.intensity = 2.5 + 2 * Math.sin(t * 1.7 + 1);
+          camera.position.x = 6 + Math.sin(t * 0.2) * 2; camera.position.z = 12 + Math.cos(t * 0.15) * 2;
+          camera.lookAt(0, 1.5, 0);
+          renderer.render(scene, camera);
+        })();
+      });
+
+      // ── Scene 5: Complete system — full isometric city ────────────────────────
+      initSceneCanvas('sc-canvas-4', (renderer, scene, camera, W, H) => {
+        renderer.setClearColor(0x05070e, 1);
+        scene.fog = new THREE.FogExp2(0x05070e, 0.022);
+        camera.position.set(10, 10, 14);
+        camera.lookAt(0, 0, 0);
+
+        scene.add(new THREE.AmbientLight(0x1a2050, 3));
+        const l1 = new THREE.PointLight(0x4ade80, 4, 28); l1.position.set(-5, 8, 3); scene.add(l1);
+        const l2 = new THREE.PointLight(0x3485c8, 3, 22); l2.position.set(5, 5, -4); scene.add(l2);
+        const l3 = new THREE.PointLight(0xffa01e, 3, 18); l3.position.set(0, 6, 6); scene.add(l3);
+        scene.add(new THREE.GridHelper(40, 30, 0x0d1e30, 0x081018));
+
+        // Full rack city
+        const cityRacks = [];
+        const positions = [
+          [-4,0],[−2,0],[0,0],[2,0],[4,0],
+          [-3,-3],[−1,-3],[1,-3],[3,-3],
+          [-2,-6],[0,-6],[2,-6],
+          [0,-9]
+        ].filter(Boolean);
+        // manually define since template literals in array init break
+        const px = [-4,-2,0,2,4,-3,-1,1,3,-2,0,2,0];
+        const pz = [0,0,0,0,0,-3,-3,-3,-3,-6,-6,-6,-9];
+        const cols = [0x3485c8,0xffa01e,0x4ade80,0x3485c8,0xa78bfa,0xffa01e,0x4ade80,0x3485c8,0xffa01e,0x4ade80,0x3485c8,0xffa01e,0x4ade80];
+        px.forEach((x, i) => {
+          const c = cols[i], h = 1.5 + Math.random() * 2.5;
+          const g = new THREE.Group(); g.position.set(x, 0, pz[i]); scene.add(g);
+          const geo = new THREE.BoxGeometry(0.9, h, 0.6);
+          const mat = new THREE.MeshPhongMaterial({ color: 0x0a1022, emissive: c, emissiveIntensity: 0.3 });
+          g.add(new THREE.Mesh(geo, mat));
+          g.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: c })));
+          cityRacks.push({ mat, phase: Math.random() * Math.PI * 2 });
+        });
+
+        // Floating dashboard panels
+        const panelDefs = [
+          { x:-5, y:3.5, z:0 }, { x:5, y:4, z:-2 }, { x:0, y:5, z:-7 }
+        ];
+        panelDefs.forEach(({ x, y, z }) => {
+          const pg = new THREE.Group(); pg.position.set(x, y, z); scene.add(pg);
+          const pGeo = new THREE.PlaneGeometry(2.4, 1.5);
+          const pMat = new THREE.MeshPhongMaterial({ color: 0x061828, emissive: 0x0a3060, emissiveIntensity: 0.5, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
+          pg.add(new THREE.Mesh(pGeo, pMat));
+          pg.add(new THREE.LineSegments(new THREE.EdgesGeometry(pGeo), new THREE.LineBasicMaterial({ color: 0x3485c8 })));
+          pg.userData = { baseY: y, phase: Math.random() * Math.PI * 2 };
+        });
+
+        // Green check glow on top of center rack
+        const checkLight = new THREE.PointLight(0x4ade80, 6, 10); checkLight.position.set(0, 5, 0); scene.add(checkLight);
+
+        let t = 0;
+        (function loop() { requestAnimationFrame(loop); t += 0.011;
+          cityRacks.forEach(r => { r.mat.emissiveIntensity = 0.2 + 0.2 * Math.sin(t * 1.4 + r.phase); });
+          checkLight.intensity = 4 + 3 * Math.abs(Math.sin(t * 0.8));
+          l1.intensity = 3 + 2 * Math.sin(t * 1.1); l2.intensity = 2.5 + 1.5 * Math.sin(t * 0.9 + 1);
+          camera.position.x = 10 + Math.sin(t * 0.18) * 2; camera.position.z = 14 + Math.cos(t * 0.14) * 2;
+          camera.lookAt(0, 0, 0);
+          renderer.render(scene, camera);
+        })();
+      });
 
     })();
     </script>
