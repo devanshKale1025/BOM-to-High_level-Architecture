@@ -1,0 +1,2847 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DeltaV Architecture Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+      :root {
+        --bg: #08090d;
+        --bg2: #0d0f16;
+        --amber: #ffa01e;
+        --amber2: #ff7a00;
+        --green: #4ade80;
+        --red: #f87171;
+        --violet: #a78bfa;
+        --text: #e8eaf0;
+        --muted: #4a5070;
+        --border: rgba(255, 255, 255, 0.07);
+        --font-display: "Syne", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+        --font-body: "Space Grotesk", sans-serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-body);
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      /* ─── CUSTOM CURSOR ─────────────────────────────────────────────────────────── */
+      #cursor {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        pointer-events: none;
+        mix-blend-mode: difference;
+      }
+      #cursor-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--amber);
+        position: absolute;
+        transform: translate(-50%, -50%);
+        transition: transform 0.08s;
+      }
+      #cursor-ring {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(255, 160, 30, 0.5);
+        position: absolute;
+        transform: translate(-50%, -50%);
+        transition: all 0.18s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      body:has(a:hover) #cursor-ring,
+      body:has(button:hover) #cursor-ring,
+      body:has(.interactive:hover) #cursor-ring {
+        transform: translate(-50%, -50%) scale(1.8);
+        border-color: rgba(255, 160, 30, 0.8);
+      }
+
+      /* ─── CANVAS BG ─────────────────────────────────────────────────────────────── */
+      #three-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      /* ─── NOISE OVERLAY ─────────────────────────────────────────────────────────── */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+        opacity: 0.025;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      /* ─── SCROLL CONTAINER ──────────────────────────────────────────────────────── */
+      #app {
+        position: relative;
+        z-index: 2;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 0 3rem;
+      }
+
+      /* ─── NAV ───────────────────────────────────────────────────────────────────── */
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2rem 0;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 0;
+      }
+      .nav-brand {
+        font-family: var(--font-display);
+        font-size: 18px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav-brand .bolt {
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(135deg, var(--amber), var(--amber2));
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        box-shadow: 0 4px 16px rgba(255, 160, 30, 0.35);
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--amber);
+      }
+      .nav-badge {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 160, 30, 0.3);
+        color: var(--amber);
+        letter-spacing: 0.08em;
+      }
+
+      /* ─── HERO ──────────────────────────────────────────────────────────────────── */
+      #hero {
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 5rem 0 4rem;
+        position: relative;
+      }
+
+      .hero-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--amber);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .hero-eyebrow::before {
+        content: "";
+        display: block;
+        width: 32px;
+        height: 1px;
+        background: var(--amber);
+      }
+
+      .hero-title {
+        font-family: var(--font-display);
+        font-size: clamp(4rem, 9vw, 8.5rem);
+        font-weight: 800;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        color: var(--text);
+        margin-bottom: 2rem;
+      }
+      .hero-title .line2 {
+        color: transparent;
+        -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.25);
+      }
+      .hero-title .accent {
+        color: var(--amber);
+      }
+
+      .hero-sub-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: end;
+        margin-bottom: 3rem;
+      }
+      .hero-sub {
+        font-size: 16px;
+        font-weight: 300;
+        color: #7a8099;
+        line-height: 1.8;
+        max-width: 480px;
+      }
+      .hero-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-end;
+      }
+      .meta-item {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .meta-item span {
+        color: var(--text);
+      }
+
+      .hero-cta-row {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--amber), var(--amber2));
+        color: #08090d;
+        border: none;
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        cursor: none;
+        box-shadow: 0 8px 32px rgba(255, 160, 30, 0.3);
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(255, 160, 30, 0.5);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: none;
+        transition: all 0.2s;
+      }
+      .btn-ghost:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: var(--text);
+      }
+
+      .scroll-hint {
+        position: absolute;
+        bottom: 3rem;
+        left: 0;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: fadeInUp 2s ease 1s both;
+      }
+      .scroll-hint::after {
+        content: "";
+        display: block;
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, var(--muted), transparent);
+        animation: scrollLine 2s ease-in-out infinite;
+      }
+      @keyframes scrollLine {
+        0%,
+        100% {
+          transform: scaleY(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scaleY(0.5);
+          opacity: 0.4;
+        }
+      }
+
+      /* ─── MARQUEE ────────────────────────────────────────────────────────────────── */
+      .marquee-wrap {
+        overflow: hidden;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 1rem 0;
+        margin: 0 -3rem;
+      }
+      .marquee-track {
+        display: flex;
+        gap: 3rem;
+        animation: marquee 22s linear infinite;
+        width: max-content;
+      }
+      .marquee-item {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .marquee-item::after {
+        content: "✦";
+        color: var(--amber);
+      }
+      @keyframes marquee {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* ─── STATS ─────────────────────────────────────────────────────────────────── */
+      #stats {
+        padding: 6rem 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 8rem;
+      }
+      .stat-cell {
+        background: var(--bg2);
+        padding: 2.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .stat-cell:hover {
+        background: rgba(255, 160, 30, 0.04);
+      }
+      .stat-cell::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--amber), transparent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s;
+      }
+      .stat-cell:hover::before {
+        transform: scaleX(1);
+      }
+      .stat-num {
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 4vw, 4rem);
+        font-weight: 800;
+        line-height: 1;
+        color: var(--text);
+        margin-bottom: 0.4rem;
+      }
+      .stat-num .amber {
+        color: var(--amber);
+      }
+      .stat-num .green {
+        color: var(--green);
+      }
+      .stat-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      /* ─── SECTION HEADER ────────────────────────────────────────────────────────── */
+      .section-head {
+        display: flex;
+        align-items: baseline;
+        gap: 1.5rem;
+        margin-bottom: 4rem;
+      }
+      .section-num {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--amber);
+        letter-spacing: 0.1em;
+        background: rgba(255, 160, 30, 0.08);
+        border: 1px solid rgba(255, 160, 30, 0.2);
+        border-radius: 4px;
+        padding: 3px 10px;
+        flex-shrink: 0;
+      }
+      .section-title {
+        font-family: var(--font-display);
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--text);
+      }
+      .section-line {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+        margin-bottom: 0.3rem;
+      }
+
+      /* ─── UPLOAD ZONE ───────────────────────────────────────────────────────────── */
+      #upload-section {
+        padding: 2rem 0 6rem;
+      }
+
+      .upload-zone {
+        border: 1.5px dashed rgba(255, 160, 30, 0.25);
+        border-radius: 16px;
+        background: rgba(255, 160, 30, 0.02);
+        padding: 4rem 2rem;
+        text-align: center;
+        cursor: none;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      }
+      .upload-zone::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 60% 50% at 50% 50%,
+          rgba(255, 160, 30, 0.04),
+          transparent
+        );
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .upload-zone:hover,
+      .upload-zone.drag-over {
+        border-color: rgba(255, 160, 30, 0.6);
+        background: rgba(255, 160, 30, 0.05);
+      }
+      .upload-zone:hover::before,
+      .upload-zone.drag-over::before {
+        opacity: 1;
+      }
+
+      .upload-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: rgba(255, 160, 30, 0.1);
+        border: 1px solid rgba(255, 160, 30, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 28px;
+        transition: all 0.3s;
+      }
+      .upload-zone:hover .upload-icon {
+        background: rgba(255, 160, 30, 0.18);
+        transform: scale(1.08);
+        box-shadow: 0 0 40px rgba(255, 160, 30, 0.2);
+      }
+      .upload-title {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 0.5rem;
+      }
+      .upload-sub {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 2rem;
+      }
+      #file-input {
+        display: none;
+      }
+      .upload-formats {
+        display: flex;
+        gap: 0.6rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .fmt-tag {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      /* ─── OR DEMO ────────────────────────────────────────────────────────────────── */
+      .or-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 2rem 0;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.15em;
+        color: var(--muted);
+      }
+      .or-divider::before,
+      .or-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      /* ─── HANDMADE DEMO PANEL ────────────────────────────────────────────────────── */
+      #demo-panel {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        display: none;
+      }
+      #demo-panel.active {
+        display: block;
+      }
+
+      .panel-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1.2rem;
+        background: rgba(255, 255, 255, 0.025);
+        border-bottom: 1px solid var(--border);
+      }
+      .panel-dots {
+        display: flex;
+        gap: 7px;
+      }
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .dot-r {
+        background: #ff5f57;
+      }
+      .dot-y {
+        background: #ffbd2e;
+      }
+      .dot-g {
+        background: #28ca41;
+      }
+      .panel-title {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+      }
+      .panel-badge {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: rgba(74, 222, 128, 0.08);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+        color: var(--green);
+      }
+      .panel-body {
+        padding: 2rem;
+      }
+
+      /* ─── ARCHITECTURE DIAGRAM ───────────────────────────────────────────────────── */
+      #arch-section {
+        padding: 2rem 0 6rem;
+      }
+
+      .arch-canvas-wrap {
+        background: #0a0c12;
+        border: 1px solid rgba(255, 160, 30, 0.15);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow:
+          0 0 80px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.03);
+        margin-bottom: 2rem;
+      }
+      .arch-topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.8rem 1.2rem;
+        background: rgba(255, 255, 255, 0.02);
+        border-bottom: 1px solid var(--border);
+      }
+      .arch-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+      }
+
+      #arch-canvas {
+        width: 100%;
+        height: 500px;
+        display: block;
+      }
+
+      /* ─── RESULTS TABLE ─────────────────────────────────────────────────────────── */
+      #results-section {
+        padding: 2rem 0 6rem;
+        display: none;
+      }
+      #results-section.active {
+        display: block;
+      }
+
+      .table-wrap {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--font-mono);
+        font-size: 11px;
+      }
+      .data-table th {
+        padding: 0.8rem 1rem;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        font-size: 9px;
+        color: var(--amber);
+        background: rgba(255, 160, 30, 0.06);
+        border-bottom: 1px solid rgba(255, 160, 30, 0.15);
+        font-weight: 500;
+      }
+      .data-table td {
+        padding: 0.65rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        color: #b8bcc8;
+        vertical-align: middle;
+      }
+      .data-table tr:hover td {
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 9px;
+        letter-spacing: 0.08em;
+        font-weight: 500;
+      }
+      .badge-high {
+        background: rgba(74, 222, 128, 0.1);
+        color: var(--green);
+        border: 1px solid rgba(74, 222, 128, 0.25);
+      }
+      .badge-medium {
+        background: rgba(255, 160, 30, 0.1);
+        color: var(--amber);
+        border: 1px solid rgba(255, 160, 30, 0.25);
+      }
+      .badge-low {
+        background: rgba(248, 113, 113, 0.1);
+        color: var(--red);
+        border: 1px solid rgba(248, 113, 113, 0.25);
+      }
+      .badge-auto {
+        background: rgba(167, 139, 250, 0.1);
+        color: var(--violet);
+        border: 1px solid rgba(167, 139, 250, 0.25);
+      }
+
+      /* ─── CABINET CARDS ─────────────────────────────────────────────────────────── */
+      .cab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 2rem;
+      }
+      .cab-card {
+        background: var(--bg2);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.25s;
+      }
+      .cab-card:hover {
+        background: rgba(255, 255, 255, 0.025);
+      }
+      .cab-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+      }
+      .cab-card.pdc::before {
+        background: linear-gradient(90deg, #3b82f6, transparent);
+      }
+      .cab-card.op::before {
+        background: linear-gradient(90deg, var(--green), transparent);
+      }
+      .cab-card.sw::before {
+        background: linear-gradient(90deg, var(--violet), transparent);
+      }
+      .cab-room {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 0.3rem;
+      }
+      .cab-name {
+        font-family: var(--font-display);
+        font-size: 13px;
+        font-weight: 700;
+        color: #d0d4e8;
+        margin-bottom: 0.6rem;
+      }
+      .cab-count {
+        font-family: var(--font-display);
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--amber);
+        line-height: 1;
+      }
+      .cab-sub {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* ─── DOWNLOAD AREA ─────────────────────────────────────────────────────────── */
+      .download-card {
+        background: linear-gradient(
+          135deg,
+          rgba(74, 222, 128, 0.04) 0%,
+          rgba(255, 160, 30, 0.03) 100%
+        );
+        border: 1px solid rgba(74, 222, 128, 0.18);
+        border-radius: 16px;
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        margin-top: 3rem;
+      }
+      .download-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--green), var(--amber));
+      }
+      .download-title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text);
+        margin-bottom: 0.4rem;
+      }
+      .download-sub {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+      }
+      .download-meta {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+      .dl-meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .dl-meta-label {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .dl-meta-val {
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .btn-download {
+        background: rgba(74, 222, 128, 0.1);
+        color: var(--green);
+        border: 1px solid rgba(74, 222, 128, 0.3);
+        padding: 14px 32px;
+        border-radius: 8px;
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        cursor: none;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .btn-download:hover {
+        background: rgba(74, 222, 128, 0.18);
+        box-shadow: 0 4px 24px rgba(74, 222, 128, 0.2);
+      }
+
+      /* ─── PROGRESS BAR ──────────────────────────────────────────────────────────── */
+      .progress-container {
+        display: none;
+        margin-top: 1.5rem;
+      }
+      .progress-container.active {
+        display: block;
+      }
+      .progress-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        color: var(--amber);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+      }
+      .progress-bar {
+        height: 3px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--amber), var(--amber2));
+        width: 0%;
+        transition: width 0.4s ease;
+        border-radius: 2px;
+        box-shadow: 0 0 8px rgba(255, 160, 30, 0.6);
+      }
+
+      /* ─── STEP TRACKER ──────────────────────────────────────────────────────────── */
+      .steps {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        margin-bottom: 3rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--bg2);
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.8rem 1.5rem;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        flex: 1;
+        border-right: 1px solid var(--border);
+        transition: all 0.3s;
+      }
+      .step:last-child {
+        border-right: none;
+      }
+      .step.active {
+        color: var(--amber);
+        background: rgba(255, 160, 30, 0.05);
+      }
+      .step.done {
+        color: var(--green);
+        background: rgba(74, 222, 128, 0.04);
+      }
+      .step-n {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid currentColor;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        flex-shrink: 0;
+      }
+      .step.done .step-n {
+        background: rgba(74, 222, 128, 0.1);
+      }
+
+      /* ─── FOOTER ─────────────────────────────────────────────────────────────────── */
+      footer {
+        padding: 3rem 0;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-brand {
+        font-family: var(--font-display);
+        font-size: 15px;
+        font-weight: 800;
+      }
+      .footer-info {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+
+      /* ─── TOAST ──────────────────────────────────────────────────────────────────── */
+      #toast {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 9998;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0.8rem 1.4rem;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--text);
+        transform: translateY(80px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+        pointer-events: none;
+      }
+      #toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      #toast.success {
+        border-color: rgba(74, 222, 128, 0.3);
+      }
+      #toast.success .toast-icon {
+        color: var(--green);
+      }
+      #toast.error {
+        border-color: rgba(248, 113, 113, 0.3);
+      }
+      #toast.error .toast-icon {
+        color: var(--red);
+      }
+
+      /* ─── ANIMATIONS ─────────────────────────────────────────────────────────────── */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes reveal {
+        from {
+          opacity: 0;
+          transform: translateY(32px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .reveal {
+        opacity: 0;
+      }
+      .revealed {
+        animation: reveal 0.7s cubic-bezier(0.23, 1, 0.32, 1) both;
+      }
+
+      .hero-eyebrow {
+        animation: fadeInUp 0.8s 0.1s ease both;
+      }
+      .hero-title {
+        animation: fadeInUp 0.9s 0.2s ease both;
+      }
+      .hero-sub-row {
+        animation: fadeInUp 0.9s 0.35s ease both;
+      }
+      .hero-cta-row {
+        animation: fadeInUp 0.9s 0.5s ease both;
+      }
+
+      /* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
+      @media (max-width: 900px) {
+        #app {
+          padding: 0 1.5rem;
+        }
+        .hero-sub-row {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+        #stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .hero-title {
+          font-size: clamp(3rem, 10vw, 5rem);
+        }
+        .hero-meta {
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Custom Cursor -->
+    <div id="cursor">
+      <div id="cursor-ring"></div>
+      <div id="cursor-dot"></div>
+    </div>
+
+    <!-- Three.js Canvas -->
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Toast -->
+    <div id="toast">
+      <span class="toast-icon">✓</span><span id="toast-msg">Done</span>
+    </div>
+
+    <!-- Main App -->
+    <div id="app">
+      <!-- NAV -->
+      <nav>
+        <div class="nav-brand">
+          <div class="bolt">⚡</div>
+          DeltaV Gen
+        </div>
+        <div class="nav-links">
+          <a href="#upload-section">Upload</a>
+          <a href="#arch-section">Preview</a>
+          <a href="#results-section">Results</a>
+        </div>
+        <div class="nav-badge">v2.0 · EMERSON PUNE</div>
+      </nav>
+
+      <!-- HERO -->
+      <section id="hero">
+        <div class="hero-eyebrow">
+          ⬡ Emerson Automation Solutions · DCS Engineering
+        </div>
+        <h1 class="hero-title">
+          BOM<span class="accent"> →</span><br />
+          <span class="line2">Architecture</span>
+        </h1>
+        <div class="hero-sub-row">
+          <p class="hero-sub">
+            Upload any Bill of Materials. The rule engine classifies every
+            component, groups it into cabinets, and renders a one-slide DeltaV
+            architecture diagram — in seconds.
+          </p>
+          <div class="hero-meta">
+            <div class="meta-item">Engine <span>100% Rule-Based</span></div>
+            <div class="meta-item">
+              Classification Levels <span>4 Layers</span>
+            </div>
+            <div class="meta-item">
+              Formats <span>.xlsx · .xls · .csv</span>
+            </div>
+            <div class="meta-item">Output <span>Architecture PPTX</span></div>
+          </div>
+        </div>
+        <div class="hero-cta-row">
+          <button
+            class="btn-primary"
+            onclick="document.getElementById('file-input').click()"
+          >
+            ↑ Upload BOM
+          </button>
+          <button class="btn-ghost interactive" onclick="loadDemo()">
+            Load Demo JSON
+          </button>
+        </div>
+        <div class="scroll-hint">Scroll to explore</div>
+      </section>
+
+      <!-- MARQUEE -->
+      <div class="marquee-wrap">
+        <div class="marquee-track">
+          <span class="marquee-item">CONTROLLER CLASSIFICATION</span>
+          <span class="marquee-item">CHARM BASEPLATE SIZING</span>
+          <span class="marquee-item">IO CABINET SPLITTING</span>
+          <span class="marquee-item">CIOC AUTO-INSERT</span>
+          <span class="marquee-item">REDUNDANCY DETECTION</span>
+          <span class="marquee-item">OPERATOR ROOM ROUTING</span>
+          <span class="marquee-item">SOFTWARE LICENSE STRIP</span>
+          <span class="marquee-item">FOPP TOPOLOGY</span>
+          <span class="marquee-item">SELF-LEARNING RULES</span>
+          <!-- duplicate for seamless loop -->
+          <span class="marquee-item">CONTROLLER CLASSIFICATION</span>
+          <span class="marquee-item">CHARM BASEPLATE SIZING</span>
+          <span class="marquee-item">IO CABINET SPLITTING</span>
+          <span class="marquee-item">CIOC AUTO-INSERT</span>
+          <span class="marquee-item">REDUNDANCY DETECTION</span>
+          <span class="marquee-item">OPERATOR ROOM ROUTING</span>
+          <span class="marquee-item">SOFTWARE LICENSE STRIP</span>
+          <span class="marquee-item">FOPP TOPOLOGY</span>
+          <span class="marquee-item">SELF-LEARNING RULES</span>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div id="stats" class="reveal">
+        <div class="stat-cell">
+          <div class="stat-num amber" id="stat-items">—</div>
+          <div class="stat-label">BOM Items Parsed</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num green" id="stat-classified">—</div>
+          <div class="stat-label">Auto-Classified</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num" id="stat-cabinets">—</div>
+          <div class="stat-label">Cabinets Generated</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num" id="stat-pct">
+            100<span style="font-size: 1.5rem">%</span>
+          </div>
+          <div class="stat-label">Offline · No API</div>
+        </div>
+      </div>
+
+      <!-- UPLOAD SECTION -->
+      <section id="upload-section">
+        <div class="section-head reveal">
+          <span class="section-num">01</span>
+          <span class="section-title">Upload Bill of Materials</span>
+          <div class="section-line"></div>
+        </div>
+
+        <!-- Step Tracker -->
+        <div class="steps" id="step-tracker">
+          <div class="step active" id="s1">
+            <div class="step-n">1</div>
+            Upload BOM
+          </div>
+          <div class="step" id="s2">
+            <div class="step-n">2</div>
+            Classify
+          </div>
+          <div class="step" id="s3">
+            <div class="step-n">3</div>
+            Generate
+          </div>
+          <div class="step" id="s4">
+            <div class="step-n">4</div>
+            Download
+          </div>
+        </div>
+
+        <div
+          class="upload-zone reveal interactive"
+          id="upload-zone"
+          onclick="document.getElementById('file-input').click()"
+          ondragover="onDragOver(event)"
+          ondragleave="onDragLeave(event)"
+          ondrop="onDrop(event)"
+        >
+          <div class="upload-icon">⬆</div>
+          <div class="upload-title">Drop your BOM file here</div>
+          <div class="upload-sub">
+            Or click to browse — any column order, any header position
+          </div>
+          <div class="upload-formats">
+            <span class="fmt-tag">.xlsx</span>
+            <span class="fmt-tag">.xls</span>
+            <span class="fmt-tag">.csv</span>
+            <span class="fmt-tag">UTF-8</span>
+            <span class="fmt-tag">Latin-1</span>
+            <span class="fmt-tag">Multi-sheet</span>
+          </div>
+        </div>
+        <input
+          type="file"
+          id="file-input"
+          accept=".xlsx,.xls,.csv"
+          onchange="handleFile(event)"
+        />
+
+        <div class="progress-container" id="progress-wrap">
+          <div class="progress-label" id="progress-label">Parsing...</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="or-divider">OR</div>
+
+        <!-- Demo panel -->
+        <div id="demo-panel">
+          <div class="panel-topbar">
+            <div class="panel-dots">
+              <div class="dot dot-r"></div>
+              <div class="dot dot-y"></div>
+              <div class="dot dot-g"></div>
+            </div>
+            <div class="panel-title">HANDMADE_DEMO.JSON · LOADED</div>
+            <div class="panel-badge">✓ DEMO MODE</div>
+          </div>
+          <div class="panel-body">
+            <pre
+              id="demo-json"
+              style="
+                font-family: var(--font-mono);
+                font-size: 11px;
+                color: #7a8099;
+                line-height: 1.7;
+                overflow: auto;
+                max-height: 300px;
+              "
+            ></pre>
+          </div>
+        </div>
+
+        <button
+          class="btn-ghost interactive"
+          style="margin-top: 1rem; width: 100%"
+          onclick="loadDemo()"
+        >
+          ⬡ Load handmade_demo.json
+        </button>
+      </section>
+
+      <!-- ARCHITECTURE PREVIEW -->
+      <section id="arch-section">
+        <div class="section-head reveal">
+          <span class="section-num">02</span>
+          <span class="section-title">Architecture Preview</span>
+          <div class="section-line"></div>
+        </div>
+
+        <div class="arch-canvas-wrap">
+          <div class="arch-topbar">
+            <div class="panel-dots">
+              <div class="dot dot-r"></div>
+              <div class="dot dot-y"></div>
+              <div class="dot dot-g"></div>
+            </div>
+            <div class="arch-label">
+              DELTAV SYSTEM ARCHITECTURE · REAL-TIME RENDER
+            </div>
+            <div class="panel-badge" id="arch-status">AWAITING BOM</div>
+          </div>
+          <canvas id="arch-canvas"></canvas>
+        </div>
+
+        <div
+          style="display: flex; gap: 1rem; flex-wrap: wrap"
+          id="arch-buttons"
+        >
+          <button
+            class="btn-primary interactive"
+            id="gen-btn"
+            onclick="generateArch()"
+          >
+            ⚡ Generate Architecture
+          </button>
+          <button class="btn-ghost interactive" onclick="resetAll()">
+            ↺ Reset
+          </button>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <section id="results-section">
+        <div class="section-head reveal">
+          <span class="section-num">03</span>
+          <span class="section-title">Classification Results</span>
+          <div class="section-line"></div>
+        </div>
+
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Area</th>
+                <th>Qty</th>
+                <th>Class</th>
+                <th>Confidence</th>
+              </tr>
+            </thead>
+            <tbody id="results-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="cab-grid" id="cab-grid"></div>
+
+        <div class="download-card" id="download-card" style="display: none">
+          <div class="download-title">Architecture Ready</div>
+          <div class="download-sub">
+            PPTX FILE · DELTAV SINGLE-SLIDE DIAGRAM
+          </div>
+          <div class="download-meta">
+            <div class="dl-meta-item">
+              <div class="dl-meta-label">Format</div>
+              <div class="dl-meta-val">.pptx · Microsoft PowerPoint</div>
+            </div>
+            <div class="dl-meta-item">
+              <div class="dl-meta-label">Slides</div>
+              <div class="dl-meta-val">1 · Architecture Only</div>
+            </div>
+            <div class="dl-meta-item">
+              <div class="dl-meta-label">Status</div>
+              <div class="dl-meta-val" style="color: var(--green)">
+                ✓ Generated
+              </div>
+            </div>
+          </div>
+          <button class="btn-download interactive" onclick="downloadPPTX()">
+            ↓ Download Architecture.pptx
+          </button>
+        </div>
+      </section>
+
+      <footer>
+        <div class="footer-brand" style="color: var(--amber)">
+          ⚡ DeltaV Architecture Generator
+        </div>
+        <div class="footer-info">
+          Emerson Automation Solutions · Pune · Rule-Based · 100% Offline · v2.0
+        </div>
+      </footer>
+    </div>
+
+    <!-- ─── THREE.JS PARTICLE BACKGROUND ─────────────────────────────────────────── -->
+    <script>
+      // ─── THREE.JS SCENE ───────────────────────────────────────────────────────────
+      (function () {
+        const canvas = document.getElementById("three-canvas");
+        const renderer = new THREE.WebGLRenderer({
+          canvas,
+          alpha: true,
+          antialias: true,
+        });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+          60,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000,
+        );
+        camera.position.z = 30;
+
+        // Grid lines — horizontal and vertical floating in 3D
+        const gridMat = new THREE.LineBasicMaterial({
+          color: 0xffa01e,
+          transparent: true,
+          opacity: 0.04,
+        });
+        const gridGroup = new THREE.Group();
+
+        for (let i = -20; i <= 20; i += 2) {
+          const hGeo = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(-30, i, 0),
+            new THREE.Vector3(30, i, 0),
+          ]);
+          const vGeo = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(i * 1.5, -15, 0),
+            new THREE.Vector3(i * 1.5, 15, 0),
+          ]);
+          gridGroup.add(new THREE.Line(hGeo, gridMat));
+          gridGroup.add(new THREE.Line(vGeo, gridMat));
+        }
+        scene.add(gridGroup);
+
+        // Floating particles
+        const pCount = 160;
+        const positions = new Float32Array(pCount * 3);
+        const pSizes = new Float32Array(pCount);
+        for (let i = 0; i < pCount; i++) {
+          positions[i * 3] = (Math.random() - 0.5) * 80;
+          positions[i * 3 + 1] = (Math.random() - 0.5) * 50;
+          positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
+          pSizes[i] = Math.random() * 2 + 0.5;
+        }
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        pGeo.setAttribute("size", new THREE.BufferAttribute(pSizes, 1));
+
+        const pMat = new THREE.PointsMaterial({
+          color: 0xffa01e,
+          size: 0.12,
+          transparent: true,
+          opacity: 0.5,
+          sizeAttenuation: true,
+        });
+        const particles = new THREE.Points(pGeo, pMat);
+        scene.add(particles);
+
+        // Floating geometric shapes — circuit-like rectangles
+        const shapes = [];
+        const rectMat = new THREE.LineBasicMaterial({
+          color: 0xffa01e,
+          transparent: true,
+          opacity: 0.07,
+        });
+        for (let i = 0; i < 12; i++) {
+          const w = Math.random() * 4 + 1;
+          const h = Math.random() * 2 + 0.5;
+          const geo = new THREE.EdgesGeometry(new THREE.BoxGeometry(w, h, 0.1));
+          const mesh = new THREE.LineSegments(geo, rectMat.clone());
+          mesh.position.set(
+            (Math.random() - 0.5) * 60,
+            (Math.random() - 0.5) * 40,
+            (Math.random() - 0.5) * 10 - 5,
+          );
+          mesh.rotation.z = (Math.random() - 0.5) * 0.3;
+          mesh.userData.speed = {
+            x: (Math.random() - 0.5) * 0.0008,
+            y: (Math.random() - 0.5) * 0.0005,
+          };
+          shapes.push(mesh);
+          scene.add(mesh);
+        }
+
+        // Mouse parallax
+        let mx = 0,
+          my = 0;
+        window.addEventListener("mousemove", (e) => {
+          mx = (e.clientX / window.innerWidth - 0.5) * 2;
+          my = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        // Animate
+        let t = 0;
+        function animate() {
+          requestAnimationFrame(animate);
+          t += 0.008;
+
+          // Slow grid rotation
+          gridGroup.rotation.z = t * 0.015;
+          gridGroup.rotation.x = Math.sin(t * 0.07) * 0.04;
+
+          // Particle drift
+          particles.rotation.y = t * 0.02;
+          particles.rotation.x = t * 0.01;
+
+          // Mouse parallax
+          camera.position.x += (mx * 3 - camera.position.x) * 0.04;
+          camera.position.y += (-my * 2 - camera.position.y) * 0.04;
+          camera.lookAt(scene.position);
+
+          // Shape float
+          shapes.forEach((s) => {
+            s.position.x += s.userData.speed.x * 60;
+            s.position.y += s.userData.speed.y * 60;
+            if (Math.abs(s.position.x) > 35) s.userData.speed.x *= -1;
+            if (Math.abs(s.position.y) > 22) s.userData.speed.y *= -1;
+            s.rotation.z += 0.001;
+          });
+
+          renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener("resize", () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      })();
+    </script>
+
+    <!-- ─── ARCHITECTURE CANVAS (2D) ──────────────────────────────────────────────── -->
+    <script>
+      // ─── CUSTOM CURSOR ────────────────────────────────────────────────────────────
+      const cursorDot = document.getElementById("cursor-dot");
+      const cursorRing = document.getElementById("cursor-ring");
+      let cx = 0,
+        cy = 0,
+        rx = 0,
+        ry = 0;
+      window.addEventListener("mousemove", (e) => {
+        cx = e.clientX;
+        cy = e.clientY;
+      });
+      (function moveCursor() {
+        requestAnimationFrame(moveCursor);
+        rx += (cx - rx) * 0.15;
+        ry += (cy - ry) * 0.15;
+        cursorDot.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+        cursorRing.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+      })();
+
+      // ─── REVEAL ON SCROLL ─────────────────────────────────────────────────────────
+      const revealEls = document.querySelectorAll(".reveal");
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("revealed");
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+      revealEls.forEach((el) => io.observe(el));
+
+      // ─── TOAST ────────────────────────────────────────────────────────────────────
+      function toast(msg, type = "success") {
+        const el = document.getElementById("toast");
+        document.getElementById("toast-msg").textContent = msg;
+        el.className = "show " + type;
+        setTimeout(() => (el.className = ""), 3000);
+      }
+
+      // ─── DRAG & DROP ──────────────────────────────────────────────────────────────
+      function onDragOver(e) {
+        e.preventDefault();
+        document.getElementById("upload-zone").classList.add("drag-over");
+      }
+      function onDragLeave(e) {
+        document.getElementById("upload-zone").classList.remove("drag-over");
+      }
+      function onDrop(e) {
+        e.preventDefault();
+        document.getElementById("upload-zone").classList.remove("drag-over");
+        const file = e.dataTransfer.files[0];
+        if (file) processFile(file);
+      }
+
+      // ─── FILE HANDLING ────────────────────────────────────────────────────────────
+      let parsedData = null;
+
+      function handleFile(event) {
+        const file = event.target.files[0];
+        if (file) processFile(file);
+      }
+
+      function setProgress(pct, label) {
+        const wrap = document.getElementById("progress-wrap");
+        const fill = document.getElementById("progress-fill");
+        const lbl = document.getElementById("progress-label");
+        wrap.classList.add("active");
+        fill.style.width = pct + "%";
+        lbl.textContent = label;
+        if (pct >= 100) setTimeout(() => wrap.classList.remove("active"), 600);
+      }
+
+      function setStep(n) {
+        ["s1", "s2", "s3", "s4"].forEach((id, i) => {
+          const el = document.getElementById(id);
+          if (i + 1 < n) {
+            el.className = "step done";
+            el.querySelector(".step-n").textContent = "✓";
+          } else if (i + 1 === n) el.className = "step active";
+          else el.className = "step";
+        });
+      }
+
+      async function processFile(file) {
+        const ext = file.name.split(".").pop().toLowerCase();
+        if (!["xlsx", "xls", "csv"].includes(ext)) {
+          toast("Unsupported format", "error");
+          return;
+        }
+
+        setStep(2);
+        setProgress(20, "Reading file...");
+
+        const text = await file.text();
+        const rows = parseCSV(text);
+
+        setProgress(60, "Classifying components...");
+        await sleep(300);
+
+        parsedData = classifyRows(rows);
+        setProgress(100, "Done");
+
+        updateStats(parsedData);
+        renderTable(parsedData);
+        renderCabGrid(parsedData);
+
+        setStep(3);
+        document.getElementById("results-section").classList.add("active");
+        toast(`✓ ${parsedData.length} items classified`);
+        document
+          .getElementById("results-section")
+          .scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function sleep(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+      }
+
+      // ─── DEMO LOADER ──────────────────────────────────────────────────────────────
+      const DEMO_JSON = {
+        rooms: [
+          {
+            room_type: "OTHER",
+            CNTR: { quantity: 1, redundant: true },
+            CHARM: { baseplates: 31 },
+            FOPP: { quantity: 2 },
+            ENC_COMP: [
+              { part_name: "DeltaV Rack Workstation", quantity: 1 },
+              { part_name: "DeltaV Smart Switch", quantity: 2 },
+              { part_name: "19 inch Sliding Screen", quantity: 1 },
+              { part_name: "APC UPS 3kVA", quantity: 1 },
+              { part_name: "Hirschmann Industrial Switch", quantity: 1 },
+            ],
+          },
+          {
+            room_type: "OPERATOR",
+            CNTR: { quantity: 0, redundant: false },
+            CHARM: { baseplates: 0 },
+            FOPP: { quantity: 0 },
+            ENC_COMP: [
+              { part_name: "DeltaV Full-sized Tower Workstation", quantity: 1 },
+              { part_name: "24-inch Monitor", quantity: 1 },
+              { part_name: "Printer", quantity: 1 },
+            ],
+          },
+        ],
+      };
+
+      function loadDemo() {
+        document.getElementById("demo-panel").classList.add("active");
+        document.getElementById("demo-json").textContent = JSON.stringify(
+          DEMO_JSON,
+          null,
+          2,
+        );
+
+        setStep(2);
+        setProgress(20, "Loading demo...");
+
+        // Convert demo JSON to rows
+        const rows = [];
+        let sr = 1;
+        DEMO_JSON.rooms.forEach((room) => {
+          const area =
+            room.room_type === "OPERATOR" ? "OPERATOR ROOM" : "PDC ROOM";
+          if (room.CNTR.quantity > 0) {
+            const desc = room.CNTR.redundant
+              ? "Redundant PK Controller"
+              : "PK Controller";
+            rows.push({
+              sr_no: sr++,
+              area,
+              description: desc,
+              qty: room.CNTR.quantity,
+              category: "CNTR",
+              part_number: "CNTR-PK750",
+            });
+          }
+          if (room.CHARM.baseplates > 0) {
+            rows.push({
+              sr_no: sr++,
+              area,
+              description: "CHARM Baseplate Assembly",
+              qty: room.CHARM.baseplates,
+              category: "CHARM",
+              part_number: "CHARM-DPN-017",
+            });
+          }
+          if (room.FOPP.quantity > 0) {
+            rows.push({
+              sr_no: sr++,
+              area,
+              description: "Fiber Optic Patch Panel",
+              qty: room.FOPP.quantity,
+              category: "FOPP",
+              part_number: "FOPP-001",
+            });
+          }
+          room.ENC_COMP.forEach((comp) => {
+            rows.push({
+              sr_no: sr++,
+              area,
+              description: comp.part_name,
+              qty: comp.quantity,
+              category: "",
+              part_number: "",
+            });
+          });
+        });
+
+        setTimeout(async () => {
+          setProgress(60, "Classifying...");
+          await sleep(300);
+          parsedData = classifyRows(rows);
+          setProgress(100, "Done");
+          updateStats(parsedData);
+          renderTable(parsedData);
+          renderCabGrid(parsedData);
+          setStep(3);
+          document.getElementById("results-section").classList.add("active");
+          toast(`✓ Demo loaded — ${parsedData.length} items`, "success");
+          document
+            .getElementById("results-section")
+            .scrollIntoView({ behavior: "smooth" });
+        }, 400);
+      }
+
+      // ─── MINIMAL CSV PARSER ───────────────────────────────────────────────────────
+      function parseCSV(text) {
+        const lines = text.split("\n").map((l) => l.replace(/\r/g, ""));
+        if (!lines.length) return [];
+        // Find header row (first row with desc-like column)
+        let hdr = 0;
+        for (let i = 0; i < Math.min(15, lines.length); i++) {
+          const lower = lines[i].toLowerCase();
+          if (
+            lower.includes("description") ||
+            lower.includes("desc") ||
+            lower.includes("item")
+          ) {
+            hdr = i;
+            break;
+          }
+        }
+        const headers = lines[hdr]
+          .split(",")
+          .map((h) => h.trim().toLowerCase().replace(/['"]/g, ""));
+        const findCol = (aliases) => {
+          for (const a of aliases) {
+            const i = headers.findIndex((h) => h.includes(a));
+            if (i >= 0) return i;
+          }
+          return -1;
+        };
+        const descIdx = findCol([
+          "description",
+          "desc",
+          "item",
+          "component",
+          "material",
+          "particulars",
+        ]);
+        const qtyIdx = findCol(["qty", "quantity", "count", "units"]);
+        const areaIdx = findCol([
+          "area",
+          "room",
+          "location",
+          "zone",
+          "section",
+        ]);
+        const catIdx = findCol(["category", "cat", "type", "class", "group"]);
+        const partIdx = findCol([
+          "part",
+          "catalog",
+          "model",
+          "article",
+          "material code",
+          "item code",
+        ]);
+
+        const rows = [];
+        for (let i = hdr + 1; i < lines.length; i++) {
+          const cells = lines[i]
+            .split(",")
+            .map((c) => c.trim().replace(/['"]/g, ""));
+          const desc = descIdx >= 0 ? cells[descIdx] : cells[0];
+          if (
+            !desc ||
+            ["nan", "none", "", "undefined"].includes(desc.toLowerCase())
+          )
+            continue;
+          rows.push({
+            sr_no: i - hdr,
+            area: areaIdx >= 0 ? cells[areaIdx] : "PDC ROOM",
+            description: desc,
+            qty: qtyIdx >= 0 ? parseInt(cells[qtyIdx]) || 1 : 1,
+            category: catIdx >= 0 ? cells[catIdx] : "",
+            part_number: partIdx >= 0 ? cells[partIdx] : "",
+          });
+        }
+        return rows;
+      }
+
+      // ─── CLASSIFICATION ENGINE (mirrors classifier.py logic) ──────────────────────
+      const RULES = {
+        CONTROLLER: {
+          keywords: [
+            "controller",
+            "pk750",
+            "pk controller",
+            "redundant pk",
+            "cpu module",
+            "deltav controller",
+          ],
+          part_prefixes: ["cntr-"],
+          label: "PK Controller",
+          color: "#1A3A6B",
+        },
+        CIOC: {
+          keywords: [
+            "cioc",
+            "charm i/o card",
+            "io card 2",
+            "cioc carrier",
+            "cioc2",
+            "redundant cioc",
+          ],
+          part_prefixes: ["charm-dpn-015", "charm-dpn-016"],
+          label: "CIOC",
+          color: "#2E5FA3",
+        },
+        CHARM_BASE: {
+          keywords: [
+            "charm baseplate",
+            "baseplate assembly",
+            "charm base",
+            "baseplate terminator",
+          ],
+          part_prefixes: ["charm-dpn-017", "charm-dpn-019", "charm-dpn-020"],
+          label: "CHARM Base",
+          color: "#8B4513",
+        },
+        CHARM_AI: {
+          keywords: [
+            "analog input",
+            "ai charm",
+            "4-20 ma",
+            "hart input",
+            "rtd charm",
+            "ain charm",
+          ],
+          part_prefixes: ["charm-dpn-011", "charm-dpn-012"],
+          label: "AI CHARM",
+          color: "#C96A00",
+        },
+        CHARM_AO: {
+          keywords: ["analog output", "ao charm", "current output charm"],
+          part_prefixes: ["charm-dpn-013"],
+          label: "AO CHARM",
+          color: "#B85C00",
+        },
+        CHARM_DI: {
+          keywords: [
+            "discrete input",
+            "di charm",
+            "dry contact charm",
+            "digital input charm",
+          ],
+          part_prefixes: ["charm-dpn-014", "charm-dpn-024"],
+          label: "DI CHARM",
+          color: "#A85000",
+        },
+        CHARM_DO: {
+          keywords: [
+            "discrete output",
+            "do charm",
+            "relay output charm",
+            "digital output charm",
+          ],
+          part_prefixes: ["charm-dpn-018", "charm-dpn-023"],
+          label: "DO CHARM",
+          color: "#963D00",
+        },
+        POWER: {
+          keywords: [
+            "power supply",
+            "bulk power",
+            "psu",
+            "power module",
+            "24vdc",
+            "ups power",
+          ],
+          part_prefixes: ["pwr-"],
+          label: "Power Supply",
+          color: "#CC3300",
+        },
+        UPS: {
+          keywords: [
+            "ups",
+            "uninterruptible",
+            "apc",
+            "battery backup",
+            "power backup",
+          ],
+          part_prefixes: ["ups-"],
+          label: "UPS",
+          color: "#FFD700",
+        },
+        WORKSTATION: {
+          keywords: [
+            "workstation",
+            "rack workstation",
+            "ews",
+            "industrial pc",
+            "proplus",
+            "professional plus",
+          ],
+          part_prefixes: ["ws-"],
+          label: "EWS/PROPlus",
+          color: "#2B5EA7",
+        },
+        SWITCH: {
+          keywords: [
+            "switch",
+            "network switch",
+            "smart switch",
+            "hirschmann",
+            "ethernet switch",
+          ],
+          part_prefixes: ["swt-"],
+          label: "DCS Switch",
+          color: "#2D6A2D",
+        },
+        SCREEN: {
+          keywords: [
+            "sliding screen",
+            "pullout screen",
+            "rack screen",
+            "19 inch screen",
+            "kvm",
+          ],
+          part_prefixes: ["scr-"],
+          label: '19" Screen',
+          color: "#555555",
+        },
+        FOPP: {
+          keywords: [
+            "fopp",
+            "fiber optic patch",
+            "patch panel",
+            "optical patch",
+            "liu",
+            "fopps",
+          ],
+          part_prefixes: ["fopp-"],
+          label: "FOPP",
+          color: "#7B3F9E",
+        },
+        MEDIA_CONV: {
+          keywords: [
+            "media converter",
+            "single mode",
+            "converter assembly",
+            "fiber converter",
+          ],
+          part_prefixes: ["mc-"],
+          label: "Media Conv",
+          color: "#00A0B0",
+        },
+        SOFTWARE: {
+          keywords: [
+            "software",
+            "license",
+            "softkey",
+            "dst",
+            "reporter",
+            "live operations",
+            "performance pack",
+          ],
+          part_prefixes: ["sw-", "swk-", "gen-"],
+          label: "Software",
+          color: "#4A8C3F",
+        },
+        MONITOR: {
+          keywords: [
+            "led monitor",
+            "widescreen monitor",
+            "24 inch",
+            "24-inch",
+            "display monitor",
+            "lcd monitor",
+          ],
+          part_prefixes: ["mon-dpn-037"],
+          label: "Monitor",
+          color: "#4488AA",
+        },
+        PRINTER: {
+          keywords: ["printer", "laser printer", "network printer"],
+          part_prefixes: ["prt-"],
+          label: "Printer",
+          color: "#888888",
+        },
+        OPERATOR_WS: {
+          keywords: [
+            "tower workstation",
+            "full-sized tower",
+            "full sized tower",
+            "operator workstation",
+            "deltav tower",
+          ],
+          part_prefixes: ["ws-dpn-036"],
+          label: "OWS",
+          color: "#2B5EA7",
+        },
+        FIREWALL: {
+          keywords: [
+            "firewall",
+            "nextgen",
+            "security appliance",
+            "next gen",
+            "smart firewall",
+          ],
+          part_prefixes: ["fw-"],
+          label: "Firewall",
+          color: "#C03030",
+        },
+      };
+
+      const CAT_MAP = {
+        cntr: "CONTROLLER",
+        ws: "WORKSTATION",
+        swt: "SWITCH",
+        ups: "UPS",
+        sw: "SOFTWARE",
+        swk: "SOFTWARE",
+        charm: "CHARM_BASE",
+        pwr: "POWER",
+        mc: "MEDIA_CONV",
+        fopp: "FOPP",
+        fbr: "FIBER",
+        cab: "CABINET",
+        mon: "MONITOR",
+        prt: "PRINTER",
+        con: "CONSOLE",
+        fw: "FIREWALL",
+      };
+
+      function norm(s) {
+        return String(s)
+          .toLowerCase()
+          .trim()
+          .replace(/[;:,]/g, " ")
+          .replace(/\s+/g, " ");
+      }
+
+      function classifyRow(row) {
+        const desc = norm(row.description);
+        const part = norm(row.part_number);
+        const cat = norm(row.category);
+        const area = norm(row.area);
+
+        // Special: operator + workstation/tower → OPERATOR_WS
+        if (
+          area.includes("operator") &&
+          (desc.includes("workstation") || desc.includes("tower"))
+        )
+          return ["OPERATOR_WS", "HIGH"];
+
+        // Level 1: part prefix
+        for (const [cls, rule] of Object.entries(RULES)) {
+          for (const pfx of rule.part_prefixes || []) {
+            if (part.startsWith(pfx)) return [cls, "HIGH"];
+          }
+        }
+        // Level 2: exact phrase
+        for (const [cls, rule] of Object.entries(RULES)) {
+          for (const kw of rule.keywords) {
+            if (norm(kw) === desc) return [cls, "HIGH"];
+          }
+        }
+        // Level 3: keyword score
+        const scores = {};
+        for (const [cls, rule] of Object.entries(RULES)) {
+          let score = 0;
+          for (const kw of rule.keywords) {
+            const kn = norm(kw);
+            if (desc.includes(kn)) score += kn.split(" ").length;
+          }
+          if (score > 0) scores[cls] = score;
+        }
+        if (Object.keys(scores).length) {
+          const best = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+          return [best, scores[best] >= 2 ? "MEDIUM" : "LOW"];
+        }
+        // Category fallback
+        if (cat in CAT_MAP) return [CAT_MAP[cat], "LOW"];
+        return ["UNKNOWN", "UNKNOWN"];
+      }
+
+      function getCabinetGroup(cls) {
+        const IO = [
+          "CONTROLLER",
+          "CIOC",
+          "CHARM_BASE",
+          "CHARM_AI",
+          "CHARM_AO",
+          "CHARM_DI",
+          "CHARM_DO",
+          "POWER",
+        ];
+        const OP = ["OPERATOR_WS", "MONITOR", "PRINTER", "FIREWALL", "CONSOLE"];
+        const SW = ["SOFTWARE"];
+        const FP = ["FOPP"];
+        if (IO.includes(cls)) return "IO_CABINET";
+        if (OP.includes(cls)) return "OPERATOR_DESK";
+        if (SW.includes(cls)) return "SOFTWARE";
+        if (FP.includes(cls)) return "FOPP_NODES";
+        return "SERVER_CABINET";
+      }
+
+      function classifyRows(rows) {
+        return rows.map((r) => {
+          const [cls, conf] = classifyRow(r);
+          const rule = RULES[cls] || {};
+          return {
+            ...r,
+            diagram_class: cls,
+            confidence: conf,
+            label: rule.label || cls,
+            color: rule.color || "#888888",
+            cabinet: getCabinetGroup(cls),
+          };
+        });
+      }
+
+      // ─── STATS UPDATE ─────────────────────────────────────────────────────────────
+      function updateStats(data) {
+        const classified = data.filter(
+          (r) => r.diagram_class !== "UNKNOWN",
+        ).length;
+        const pct = Math.round((classified / data.length) * 100);
+        const cabs = new Set(data.map((r) => r.cabinet)).size;
+
+        animateNum("stat-items", data.length);
+        animateNum("stat-classified", classified, "", `${pct}%`);
+        animateNum("stat-cabinets", cabs);
+      }
+      function animateNum(id, target, prefix = "", suffix = "") {
+        const el = document.getElementById(id);
+        let cur = 0;
+        const step = Math.ceil(target / 30);
+        const iv = setInterval(() => {
+          cur = Math.min(cur + step, target);
+          el.textContent = prefix + cur + suffix;
+          if (cur >= target) clearInterval(iv);
+        }, 30);
+      }
+
+      // ─── RESULTS TABLE ────────────────────────────────────────────────────────────
+      function renderTable(data) {
+        const tbody = document.getElementById("results-tbody");
+        tbody.innerHTML = data
+          .slice(0, 60)
+          .map(
+            (r, i) => `
+    <tr style="animation:fadeInUp 0.4s ${i * 0.02}s both">
+      <td style="color:var(--muted)">${r.sr_no}</td>
+      <td>
+        <div style="font-size:12px;color:var(--text)">${r.description.slice(0, 55)}</div>
+        ${r.part_number ? `<div style="font-size:10px;color:var(--muted);margin-top:2px">${r.part_number}</div>` : ""}
+      </td>
+      <td style="color:var(--muted);font-size:10px">${r.area || "PDC ROOM"}</td>
+      <td style="color:var(--text);font-weight:600">${r.qty}</td>
+      <td>
+        <span style="font-size:11px;padding:3px 8px;border-radius:4px;background:${r.color}22;color:${r.color};border:1px solid ${r.color}44">
+          ${r.label}
+        </span>
+      </td>
+      <td><span class="badge badge-${r.confidence.toLowerCase()}">${r.confidence}</span></td>
+    </tr>
+  `,
+          )
+          .join("");
+      }
+
+      // ─── CABINET GRID ─────────────────────────────────────────────────────────────
+      function renderCabGrid(data) {
+        const cabs = {};
+        data.forEach((r) => {
+          const key =
+            r.cabinet === "IO_CABINET"
+              ? "I/O Cabinet"
+              : r.cabinet
+                  .replace(/_/g, " ")
+                  .replace(/\b\w/g, (c) => c.toUpperCase());
+          const room = r.area?.includes("OPERATOR")
+            ? "OPERATOR ROOM"
+            : "PDC ROOM";
+          const fullKey = `${room}::${key}`;
+          if (!cabs[fullKey]) cabs[fullKey] = { room, name: key, count: 0 };
+          cabs[fullKey].count++;
+        });
+
+        const grid = document.getElementById("cab-grid");
+        grid.innerHTML = Object.values(cabs)
+          .map((c) => {
+            const cls = c.room.includes("OPERATOR")
+              ? "op"
+              : c.name.includes("Software")
+                ? "sw"
+                : "pdc";
+            return `
+      <div class="cab-card ${cls}">
+        <div class="cab-room">${c.room}</div>
+        <div class="cab-name">${c.name}</div>
+        <div class="cab-count">${c.count}</div>
+        <div class="cab-sub">components</div>
+      </div>`;
+          })
+          .join("");
+      }
+
+      // ─── ARCHITECTURE 2D CANVAS ───────────────────────────────────────────────────
+      let archAnimFrame = null;
+
+      function generateArch() {
+        if (!parsedData) {
+          toast("Upload a BOM first", "error");
+          return;
+        }
+
+        setStep(4);
+        document.getElementById("arch-status").textContent = "✓ LIVE";
+        document.getElementById("arch-status").style.background =
+          "rgba(74,222,128,0.08)";
+        document.getElementById("arch-status").style.color = "var(--green)";
+        document.getElementById("arch-status").style.borderColor =
+          "rgba(74,222,128,0.2)";
+
+        document.getElementById("download-card").style.display = "block";
+
+        drawArchitecture(parsedData);
+        toast("✓ Architecture rendered", "success");
+      }
+
+      function drawArchitecture(data) {
+        const canvas = document.getElementById("arch-canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Resize canvas
+        const wrap = canvas.parentElement;
+        canvas.width = wrap.clientWidth;
+        canvas.height = 500;
+
+        const W = canvas.width,
+          H = canvas.height;
+        const dpr = window.devicePixelRatio || 1;
+
+        if (archAnimFrame) cancelAnimationFrame(archAnimFrame);
+
+        // Group data
+        const pdcItems = data.filter((r) => !r.area?.includes("OPERATOR"));
+        const opItems = data.filter((r) => r.area?.includes("OPERATOR"));
+
+        const ioItems = pdcItems.filter((r) => r.cabinet === "IO_CABINET");
+        const srvItems = pdcItems.filter((r) => r.cabinet === "SERVER_CABINET");
+        const swItems = pdcItems.filter((r) => r.cabinet === "SOFTWARE");
+        const foppItems = pdcItems.filter((r) => r.cabinet === "FOPP_NODES");
+
+        // Count CHARM baseplates for IO cab count
+        const charmBase =
+          ioItems
+            .filter((r) => r.diagram_class === "CHARM_BASE")
+            .reduce((s, r) => s + r.qty, 0) || 24;
+        const numIOCabs = Math.max(1, Math.ceil(charmBase / 24));
+
+        let t = 0;
+        function draw() {
+          archAnimFrame = requestAnimationFrame(draw);
+          t += 0.012;
+          ctx.clearRect(0, 0, W, H);
+
+          // Background
+          ctx.fillStyle = "#0A0C12";
+          ctx.fillRect(0, 0, W, H);
+
+          // Grid
+          ctx.strokeStyle = "rgba(255,160,30,0.04)";
+          ctx.lineWidth = 1;
+          for (let gx = 0; gx < W; gx += 40) {
+            ctx.beginPath();
+            ctx.moveTo(gx, 0);
+            ctx.lineTo(gx, H);
+            ctx.stroke();
+          }
+          for (let gy = 0; gy < H; gy += 40) {
+            ctx.beginPath();
+            ctx.moveTo(0, gy);
+            ctx.lineTo(W, gy);
+            ctx.stroke();
+          }
+
+          const PAD = 18;
+          const pdcW = W * 0.66;
+          const opW = W - pdcW - PAD * 3;
+
+          // ── PDC ROOM ──────────────────────────────────────────────────────────────
+          drawRoom(ctx, PAD, PAD, pdcW - PAD, H - PAD * 2, "PDC ROOM", t);
+
+          // Software strip at top
+          const swY = PAD + 38;
+          if (swItems.length)
+            drawSoftwareStrip(
+              ctx,
+              PAD + 12,
+              swY,
+              pdcW - PAD * 2 - 20,
+              28,
+              swItems,
+              t,
+            );
+
+          // Server cabinet
+          const srvX = PAD + 12;
+          const srvY = swY + 38;
+          const srvH = H - PAD * 2 - 90;
+          const srvW = 120;
+          drawCabinet(
+            ctx,
+            srvX,
+            srvY,
+            srvW,
+            srvH,
+            "Server Cabinet",
+            srvItems,
+            t,
+          );
+
+          // FOPP nodes
+          const foppX = srvX + srvW + 20;
+          if (foppItems.length) {
+            foppItems.slice(0, 3).forEach((fp, i) => {
+              drawFOPP(ctx, foppX, srvY + i * 55, t + i * 0.5);
+            });
+          }
+
+          // IO Cabinets
+          const ioCabW = Math.min(
+            110,
+            (pdcW - PAD - srvX - srvW - 50) / numIOCabs - 10,
+          );
+          for (let c = 0; c < numIOCabs; c++) {
+            const ioCabX = foppX + 50 + c * (ioCabW + 10);
+            drawIOCabinet(
+              ctx,
+              ioCabX,
+              srvY,
+              ioCabW,
+              srvH,
+              `I/O #${c + 1}`,
+              ioItems,
+              c,
+              numIOCabs,
+              t,
+            );
+          }
+
+          // Bus lines
+          const busY = srvY + srvH * 0.35;
+          const busEndX = pdcW - PAD - 10;
+
+          // Controller bus (blue)
+          ctx.strokeStyle = `rgba(46,95,163,${0.6 + 0.2 * Math.sin(t)})`;
+          ctx.lineWidth = 2.5;
+          ctx.setLineDash([6, 4]);
+          ctx.beginPath();
+          ctx.moveTo(srvX + srvW, busY);
+          ctx.lineTo(busEndX, busY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          drawBusLabel(
+            ctx,
+            srvX + srvW + 10,
+            busY - 10,
+            "CTRL BUS",
+            "#2E5FA3",
+            t,
+          );
+
+          // Network bus (magenta)
+          const netY = srvY + srvH * 0.55;
+          ctx.strokeStyle = `rgba(204,0,119,${0.5 + 0.2 * Math.sin(t + 1)})`;
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          ctx.moveTo(srvX + srvW, netY);
+          ctx.lineTo(busEndX, netY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          drawBusLabel(
+            ctx,
+            srvX + srvW + 10,
+            netY - 10,
+            "NET BUS",
+            "#CC0077",
+            t,
+          );
+
+          // ── OPERATOR ROOM ──────────────────────────────────────────────────────────
+          const opX = pdcW + PAD;
+          drawRoom(
+            ctx,
+            opX,
+            PAD,
+            opW,
+            H - PAD * 2,
+            "OPERATOR ROOM",
+            t,
+            "#4ADE80",
+          );
+          drawOperatorDesk(ctx, opX + 16, H / 2 - 80, opW - 30, opItems, t);
+
+          // Fiber link between rooms
+          drawFiberLink(ctx, pdcW + PAD / 2, H / 2, t);
+
+          // Animated data flow
+          drawDataFlow(ctx, srvX + srvW, busY, busEndX, busY, t, "#2E5FA3");
+        }
+
+        draw();
+      }
+
+      // ── DRAWING HELPERS ────────────────────────────────────────────────────────────
+
+      function drawRoom(ctx, x, y, w, h, label, t, borderColor = "#FFA01E") {
+        // Dashed room border
+        ctx.save();
+        ctx.strokeStyle =
+          borderColor === "#FFA01E"
+            ? `rgba(255,160,30,${0.3 + 0.08 * Math.sin(t * 0.5)})`
+            : `rgba(74,222,128,${0.3 + 0.08 * Math.sin(t * 0.5 + 1)})`;
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([8, 6]);
+        ctx.fillStyle =
+          borderColor === "#FFA01E"
+            ? "rgba(255,160,30,0.015)"
+            : "rgba(74,222,128,0.01)";
+        roundRect(ctx, x, y, w, h, 10);
+        ctx.fill();
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Label tab
+        ctx.fillStyle =
+          borderColor === "#FFA01E"
+            ? "rgba(255,160,30,0.12)"
+            : "rgba(74,222,128,0.1)";
+        ctx.beginPath();
+        ctx.roundRect(x + 12, y - 1, label.length * 7 + 20, 22, 4);
+        ctx.fill();
+        ctx.fillStyle = borderColor === "#FFA01E" ? "#FFA01E" : "#4ADE80";
+        ctx.font = 'bold 9px "JetBrains Mono"';
+        ctx.letterSpacing = "0.15em";
+        ctx.fillText(label.toUpperCase(), x + 20, y + 14);
+        ctx.restore();
+      }
+
+      function drawCabinet(ctx, x, y, w, h, label, items, t) {
+        // Cabinet body
+        ctx.fillStyle = "#1C1F2B";
+        roundRect(ctx, x, y, w, h, 6);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.12)";
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, x, y, w, h, 6);
+        ctx.stroke();
+
+        // Top cap
+        ctx.fillStyle = "#2B2E3E";
+        ctx.fillRect(x, y, w, 22);
+        ctx.fillStyle = "#E8EAF0";
+        ctx.font = 'bold 8px "JetBrains Mono"';
+        ctx.fillText(label.toUpperCase(), x + 8, y + 14);
+
+        // Inner items
+        const innerPad = 8;
+        const itemH = 18;
+        let iy = y + 30;
+        items
+          .slice(0, Math.floor((h - 40) / (itemH + 3)))
+          .forEach((item, i) => {
+            const col = item.color || "#555";
+            ctx.fillStyle = col + "CC";
+            roundRect(ctx, x + innerPad, iy, w - innerPad * 2, itemH, 3);
+            ctx.fill();
+            ctx.fillStyle = "#fff";
+            ctx.font = `${item.qty > 1 ? "bold" : "normal"} 8px "JetBrains Mono"`;
+            ctx.fillText(
+              (item.label || item.diagram_class).slice(0, 12),
+              x + innerPad + 5,
+              iy + 12,
+            );
+            if (item.qty > 1) {
+              ctx.fillStyle = "rgba(255,255,255,0.6)";
+              ctx.font = '7px "JetBrains Mono"';
+              ctx.fillText(`×${item.qty}`, x + w - innerPad - 22, iy + 12);
+            }
+            iy += itemH + 3;
+          });
+      }
+
+      function drawIOCabinet(
+        ctx,
+        x,
+        y,
+        w,
+        h,
+        label,
+        items,
+        cabIdx,
+        totalCabs,
+        t,
+      ) {
+        ctx.fillStyle = "#181B27";
+        roundRect(ctx, x, y, w, h, 6);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(139,69,19,0.6)";
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, x, y, w, h, 6);
+        ctx.stroke();
+
+        ctx.fillStyle = "#2B2012";
+        ctx.fillRect(x, y, w, 22);
+        ctx.fillStyle = "#CC6600";
+        ctx.font = 'bold 8px "JetBrains Mono"';
+        ctx.fillText(label, x + 6, y + 14);
+
+        // CHARM strips
+        const perCab = Math.ceil(items.length / totalCabs);
+        const myItems = items.slice(cabIdx * perCab, (cabIdx + 1) * perCab);
+        const stripH = 14;
+        let sy = y + 28;
+        myItems
+          .slice(0, Math.floor((h - 40) / (stripH + 2)))
+          .forEach((item) => {
+            const col = item.color || "#8B4513";
+            ctx.fillStyle = col + "DD";
+            ctx.fillRect(x + 5, sy, w - 10, stripH);
+            ctx.fillStyle = "#fff";
+            ctx.font = '7px "JetBrains Mono"';
+            ctx.fillText((item.label || "").slice(0, 8), x + 7, sy + 10);
+            sy += stripH + 2;
+          });
+
+        // Animated CHARM glow pulse
+        const pulse = 0.1 + 0.06 * Math.sin(t * 1.5 + cabIdx);
+        ctx.fillStyle = `rgba(204,102,0,${pulse})`;
+        roundRect(ctx, x + 2, y + 2, w - 4, h - 4, 4);
+        ctx.fill();
+      }
+
+      function drawFOPP(ctx, x, y, t) {
+        const glow = 0.6 + 0.3 * Math.sin(t * 2);
+        ctx.fillStyle = `rgba(123,63,158,${0.8})`;
+        roundRect(ctx, x, y, 36, 30, 4);
+        ctx.fill();
+        ctx.strokeStyle = `rgba(123,63,158,${glow})`;
+        ctx.lineWidth = 1;
+        roundRect(ctx, x, y, 36, 30, 4);
+        ctx.stroke();
+        ctx.fillStyle = "#fff";
+        ctx.font = 'bold 8px "JetBrains Mono"';
+        ctx.fillText("FOPP", x + 4, y + 18);
+      }
+
+      function drawSoftwareStrip(ctx, x, y, w, h, items, t) {
+        const grad = ctx.createLinearGradient(x, y, x + w, y);
+        grad.addColorStop(0, "rgba(74,140,63,0.25)");
+        grad.addColorStop(1, "rgba(74,140,63,0.08)");
+        ctx.fillStyle = grad;
+        roundRect(ctx, x, y, w, h, 4);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(74,140,63,0.4)";
+        ctx.lineWidth = 1;
+        roundRect(ctx, x, y, w, h, 4);
+        ctx.stroke();
+
+        ctx.fillStyle = "#4A8C3F";
+        ctx.font = 'bold 8px "JetBrains Mono"';
+        let lx = x + 10;
+        items.slice(0, 8).forEach((item) => {
+          ctx.fillText("SW", lx, y + 18);
+          lx += 30;
+        });
+        ctx.fillStyle = "#7A8099";
+        ctx.font = '8px "JetBrains Mono"';
+        ctx.fillText(
+          `${items.length} SOFTWARE LICENSES`,
+          x + 10,
+          y + h / 2 + 4,
+        );
+      }
+
+      function drawOperatorDesk(ctx, x, y, w, items, t) {
+        // Desk surface
+        ctx.fillStyle = "#1E2230";
+        roundRect(ctx, x, y, w, 160, 8);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(74,222,128,0.2)";
+        ctx.lineWidth = 1;
+        roundRect(ctx, x, y, w, 160, 8);
+        ctx.stroke();
+
+        ctx.fillStyle = "#4ADE80";
+        ctx.font = 'bold 8px "JetBrains Mono"';
+        ctx.fillText("OPERATOR DESK", x + 12, y + 16);
+
+        // Monitors
+        const monitors = items.filter((r) =>
+          ["MONITOR", "CONSOLE"].includes(r.diagram_class),
+        );
+        monitors.slice(0, 2).forEach((m, i) => {
+          const mx = x + 16 + i * 70;
+          // Monitor frame
+          ctx.fillStyle = "#222";
+          roundRect(ctx, mx, y + 28, 58, 44, 4);
+          ctx.fill();
+          // Screen
+          ctx.fillStyle = `rgba(52,133,200,${0.7 + 0.2 * Math.sin(t + i)})`;
+          ctx.fillRect(mx + 4, y + 32, 50, 32);
+          // Scanlines
+          ctx.strokeStyle = "rgba(0,0,0,0.2)";
+          ctx.lineWidth = 1;
+          for (let sl = y + 32; sl < y + 64; sl += 4) {
+            ctx.beginPath();
+            ctx.moveTo(mx + 4, sl);
+            ctx.lineTo(mx + 54, sl);
+            ctx.stroke();
+          }
+          ctx.fillStyle = "#fff";
+          ctx.font = '6px "JetBrains Mono"';
+          ctx.fillText("DeltaV", mx + 16, y + 52);
+        });
+
+        // Tower WS
+        const tower = items.find((r) => r.diagram_class === "OPERATOR_WS");
+        if (tower) {
+          const tx = x + w - 60;
+          ctx.fillStyle = "#333";
+          roundRect(ctx, tx, y + 28, 36, 70, 4);
+          ctx.fill();
+          ctx.fillStyle = "#555";
+          ctx.fillRect(tx + 6, y + 38, 24, 16);
+          ctx.fillStyle = `rgba(0,120,255,${0.5 + 0.3 * Math.sin(t * 2)})`;
+          ctx.beginPath();
+          ctx.arc(tx + 18, y + 33, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#fff";
+          ctx.font = '7px "JetBrains Mono"';
+          ctx.fillText("OWS", tx + 8, y + 112);
+        }
+
+        // Printer
+        const printer = items.find((r) => r.diagram_class === "PRINTER");
+        if (printer && w > 120) {
+          const px = x + w - 100;
+          ctx.fillStyle = "#444";
+          roundRect(ctx, px, y + 90, 50, 30, 3);
+          ctx.fill();
+          ctx.fillStyle = "#666";
+          ctx.fillRect(px + 5, y + 100, 40, 8);
+          ctx.fillStyle = "#fff";
+          ctx.font = '7px "JetBrains Mono"';
+          ctx.fillText("PRT", px + 15, y + 135);
+        }
+      }
+
+      function drawFiberLink(ctx, x, y, t) {
+        const pulse = 0.4 + 0.3 * Math.sin(t * 3);
+        ctx.strokeStyle = `rgba(123,63,158,${pulse})`;
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(x - 10, y - 30);
+        ctx.lineTo(x + 10, y - 30);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Label
+        ctx.fillStyle = "rgba(123,63,158,0.5)";
+        ctx.font = '7px "JetBrains Mono"';
+        ctx.fillText("FIBER", x - 14, y - 20);
+      }
+
+      function drawBusLabel(ctx, x, y, text, color, t) {
+        ctx.fillStyle = color + "22";
+        ctx.fillRect(x, y, text.length * 7 + 10, 14);
+        ctx.fillStyle = color;
+        ctx.font = '7px "JetBrains Mono"';
+        ctx.fillText(text, x + 5, y + 10);
+      }
+
+      function drawDataFlow(ctx, x1, y, x2, _, t, color) {
+        const speed = 0.8;
+        const progress = (t * speed) % 1;
+        const px = x1 + (x2 - x1) * progress;
+        const gradient = ctx.createRadialGradient(px, y, 0, px, y, 8);
+        gradient.addColorStop(0, color + "FF");
+        gradient.addColorStop(1, color + "00");
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(px, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function roundRect(ctx, x, y, w, h, r) {
+        if (ctx.roundRect) {
+          ctx.beginPath();
+          ctx.roundRect(x, y, w, h, r);
+        } else {
+          ctx.beginPath();
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + w - r, y);
+          ctx.arcTo(x + w, y, x + w, y + r, r);
+          ctx.lineTo(x + w, y + h - r);
+          ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+          ctx.lineTo(x + r, y + h);
+          ctx.arcTo(x, y + h, x, y + h - r, r);
+          ctx.lineTo(x, y + r);
+          ctx.arcTo(x, y, x + r, y, r);
+          ctx.closePath();
+        }
+      }
+
+      // ─── GENERATE / DOWNLOAD (mock PPTX generation) ───────────────────────────────
+      function generateArch() {
+        if (!parsedData) {
+          toast("Upload a BOM first", "error");
+          return;
+        }
+
+        const btn = document.getElementById("gen-btn");
+        btn.textContent = "...Rendering";
+        btn.style.opacity = "0.7";
+
+        setTimeout(() => {
+          setStep(4);
+          document.getElementById("arch-status").textContent = "✓ LIVE";
+          document.getElementById("arch-status").style.background =
+            "rgba(74,222,128,0.08)";
+          document.getElementById("arch-status").style.color = "var(--green)";
+          document.getElementById("arch-status").style.borderColor =
+            "rgba(74,222,128,0.2)";
+          document.getElementById("download-card").style.display = "block";
+          drawArchitecture(parsedData);
+          btn.textContent = "⚡ Re-Generate";
+          btn.style.opacity = "1";
+          toast("✓ Architecture rendered", "success");
+          document
+            .getElementById("download-card")
+            .scrollIntoView({ behavior: "smooth" });
+        }, 600);
+      }
+
+      function downloadPPTX() {
+        // In production this calls generate_pptx. Here we trigger the Streamlit backend
+        toast("⚡ Connect to Streamlit backend to download PPTX", "success");
+        // Uncomment below when served via Flask/FastAPI wrapper:
+        // window.open('/api/generate', '_blank');
+      }
+
+      function resetAll() {
+        parsedData = null;
+        setStep(1);
+        document.getElementById("results-section").classList.remove("active");
+        document.getElementById("demo-panel").classList.remove("active");
+        document.getElementById("download-card").style.display = "none";
+        document.getElementById("stat-items").textContent = "—";
+        document.getElementById("stat-classified").textContent = "—";
+        document.getElementById("stat-cabinets").textContent = "—";
+        document.getElementById("results-tbody").innerHTML = "";
+        document.getElementById("cab-grid").innerHTML = "";
+        if (archAnimFrame) cancelAnimationFrame(archAnimFrame);
+        const canvas = document.getElementById("arch-canvas");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById("arch-status").textContent = "AWAITING BOM";
+        document.getElementById("arch-status").style.color = "";
+        document.getElementById("file-input").value = "";
+        toast("Reset complete", "success");
+      }
+    </script>
+  </body>
+</html>

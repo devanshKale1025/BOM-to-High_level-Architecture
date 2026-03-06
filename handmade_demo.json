@@ -1,0 +1,42 @@
+{
+  "rooms": [
+    {
+      "room_type": "OTHER",
+      "CNTR": {
+        "quantity": 1,
+        "redundant": true
+      },
+      "CHARM": {
+        "baseplates": 31
+      },
+      "FOPP": {
+        "quantity": 2
+      },
+      "ENC_COMP": [
+        { "part_name": "DeltaV Rack Workstation", "quantity": 1 },
+        { "part_name": "DeltaV Smart Switch", "quantity": 2 },
+        { "part_name": "19 inch Sliding Screen", "quantity": 1 },
+        { "part_name": "APC UPS 3kVA", "quantity": 1 },
+        { "part_name": "Hirschmann Industrial Switch", "quantity": 1 }
+      ]
+    },
+    {
+      "room_type": "OPERATOR",
+      "CNTR": {
+        "quantity": 0,
+        "redundant": false
+      },
+      "CHARM": {
+        "baseplates": 0
+      },
+      "FOPP": {
+        "quantity": 0
+      },
+      "ENC_COMP": [
+        { "part_name": "DeltaV Full-sized Tower Workstation", "quantity": 1 },
+        { "part_name": "24-inch Monitor", "quantity": 1 },
+        { "part_name": "Printer", "quantity": 1 }
+      ]
+    }
+  ]
+}

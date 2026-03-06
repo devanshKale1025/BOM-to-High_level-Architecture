@@ -1,0 +1,402 @@
+{
+  "CONTROLLER": {
+    "keywords": [
+      "controller",
+      "pk750",
+      "pk 750",
+      "pk controller",
+      "redundant pk",
+      "cpu module",
+      "process controller",
+      "primary controller",
+      "secondary controller",
+      "cntr assembly",
+      "deltav controller"
+    ],
+    "part_prefixes": [
+      "CNTR-"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "PK Controller",
+    "color_hex": "1A3A6B",
+    "text_color": "FFFFFF"
+  },
+  "CIOC": {
+    "keywords": [
+      "cioc",
+      "charm i/o card",
+      "io card 2",
+      "cioc carrier",
+      "cioc2",
+      "redundant cioc"
+    ],
+    "part_prefixes": [
+      "CHARM-DPN-015",
+      "CHARM-DPN-016"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "CIOC",
+    "color_hex": "2E5FA3",
+    "text_color": "FFFFFF"
+  },
+  "CHARM_AI": {
+    "keywords": [
+      "analog input charm",
+      "ai charm",
+      "4-20 ma",
+      "4-20ma",
+      "hart input",
+      "rtd charm",
+      "resistance temperature",
+      "analog input",
+      "ain charm",
+      "thermocouple charm",
+      "tc charm"
+    ],
+    "part_prefixes": [
+      "CHARM-DPN-011",
+      "CHARM-DPN-012"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "AI CHARM",
+    "color_hex": "C96A00",
+    "text_color": "FFFFFF"
+  },
+  "CHARM_AO": {
+    "keywords": [
+      "analog output charm",
+      "ao charm",
+      "analog output",
+      "aout charm",
+      "current output charm"
+    ],
+    "part_prefixes": [
+      "CHARM-DPN-013"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "AO CHARM",
+    "color_hex": "B85C00",
+    "text_color": "FFFFFF"
+  },
+  "CHARM_DI": {
+    "keywords": [
+      "discrete input charm",
+      "di charm",
+      "24vdc dry contact",
+      "dry contact charm",
+      "isolated input charm",
+      "discrete input",
+      "digital input charm"
+    ],
+    "part_prefixes": [
+      "CHARM-DPN-014",
+      "CHARM-DPN-024"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "DI CHARM",
+    "color_hex": "A85000",
+    "text_color": "FFFFFF"
+  },
+  "CHARM_DO": {
+    "keywords": [
+      "discrete output charm",
+      "do charm",
+      "relay output charm",
+      "high-side driver",
+      "24vdc output",
+      "discrete output",
+      "digital output charm"
+    ],
+    "part_prefixes": [
+      "CHARM-DPN-018",
+      "CHARM-DPN-023"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "DO CHARM",
+    "color_hex": "963D00",
+    "text_color": "FFFFFF"
+  },
+  "CHARM_BASE": {
+    "keywords": [
+      "charm baseplate",
+      "baseplate assembly",
+      "charm base",
+      "baseplate terminator",
+      "address plug",
+      "din-rail stop",
+      "channel identifier"
+    ],
+    "part_prefixes": [
+      "CHARM-DPN-017",
+      "CHARM-DPN-019",
+      "CHARM-DPN-020",
+      "CHARM-DPN-021",
+      "CHARM-DPN-022"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "CHARM Baseplate",
+    "color_hex": "8B4513",
+    "text_color": "FFFFFF"
+  },
+  "POWER": {
+    "keywords": [
+      "power supply",
+      "bulk power",
+      "psu",
+      "power module",
+      "redundancy module",
+      "24vdc",
+      "ups power"
+    ],
+    "part_prefixes": [
+      "PWR-"
+    ],
+    "cabinet_group": "IO_CABINET",
+    "display_label": "Power Supply",
+    "color_hex": "CC3300",
+    "text_color": "FFFFFF"
+  },
+  "UPS": {
+    "keywords": [
+      "ups",
+      "uninterruptible",
+      "apc",
+      "battery backup",
+      "power backup"
+    ],
+    "part_prefixes": [
+      "UPS-"
+    ],
+    "cabinet_group": "SERVER_CABINET",
+    "display_label": "UPS",
+    "color_hex": "FFD700",
+    "text_color": "333333"
+  },
+  "WORKSTATION": {
+    "keywords": [
+      "workstation",
+      "rack workstation",
+      "ews",
+      "tower workstation",
+      "industrial pc",
+      "operator workstation",
+      "proplus",
+      "professionalplus",
+      "professional plus"
+    ],
+    "part_prefixes": [
+      "WS-"
+    ],
+    "cabinet_group": "SERVER_CABINET",
+    "display_label": "EWS/PROPlus",
+    "color_hex": "2B5EA7",
+    "text_color": "FFFFFF"
+  },
+  "SWITCH": {
+    "keywords": [
+      "switch",
+      "network switch",
+      "smart switch",
+      "deltav switch",
+      "hirschmann",
+      "ethernet switch",
+      "modular switch",
+      "rack mount switch",
+      "pin switch"
+    ],
+    "part_prefixes": [
+      "SWT-"
+    ],
+    "cabinet_group": "SERVER_CABINET",
+    "display_label": "DCS Switch",
+    "color_hex": "2D6A2D",
+    "text_color": "FFFFFF"
+  },
+  "SCREEN": {
+    "keywords": [
+      "sliding screen",
+      "pullout screen",
+      "rack screen",
+      "19 inch screen",
+      "19\" screen",
+      "kvm",
+      "monitor rack"
+    ],
+    "part_prefixes": [
+      "SCR-"
+    ],
+    "cabinet_group": "SERVER_CABINET",
+    "display_label": "19\" Pullout Screen",
+    "color_hex": "555555",
+    "text_color": "FFFFFF"
+  },
+  "FOPP": {
+    "keywords": [
+      "fopp",
+      "fiber optic patch",
+      "patch panel",
+      "optical patch",
+      "liu",
+      "fopps",
+      "fiber patch",
+      "fo patch"
+    ],
+    "part_prefixes": [
+      "FOPP-"
+    ],
+    "cabinet_group": "FOPP_NODES",
+    "display_label": "FOPP",
+    "color_hex": "7B3F9E",
+    "text_color": "FFFFFF"
+  },
+  "MEDIA_CONV": {
+    "keywords": [
+      "media converter",
+      "single mode",
+      "converter assembly",
+      "fiber converter"
+    ],
+    "part_prefixes": [
+      "MC-"
+    ],
+    "cabinet_group": "SERVER_CABINET",
+    "display_label": "Media Converter",
+    "color_hex": "00A0B0",
+    "text_color": "FFFFFF"
+  },
+  "FIBER": {
+    "keywords": [
+      "fiber optic cable",
+      "fiber cable",
+      "optical cable",
+      "fo cable"
+    ],
+    "part_prefixes": [
+      "FBR-"
+    ],
+    "cabinet_group": "SERVER_CABINET",
+    "display_label": "Fiber Cable",
+    "color_hex": "6040A0",
+    "text_color": "FFFFFF"
+  },
+  "CABINET": {
+    "keywords": [
+      "cabinet",
+      "enclosure",
+      "panel",
+      "rack enclosure",
+      "marshalling cabinet",
+      "system cabinet"
+    ],
+    "part_prefixes": [
+      "CAB-"
+    ],
+    "cabinet_group": "META",
+    "display_label": "Cabinet",
+    "color_hex": "888888",
+    "text_color": "FFFFFF"
+  },
+  "SOFTWARE": {
+    "keywords": [
+      "software",
+      "license",
+      "softkey",
+      "dst",
+      "reporter",
+      "live operations",
+      "performance pack",
+      "premium",
+      "proplus license",
+      "professionalplus"
+    ],
+    "part_prefixes": [
+      "SW-",
+      "SWK-",
+      "GEN-",
+      "MON-DPN-00"
+    ],
+    "cabinet_group": "SOFTWARE",
+    "display_label": "Software",
+    "color_hex": "4A8C3F",
+    "text_color": "FFFFFF"
+  },
+  "FIREWALL": {
+    "keywords": [
+      "firewall",
+      "nextgen",
+      "security appliance",
+      "next gen",
+      "smart firewall"
+    ],
+    "part_prefixes": [
+      "FW-"
+    ],
+    "cabinet_group": "OPERATOR_DESK",
+    "display_label": "Firewall",
+    "color_hex": "C03030",
+    "text_color": "FFFFFF"
+  },
+  "MONITOR": {
+    "keywords": [
+      "led monitor",
+      "widescreen monitor",
+      "24 inch",
+      "24-inch",
+      "display monitor",
+      "lcd monitor"
+    ],
+    "part_prefixes": [
+      "MON-DPN-037"
+    ],
+    "cabinet_group": "OPERATOR_DESK",
+    "display_label": "Monitor",
+    "color_hex": "4488AA",
+    "text_color": "FFFFFF"
+  },
+  "CONSOLE": {
+    "keywords": [
+      "console",
+      "operator console",
+      "dual screen console",
+      "operator station console"
+    ],
+    "part_prefixes": [
+      "CON-"
+    ],
+    "cabinet_group": "OPERATOR_DESK",
+    "display_label": "Operator Console",
+    "color_hex": "5577AA",
+    "text_color": "FFFFFF"
+  },
+  "PRINTER": {
+    "keywords": [
+      "printer",
+      "laser printer",
+      "network printer"
+    ],
+    "part_prefixes": [
+      "PRT-"
+    ],
+    "cabinet_group": "OPERATOR_DESK",
+    "display_label": "Printer",
+    "color_hex": "888888",
+    "text_color": "FFFFFF"
+  },
+  "OPERATOR_WS": {
+    "keywords": [
+      "tower workstation",
+      "full-sized tower",
+      "full sized tower",
+      "operator workstation",
+      "deltav tower",
+      "full tower"
+    ],
+    "part_prefixes": [
+      "WS-DPN-036"
+    ],
+    "cabinet_group": "OPERATOR_DESK",
+    "display_label": "OWS",
+    "color_hex": "2B5EA7",
+    "text_color": "FFFFFF"
+  }
+}
