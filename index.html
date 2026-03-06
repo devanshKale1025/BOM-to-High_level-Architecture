@@ -1062,6 +1062,402 @@
         animation: fadeInUp 0.9s 0.5s ease both;
       }
 
+      /* ─── HOW IT WORKS JOURNEY ──────────────────────────────────────────────────── */
+      #journey {
+        padding: 8rem 0;
+        position: relative;
+        overflow: hidden;
+      }
+      #journey::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: 
+          radial-gradient(ellipse 80% 60% at 20% 50%, rgba(255,160,30,0.04) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 80% at 80% 50%, rgba(52,133,200,0.04) 0%, transparent 60%);
+        pointer-events: none;
+      }
+
+      .journey-header {
+        text-align: center;
+        margin-bottom: 5rem;
+      }
+      .journey-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--amber);
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+      .journey-eyebrow::before, .journey-eyebrow::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--amber));
+      }
+      .journey-eyebrow::after {
+        background: linear-gradient(90deg, var(--amber), transparent);
+      }
+      .journey-title {
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        color: var(--text);
+        line-height: 1;
+        margin-bottom: 1.2rem;
+      }
+      .journey-title .glow {
+        color: var(--amber);
+        text-shadow: 0 0 60px rgba(255,160,30,0.4);
+      }
+      .journey-sub {
+        font-size: 15px;
+        color: #5a6080;
+        max-width: 500px;
+        margin: 0 auto;
+        line-height: 1.8;
+      }
+
+      /* Scene cards in a staggered grid */
+      .journey-scenes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,0.04);
+        box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+        margin-bottom: 4rem;
+      }
+
+      .scene-card {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 16/9;
+        cursor: none;
+      }
+      .scene-card:first-child {
+        grid-column: 1 / -1;
+        aspect-ratio: 21/9;
+      }
+      .scene-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), filter 0.6s ease;
+        filter: brightness(0.7) saturate(1.2);
+      }
+      .scene-card:hover img {
+        transform: scale(1.04);
+        filter: brightness(0.9) saturate(1.4);
+      }
+      .scene-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(8,9,13,0.95) 0%, rgba(8,9,13,0.2) 50%, transparent 100%);
+        transition: opacity 0.4s;
+      }
+      .scene-card:hover .scene-overlay {
+        opacity: 0.7;
+      }
+      .scene-content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 2rem 2.5rem;
+        transform: translateY(8px);
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      .scene-card:hover .scene-content {
+        transform: translateY(0);
+      }
+      .scene-number {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--amber);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .scene-number::before {
+        content: '';
+        display: block;
+        width: 16px;
+        height: 1px;
+        background: var(--amber);
+      }
+      .scene-title {
+        font-family: var(--font-display);
+        font-size: clamp(1.1rem, 2vw, 1.6rem);
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+      }
+      .scene-desc {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: rgba(232, 234, 240, 0.6);
+        line-height: 1.6;
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity 0.3s 0.05s, transform 0.3s 0.05s;
+      }
+      .scene-card:hover .scene-desc {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ─── ANIMATED FLOW CONNECTOR ────────────────────────────────────────────────── */
+      .flow-connector {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        margin: 3rem 0;
+        position: relative;
+      }
+      .flow-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.8rem;
+        flex: 1;
+        position: relative;
+      }
+      .flow-step-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        position: relative;
+        z-index: 1;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .flow-step:hover .flow-step-icon {
+        transform: translateY(-4px);
+      }
+      .flow-step-icon.amber {
+        background: rgba(255,160,30,0.12);
+        border: 1px solid rgba(255,160,30,0.3);
+        box-shadow: 0 4px 20px rgba(255,160,30,0.15);
+      }
+      .flow-step-icon.amber:hover, .flow-step:hover .flow-step-icon.amber {
+        box-shadow: 0 8px 30px rgba(255,160,30,0.35);
+      }
+      .flow-step-icon.blue {
+        background: rgba(52,133,200,0.12);
+        border: 1px solid rgba(52,133,200,0.3);
+        box-shadow: 0 4px 20px rgba(52,133,200,0.15);
+      }
+      .flow-step-icon.green {
+        background: rgba(74,222,128,0.12);
+        border: 1px solid rgba(74,222,128,0.3);
+        box-shadow: 0 4px 20px rgba(74,222,128,0.15);
+      }
+      .flow-step-icon.violet {
+        background: rgba(167,139,250,0.12);
+        border: 1px solid rgba(167,139,250,0.3);
+        box-shadow: 0 4px 20px rgba(167,139,250,0.15);
+      }
+      .flow-step-label {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        text-align: center;
+      }
+      .flow-step-label span {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text);
+        letter-spacing: 0;
+        text-transform: none;
+        margin-bottom: 2px;
+      }
+      .flow-arrow {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        padding: 0 0.5rem;
+        margin-bottom: 2.2rem;
+      }
+      .flow-arrow-line {
+        width: 40px;
+        height: 1px;
+        background: linear-gradient(90deg, var(--border), rgba(255,160,30,0.3), var(--border));
+        position: relative;
+        overflow: hidden;
+      }
+      .flow-arrow-line::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, var(--amber), transparent);
+        animation: flowPulse 2.5s linear infinite;
+      }
+      @keyframes flowPulse {
+        to { left: 200%; }
+      }
+      .flow-arrow-head {
+        width: 0;
+        height: 0;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 6px solid rgba(255,160,30,0.4);
+      }
+
+      /* ─── 3D CANVAS SHOWCASE ─────────────────────────────────────────────────────── */
+      #journey-canvas-wrap {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255,160,30,0.12);
+        background: #080a10;
+        position: relative;
+        margin-bottom: 2rem;
+        box-shadow: 0 0 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02);
+      }
+      #journey-canvas-wrap .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.2rem;
+        background: rgba(255,255,255,0.02);
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+      }
+      #journey-3d {
+        width: 100%;
+        height: 420px;
+        display: block;
+      }
+      .canvas-caption {
+        position: absolute;
+        bottom: 2rem;
+        left: 2rem;
+        right: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        pointer-events: none;
+      }
+      .caption-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255,160,30,0.7);
+      }
+      .caption-title {
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: rgba(232,234,240,0.9);
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+      .caption-hint {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: rgba(255,255,255,0.25);
+        letter-spacing: 0.1em;
+      }
+
+      /* ─── VIDEO SECTION ──────────────────────────────────────────────────────────── */
+      #video-section {
+        padding: 6rem 0;
+        position: relative;
+      }
+      .video-wrap {
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid rgba(255,160,30,0.12);
+        box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+        position: relative;
+      }
+      .video-wrap video {
+        width: 100%;
+        display: block;
+      }
+      .video-badge {
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        border-radius: 6px;
+        background: rgba(8,9,13,0.8);
+        border: 1px solid rgba(255,160,30,0.3);
+        color: var(--amber);
+        backdrop-filter: blur(8px);
+      }
+      .video-play-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(8,9,13,0.3);
+        opacity: 1;
+        transition: opacity 0.3s;
+        cursor: none;
+      }
+      .video-play-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .play-btn {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(255,160,30,0.15);
+        border: 2px solid rgba(255,160,30,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        transition: all 0.3s;
+        backdrop-filter: blur(12px);
+      }
+      .play-btn:hover {
+        background: rgba(255,160,30,0.3);
+        transform: scale(1.1);
+        box-shadow: 0 0 60px rgba(255,160,30,0.4);
+      }
+
+      /* Scroll-triggered scene animation */
+      .scene-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.23,1,0.32,1);
+      }
+      .scene-card.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       /* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
       @media (max-width: 900px) {
         #app {
@@ -1079,6 +1475,22 @@
         }
         .hero-meta {
           align-items: flex-start;
+        }
+        .journey-scenes {
+          grid-template-columns: 1fr;
+        }
+        .scene-card:first-child {
+          aspect-ratio: 16/9;
+        }
+        .flow-connector {
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+        .flow-arrow {
+          display: none;
+        }
+        #journey-3d {
+          height: 280px;
         }
       }
     </style>
@@ -1107,6 +1519,7 @@
           DeltaV Gen
         </div>
         <div class="nav-links">
+          <a href="#journey">How It Works</a>
           <a href="#upload-section">Upload</a>
           <a href="#arch-section">Preview</a>
           <a href="#results-section">Results</a>
@@ -1147,8 +1560,13 @@
           >
             ↑ Upload BOM
           </button>
+          <a href="#journey" style="text-decoration:none;">
+            <button class="btn-ghost interactive">
+              ▶ See How It Works
+            </button>
+          </a>
           <button class="btn-ghost interactive" onclick="loadDemo()">
-            Load Demo JSON
+            Load Demo
           </button>
         </div>
         <div class="scroll-hint">Scroll to explore</div>
@@ -1178,6 +1596,172 @@
           <span class="marquee-item">SELF-LEARNING RULES</span>
         </div>
       </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <!-- HOW IT WORKS — VISUAL JOURNEY -->
+      <!-- ═══════════════════════════════════════════════════════════════════════════ -->
+      <section id="journey">
+
+        <div class="journey-header reveal">
+          <div class="journey-eyebrow">The Transformation</div>
+          <h2 class="journey-title">From <span class="glow">BOM</span> to Architecture</h2>
+          <p class="journey-sub">Watch your spreadsheet of components become a fully rendered DeltaV system diagram — automatically, in seconds.</p>
+        </div>
+
+        <!-- Flow steps -->
+        <div class="flow-connector reveal">
+          <div class="flow-step">
+            <div class="flow-step-icon amber">📄</div>
+            <div class="flow-step-label">
+              <span>BOM Upload</span>
+              .xlsx · .csv
+            </div>
+          </div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-icon blue">⚙️</div>
+            <div class="flow-step-label">
+              <span>Rule Engine</span>
+              100% Offline
+            </div>
+          </div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-icon violet">🧠</div>
+            <div class="flow-step-label">
+              <span>Classification</span>
+              4 Layers Deep
+            </div>
+          </div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-icon green">🏗️</div>
+            <div class="flow-step-label">
+              <span>Cabinet Layout</span>
+              Auto-Grouped
+            </div>
+          </div>
+          <div class="flow-arrow">
+            <div class="flow-arrow-line"></div>
+            <div class="flow-arrow-head"></div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-icon amber">📐</div>
+            <div class="flow-step-label">
+              <span>Architecture</span>
+              PPTX Export
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Three.js live visualization -->
+        <div id="journey-canvas-wrap" class="reveal">
+          <div class="topbar">
+            <div class="panel-dots">
+              <div class="dot dot-r"></div>
+              <div class="dot dot-y"></div>
+              <div class="dot dot-g"></div>
+            </div>
+            <div class="arch-label">LIVE 3D · DATA TRANSFORMATION ENGINE</div>
+            <div class="panel-badge">● RENDERING</div>
+          </div>
+          <canvas id="journey-3d"></canvas>
+          <div class="canvas-caption">
+            <div>
+              <div class="caption-label">Visualization</div>
+              <div class="caption-title">BOM → Architecture</div>
+            </div>
+            <div class="caption-hint">Interactive · Drag to rotate</div>
+          </div>
+        </div>
+
+        <!-- Scene image cards -->
+        <div class="journey-scenes">
+
+          <!-- Scene A: BOM materializes (frames 1-4 = big feature frame) -->
+          <div class="scene-card" id="sc0">
+            <img src="/mnt/user-data/uploads/sceneA_frame_01.png" alt="BOM materializes as holographic table" />
+            <div class="scene-overlay"></div>
+            <div class="scene-content">
+              <div class="scene-number">Scene 01 · 0–2s</div>
+              <div class="scene-title">The BOM Materializes</div>
+              <div class="scene-desc">Your spreadsheet appears as a glowing holographic table floating in space — every row a component waiting to be transformed.</div>
+            </div>
+          </div>
+
+          <!-- Scene A mid: data streams ignite -->
+          <div class="scene-card" id="sc1">
+            <img src="/mnt/user-data/uploads/sceneA_frame_04.png" alt="Data streams ignite" />
+            <div class="scene-overlay"></div>
+            <div class="scene-content">
+              <div class="scene-number">Scene 02 · 2–5s</div>
+              <div class="scene-title">Data Streams Ignite</div>
+              <div class="scene-desc">Blue and amber particle streams erupt from every row as the rule engine begins parsing and classifying components at machine speed.</div>
+            </div>
+          </div>
+
+          <!-- Scene A late: BOM shrinks into the distance -->
+          <div class="scene-card" id="sc2">
+            <img src="/mnt/user-data/uploads/sceneA_frame_07.png" alt="BOM streams into the system" />
+            <div class="scene-overlay"></div>
+            <div class="scene-content">
+              <div class="scene-number">Scene 03 · 5–7s</div>
+              <div class="scene-title">Into the Engine</div>
+              <div class="scene-desc">The BOM data accelerates down the pipeline, each particle representing a classified item routing to its designated cabinet or software layer.</div>
+            </div>
+          </div>
+
+          <!-- Scene B: server racks and dashboards emerge -->
+          <div class="scene-card" id="sc3">
+            <img src="/mnt/user-data/uploads/sceneB_frame_02.png" alt="Architecture emerges" />
+            <div class="scene-overlay"></div>
+            <div class="scene-content">
+              <div class="scene-number">Scene 04 · 7–10s</div>
+              <div class="scene-title">Architecture Emerges</div>
+              <div class="scene-desc">DeltaV server racks, CIOC nodes, CHARM baseplates, and operator workstations materialize — wired together by glowing fiber-optic data paths.</div>
+            </div>
+          </div>
+
+          <!-- Scene B: full system rendered -->
+          <div class="scene-card" id="sc4">
+            <img src="/mnt/user-data/uploads/sceneB_frame_04.png" alt="Full DeltaV system rendered" />
+            <div class="scene-overlay"></div>
+            <div class="scene-content">
+              <div class="scene-number">Scene 05 · Complete</div>
+              <div class="scene-title">Full System Online</div>
+              <div class="scene-desc">Your complete DeltaV architecture — controllers, I/O modules, network topology, and operator desks — ready to export as a single-slide PPTX.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Video showcase -->
+        <div id="video-section" class="reveal" style="padding: 0 0 4rem;">
+          <div class="section-head" style="margin-bottom: 2rem;">
+            <span class="section-num">▶</span>
+            <span class="section-title">Full Transformation Demo</span>
+            <div class="section-line"></div>
+          </div>
+          <div class="video-wrap">
+            <video id="demo-video" src="/mnt/user-data/uploads/emerson_animation_4k.mp4" loop muted playsinline preload="metadata"></video>
+            <div class="video-badge">⚡ 4K · EMERSON ANIMATION</div>
+            <div class="video-play-overlay" id="video-overlay" onclick="toggleVideo()">
+              <div class="play-btn" id="play-btn">▶</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+      <!-- END JOURNEY -->
 
       <!-- STATS -->
       <div id="stats" class="reveal">
@@ -1371,16 +1955,16 @@
         <div class="download-card" id="download-card" style="display: none">
           <div class="download-title">Architecture Ready</div>
           <div class="download-sub">
-            PPTX FILE · DELTAV SINGLE-SLIDE DIAGRAM
+            HIGH-RES EXPORT · 1920×1080 PNG · DELTAV SYSTEM DIAGRAM
           </div>
           <div class="download-meta">
             <div class="dl-meta-item">
               <div class="dl-meta-label">Format</div>
-              <div class="dl-meta-val">.pptx · Microsoft PowerPoint</div>
+              <div class="dl-meta-val">.png · 1920×1080</div>
             </div>
             <div class="dl-meta-item">
-              <div class="dl-meta-label">Slides</div>
-              <div class="dl-meta-val">1 · Architecture Only</div>
+              <div class="dl-meta-label">Contents</div>
+              <div class="dl-meta-val">Full Architecture Diagram</div>
             </div>
             <div class="dl-meta-item">
               <div class="dl-meta-label">Status</div>
@@ -1390,7 +1974,7 @@
             </div>
           </div>
           <button class="btn-download interactive" onclick="downloadPPTX()">
-            ↓ Download Architecture.pptx
+            ↓ Download Architecture.png
           </button>
         </div>
       </section>
@@ -2785,7 +3369,7 @@
         }
       }
 
-      // ─── GENERATE / DOWNLOAD (mock PPTX generation) ───────────────────────────────
+      // ─── GENERATE / DOWNLOAD ─────────────────────────────────────────────────────
       function generateArch() {
         if (!parsedData) {
           toast("Upload a BOM first", "error");
@@ -2796,30 +3380,90 @@
         btn.textContent = "...Rendering";
         btn.style.opacity = "0.7";
 
+        // First scroll to the architecture canvas so user watches it build
+        document.getElementById("arch-section").scrollIntoView({ behavior: "smooth" });
+
         setTimeout(() => {
           setStep(4);
           document.getElementById("arch-status").textContent = "✓ LIVE";
-          document.getElementById("arch-status").style.background =
-            "rgba(74,222,128,0.08)";
+          document.getElementById("arch-status").style.background = "rgba(74,222,128,0.08)";
           document.getElementById("arch-status").style.color = "var(--green)";
-          document.getElementById("arch-status").style.borderColor =
-            "rgba(74,222,128,0.2)";
+          document.getElementById("arch-status").style.borderColor = "rgba(74,222,128,0.2)";
           document.getElementById("download-card").style.display = "block";
           drawArchitecture(parsedData);
           btn.textContent = "⚡ Re-Generate";
           btn.style.opacity = "1";
-          toast("✓ Architecture rendered", "success");
-          document
-            .getElementById("download-card")
-            .scrollIntoView({ behavior: "smooth" });
-        }, 600);
+          toast("✓ Architecture rendered — scroll down to download", "success");
+          // Animate the canvas wrapper to draw attention
+          const wrap = document.querySelector(".arch-canvas-wrap");
+          wrap.style.transition = "box-shadow 0.6s ease";
+          wrap.style.boxShadow = "0 0 60px rgba(74,222,128,0.35), 0 0 0 1px rgba(74,222,128,0.2)";
+          setTimeout(() => {
+            wrap.style.boxShadow = "";
+          }, 2000);
+        }, 700);
       }
 
       function downloadPPTX() {
-        // In production this calls generate_pptx. Here we trigger the Streamlit backend
-        toast("⚡ Connect to Streamlit backend to download PPTX", "success");
-        // Uncomment below when served via Flask/FastAPI wrapper:
-        // window.open('/api/generate', '_blank');
+        if (!parsedData) {
+          toast("Generate architecture first", "error");
+          return;
+        }
+        // Export the live architecture canvas as a high-res PNG download
+        const srcCanvas = document.getElementById("arch-canvas");
+        // Create a full-res export canvas (1920×1080)
+        const exportCanvas = document.createElement("canvas");
+        exportCanvas.width = 1920;
+        exportCanvas.height = 1080;
+        const ectx = exportCanvas.getContext("2d");
+
+        // Dark background
+        ectx.fillStyle = "#08090d";
+        ectx.fillRect(0, 0, 1920, 1080);
+
+        // Title header bar
+        ectx.fillStyle = "rgba(13,15,22,0.95)";
+        ectx.fillRect(0, 0, 1920, 72);
+        ectx.strokeStyle = "rgba(255,160,30,0.3)";
+        ectx.lineWidth = 1;
+        ectx.beginPath(); ectx.moveTo(0, 72); ectx.lineTo(1920, 72); ectx.stroke();
+
+        // Title text
+        ectx.fillStyle = "#ffa01e";
+        ectx.font = 'bold 22px "Arial", sans-serif';
+        ectx.fillText("⚡ DeltaV Architecture — Auto-Generated from BOM", 40, 45);
+
+        // Timestamp right
+        ectx.fillStyle = "rgba(255,255,255,0.3)";
+        ectx.font = '14px "Courier New", monospace';
+        const ts = new Date().toLocaleString();
+        ectx.fillText(ts, 1920 - ectx.measureText(ts).width - 40, 45);
+
+        // Scale and draw the architecture canvas onto the export canvas
+        const scale = Math.min(1900 / srcCanvas.width, 990 / srcCanvas.height);
+        const dw = srcCanvas.width * scale;
+        const dh = srcCanvas.height * scale;
+        const dx = (1920 - dw) / 2;
+        const dy = 72 + (990 - dh) / 2 + 10;
+        ectx.drawImage(srcCanvas, dx, dy, dw, dh);
+
+        // Footer
+        ectx.fillStyle = "rgba(13,15,22,0.95)";
+        ectx.fillRect(0, 1062, 1920, 18);
+        ectx.fillStyle = "rgba(255,255,255,0.2)";
+        ectx.font = '11px "Courier New", monospace';
+        ectx.fillText("Emerson Automation Solutions · DeltaV Architecture Generator v2.0 · Emerson Pune", 40, 1075);
+
+        // Trigger download as PNG
+        exportCanvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "DeltaV_Architecture_" + Date.now() + ".png";
+          a.click();
+          URL.revokeObjectURL(url);
+          toast("✓ Architecture exported as PNG", "success");
+        }, "image/png");
       }
 
       function resetAll() {
@@ -2842,6 +3486,295 @@
         document.getElementById("file-input").value = "";
         toast("Reset complete", "success");
       }
+    </script>
+    <!-- ─── JOURNEY 3D VISUALIZATION ─────────────────────────────────────────── -->
+    <script>
+    (function() {
+      'use strict';
+
+      // ── Video toggle ──────────────────────────────────────────────────────────
+      window.toggleVideo = function() {
+        const v = document.getElementById('demo-video');
+        const overlay = document.getElementById('video-overlay');
+        const btn = document.getElementById('play-btn');
+        if (v.paused) {
+          v.play();
+          overlay.classList.add('hidden');
+          btn.textContent = '⏸';
+        } else {
+          v.pause();
+          overlay.classList.remove('hidden');
+          btn.textContent = '▶';
+        }
+      };
+      document.getElementById('demo-video').addEventListener('click', window.toggleVideo);
+
+      // ── Scroll reveal for scene cards ─────────────────────────────────────────
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+          if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('visible'), i * 120);
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      document.querySelectorAll('.scene-card').forEach(c => observer.observe(c));
+
+      // ── Three.js Journey Visualization ───────────────────────────────────────
+      const canvas3d = document.getElementById('journey-3d');
+      if (!canvas3d || typeof THREE === 'undefined') return;
+
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas3d, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(canvas3d.offsetWidth, 420);
+      renderer.setClearColor(0x080a10, 1);
+      renderer.shadowMap.enabled = true;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(55, canvas3d.offsetWidth / 420, 0.1, 200);
+      camera.position.set(0, 6, 18);
+      camera.lookAt(0, 0, 0);
+
+      // Fog
+      scene.fog = new THREE.FogExp2(0x080a10, 0.022);
+
+      // ── Lights ────────────────────────────────────────────────────────────────
+      scene.add(new THREE.AmbientLight(0x1a1f3a, 2));
+      const amber = new THREE.PointLight(0xffa01e, 4, 30);
+      amber.position.set(-6, 4, 2);
+      scene.add(amber);
+      const blue = new THREE.PointLight(0x3485c8, 3, 25);
+      blue.position.set(6, 3, -2);
+      scene.add(blue);
+      const green = new THREE.PointLight(0x4ade80, 2, 20);
+      green.position.set(0, 5, -8);
+      scene.add(green);
+
+      // ── Grid floor ────────────────────────────────────────────────────────────
+      const gridHelper = new THREE.GridHelper(60, 40, 0x1a2040, 0x0d1025);
+      gridHelper.position.y = -3;
+      scene.add(gridHelper);
+
+      // ── BOM table (left) ─────────────────────────────────────────────────────
+      const bomGroup = new THREE.Group();
+      scene.add(bomGroup);
+      bomGroup.position.set(-7, 0, 0);
+
+      // Table frame
+      const frameGeo = new THREE.BoxGeometry(4, 3, 0.08);
+      const frameMat = new THREE.MeshPhongMaterial({ color: 0x0d2040, emissive: 0x003366, emissiveIntensity: 0.4, transparent: true, opacity: 0.9 });
+      const frame = new THREE.Mesh(frameGeo, frameMat);
+      bomGroup.add(frame);
+
+      // Table border glow
+      const edgesGeo = new THREE.EdgesGeometry(frameGeo);
+      const edgesMat = new THREE.LineBasicMaterial({ color: 0x3485c8, linewidth: 2 });
+      const edges = new THREE.LineSegments(edgesGeo, edgesMat);
+      bomGroup.add(edges);
+
+      // Rows as thin planes inside table
+      for (let i = 0; i < 6; i++) {
+        const rowGeo = new THREE.PlaneGeometry(3.4, 0.3);
+        const rowMat = new THREE.MeshBasicMaterial({ 
+          color: i % 2 === 0 ? 0x0a1a30 : 0x081520, 
+          transparent: true, 
+          opacity: 0.8 
+        });
+        const row = new THREE.Mesh(rowGeo, rowMat);
+        row.position.set(0, 1 - i * 0.38, 0.05);
+        bomGroup.add(row);
+      }
+
+      // BOM label (glowing plane)
+      const labelGeo = new THREE.PlaneGeometry(1.8, 0.4);
+      const labelMat = new THREE.MeshBasicMaterial({ color: 0xffa01e, transparent: true, opacity: 0.9 });
+      const label = new THREE.Mesh(labelGeo, labelMat);
+      label.position.set(-0.8, 1.3, 0.06);
+      bomGroup.add(label);
+
+      // ── Architecture (right) — server racks ───────────────────────────────────
+      const archGroup = new THREE.Group();
+      scene.add(archGroup);
+      archGroup.position.set(6, 0, 0);
+
+      const rackPositions = [
+        [-1.5, 0, 0], [0, 0, 0], [1.5, 0, 0],
+        [-0.75, 0, -1.8], [0.75, 0, -1.8]
+      ];
+      const rackColors = [0x0a2540, 0x0d2a4a, 0x0a2540, 0x0d2a4a, 0x0a2540];
+      const rackGlows = [0x3485c8, 0xffa01e, 0x4ade80, 0x3485c8, 0xa78bfa];
+
+      rackPositions.forEach(([x, y, z], i) => {
+        const rackGeo = new THREE.BoxGeometry(1.0, 2.5, 0.6);
+        const rackMat = new THREE.MeshPhongMaterial({ color: rackColors[i], emissive: rackGlows[i], emissiveIntensity: 0.25 });
+        const rack = new THREE.Mesh(rackGeo, rackMat);
+        rack.position.set(x, y, z);
+        rack.castShadow = true;
+        archGroup.add(rack);
+
+        // LED strip
+        const ledGeo = new THREE.PlaneGeometry(0.8, 0.06);
+        const ledMat = new THREE.MeshBasicMaterial({ color: rackGlows[i], transparent: true, opacity: 0.9 });
+        for (let j = 0; j < 5; j++) {
+          const led = new THREE.Mesh(ledGeo, ledMat);
+          led.position.set(x, y - 0.8 + j * 0.4, z + 0.32);
+          archGroup.add(led);
+        }
+
+        // Rack edges
+        const rEdges = new THREE.LineSegments(
+          new THREE.EdgesGeometry(rackGeo),
+          new THREE.LineBasicMaterial({ color: rackGlows[i], linewidth: 1 })
+        );
+        rEdges.position.set(x, y, z);
+        archGroup.add(rEdges);
+      });
+
+      // ── Particle stream (BOM → Architecture) ─────────────────────────────────
+      const PARTICLES = 600;
+      const positions = new Float32Array(PARTICLES * 3);
+      const colors = new Float32Array(PARTICLES * 3);
+      const particleData = [];
+
+      for (let i = 0; i < PARTICLES; i++) {
+        const t = Math.random();
+        const lane = Math.floor(Math.random() * 5);
+        const spread = (Math.random() - 0.5) * 1.5;
+        particleData.push({ t, lane, spread, speed: 0.003 + Math.random() * 0.004, delay: Math.random() });
+        positions[i * 3] = -7 + t * 14;
+        positions[i * 3 + 1] = spread;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 2;
+
+        // color: amber to blue gradient based on position
+        const frac = t;
+        colors[i * 3]     = 1.0 - frac * 0.6;  // R
+        colors[i * 3 + 1] = frac * 0.5;          // G
+        colors[i * 3 + 2] = 0.1 + frac * 0.9;    // B
+      }
+
+      const streamGeo = new THREE.BufferGeometry();
+      streamGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      streamGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const streamMat = new THREE.PointsMaterial({
+        size: 0.12,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.85,
+        sizeAttenuation: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const particles = new THREE.Points(streamGeo, streamMat);
+      scene.add(particles);
+
+      // ── Connecting light beams ─────────────────────────────────────────────────
+      const beamCount = 5;
+      const beams = [];
+      for (let i = 0; i < beamCount; i++) {
+        const points = [
+          new THREE.Vector3(-5, (i - 2) * 0.5, 0),
+          new THREE.Vector3(0, Math.sin(i) * 0.5, 0),
+          new THREE.Vector3(5, (i - 2) * 0.4, 0)
+        ];
+        const curve = new THREE.CatmullRomCurve3(points);
+        const beamGeo = new THREE.TubeGeometry(curve, 20, 0.02, 4, false);
+        const beamMat = new THREE.MeshBasicMaterial({
+          color: i % 2 === 0 ? 0x3485c8 : 0xffa01e,
+          transparent: true,
+          opacity: 0.3,
+          blending: THREE.AdditiveBlending
+        });
+        const beam = new THREE.Mesh(beamGeo, beamMat);
+        scene.add(beam);
+        beams.push({ mesh: beam, mat: beamMat, phase: i * 1.2 });
+      }
+
+      // ── Orbit controls (manual drag) ──────────────────────────────────────────
+      let isDragging = false, prevX = 0, prevY = 0, rotX = 0, rotY = 0;
+      canvas3d.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; prevY = e.clientY; });
+      window.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        rotY += (e.clientX - prevX) * 0.005;
+        rotX += (e.clientY - prevY) * 0.005;
+        rotX = Math.max(-0.5, Math.min(0.5, rotX));
+        prevX = e.clientX; prevY = e.clientY;
+      });
+      window.addEventListener('mouseup', () => isDragging = false);
+
+      // ── Resize ────────────────────────────────────────────────────────────────
+      window.addEventListener('resize', () => {
+        const w = canvas3d.offsetWidth;
+        renderer.setSize(w, 420);
+        camera.aspect = w / 420;
+        camera.updateProjectionMatrix();
+      });
+
+      // ── Animation loop ────────────────────────────────────────────────────────
+      let frame3d = 0;
+      function animate3d() {
+        requestAnimationFrame(animate3d);
+        frame3d += 0.01;
+
+        // Auto-rotate + manual override
+        const targetY = rotY + frame3d * 0.12;
+        const pivot = new THREE.Vector3(0, 0, 0);
+        camera.position.x = Math.sin(targetY) * 18 * Math.cos(rotX);
+        camera.position.y = 6 + Math.sin(rotX) * 8;
+        camera.position.z = Math.cos(targetY) * 18 * Math.cos(rotX);
+        camera.lookAt(pivot);
+
+        // Update particles
+        const pos = streamGeo.attributes.position.array;
+        const col = streamGeo.attributes.color.array;
+        for (let i = 0; i < PARTICLES; i++) {
+          const pd = particleData[i];
+          pd.t += pd.speed;
+          if (pd.t > 1.05) pd.t = -0.05;
+          const t = pd.t;
+          // Curved path through S-shape
+          const x = -7 + t * 14;
+          const y = Math.sin(t * Math.PI) * 1.5 + pd.spread * 0.4;
+          const z = Math.sin(t * Math.PI * 2 + pd.phase || 0) * 0.8;
+          pos[i * 3]     = x;
+          pos[i * 3 + 1] = y;
+          pos[i * 3 + 2] = z;
+          // Fade in/out at edges
+          const alpha = Math.min(t * 8, 1) * Math.min((1-t) * 8, 1);
+          col[i * 3]     = (1.0 - t * 0.6) * alpha;
+          col[i * 3 + 1] = (t * 0.55) * alpha;
+          col[i * 3 + 2] = (0.1 + t * 0.9) * alpha;
+        }
+        streamGeo.attributes.position.needsUpdate = true;
+        streamGeo.attributes.color.needsUpdate = true;
+
+        // Pulse BOM glow
+        bomGroup.position.y = Math.sin(frame3d * 0.8) * 0.15;
+        bomGroup.rotation.y = Math.sin(frame3d * 0.3) * 0.08;
+        edges.material.color.setHSL(0.58, 1, 0.5 + 0.15 * Math.sin(frame3d * 2));
+
+        // Pulse arch racks
+        archGroup.rotation.y = Math.sin(frame3d * 0.4) * 0.05;
+        archGroup.children.forEach((c, i) => {
+          if (c.material && c.material.emissiveIntensity !== undefined) {
+            c.material.emissiveIntensity = 0.2 + 0.15 * Math.sin(frame3d * 1.5 + i * 0.8);
+          }
+        });
+
+        // Pulse beams
+        beams.forEach(b => {
+          b.mat.opacity = 0.15 + 0.25 * Math.abs(Math.sin(frame3d * 1.2 + b.phase));
+        });
+
+        // Pulse lights
+        amber.intensity = 3 + 2 * Math.sin(frame3d * 1.3);
+        blue.intensity  = 2 + 1.5 * Math.sin(frame3d * 1.7 + 1);
+
+        renderer.render(scene, camera);
+      }
+      animate3d();
+
+    })();
     </script>
   </body>
 </html>
