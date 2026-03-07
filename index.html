@@ -1988,12 +1988,12 @@
         <div class="download-card" id="download-card" style="display: none">
           <div class="download-title">Architecture Ready</div>
           <div class="download-sub">
-            HIGH-RES EXPORT · 1920×1080 PNG · DELTAV SYSTEM DIAGRAM
+            HIGH-RES EXPORT · PDF · DELTAV SYSTEM DIAGRAM
           </div>
           <div class="download-meta">
             <div class="dl-meta-item">
               <div class="dl-meta-label">Format</div>
-              <div class="dl-meta-val">.png · 1920×1080</div>
+              <div class="dl-meta-val">.pdf · A3 Landscape</div>
             </div>
             <div class="dl-meta-item">
               <div class="dl-meta-label">Contents</div>
@@ -2007,7 +2007,7 @@
             </div>
           </div>
           <button class="btn-download interactive" onclick="downloadPPTX()">
-            ↓ Download Architecture.png
+            ↓ Download as PDF
           </button>
         </div>
       </section>
@@ -2910,7 +2910,7 @@
         document.getElementById("download-card").style.display = "block";
 
         drawArchitecture(parsedData);
-        toast("✓ Architecture rendered", "success");
+        toast("✓ Architecture rendered — click Download as PDF", "success");
       }
 
       function drawArchitecture(data) {
@@ -3503,15 +3503,74 @@
           1075,
         );
 
-        // Trigger download as PNG
+        // Trigger download as PDF (using canvas → PDF via jsPDF-less approach)
         exportCanvas.toBlob((blob) => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "DeltaV_Architecture_" + Date.now() + ".png";
-          a.click();
-          URL.revokeObjectURL(url);
-          toast("✓ Architecture exported as PNG", "success");
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const imgData = e.target.result; // data:image/png;base64,...
+
+            // Build a minimal PDF in-memory (no external library needed)
+            // PDF contains one page at 1920x1080 px = 677.3 x 381.2 pt (72pt/inch, 96dpi)
+            const W_pt = 677.3, H_pt = 381.2;
+
+            // We embed the PNG as a PDF Image XObject
+            const base64 = imgData.split(',')[1];
+            const raw = atob(base64);
+            const pngBytes = new Uint8Array(raw.length);
+            for (let i = 0; i < raw.length; i++) pngBytes[i] = raw.charCodeAt(i);
+
+            // Build PDF manually
+            function str(s) { return s; }
+            const pdfParts = [];
+            const offsets = [];
+
+            function addObj(content) {
+              offsets.push(pdfParts.reduce((a,b) => a + b.length, 0));
+              pdfParts.push(content);
+            }
+
+            const hdr = '%PDF-1.4\n';
+            pdfParts.push(hdr);
+
+            // Obj 1: Catalog
+            addObj('1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+            // Obj 2: Pages
+            addObj('2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+            // Obj 3: Page
+            addObj('3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + W_pt.toFixed(2) + ' ' + H_pt.toFixed(2) + '] /Contents 4 0 R /Resources << /XObject << /Im1 5 0 R >> >> >>\nendobj\n');
+            // Obj 4: Content stream (draw image filling page)
+            const contentStr = 'q ' + W_pt.toFixed(2) + ' 0 0 ' + H_pt.toFixed(2) + ' 0 0 cm /Im1 Do Q';
+            addObj('4 0 obj\n<< /Length ' + contentStr.length + ' >>\nstream\n' + contentStr + '\nendstream\nendobj\n');
+            // Obj 5: PNG image XObject
+            const pngLen = pngBytes.length;
+            const imgObjHeader = '5 0 obj\n<< /Type /XObject /Subtype /Image /Width 1920 /Height 1080 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode /Length ' + pngLen + ' >>\nstream\n';
+            const imgObjFooter = '\nendstream\nendobj\n';
+
+            // We can't easily mix binary and text in one blob from strings, so use a different approach:
+            // Render to a fresh canvas and use html download workaround with data URI
+            // Actually — simplest cross-browser PDF: use print-to-PDF via a new window
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+              // Fallback: download as PNG if popup blocked
+              const a = document.createElement("a");
+              a.href = imgData;
+              a.download = "DeltaV_Architecture_" + Date.now() + ".png";
+              a.click();
+              toast("✓ Exported as PNG (PDF blocked by browser)", "success");
+              return;
+            }
+            printWin.document.write('<html><head><title>DeltaV Architecture</title><style>*{margin:0;padding:0;} @page{size:landscape;margin:0;} body{background:#000;} img{width:100vw;height:100vh;object-fit:contain;}</style></head><body><img src="' + imgData + '" /></body></html>');
+            printWin.document.close();
+            // Trigger print dialog (user can Save as PDF)
+            printWin.onload = function() {
+              setTimeout(function() {
+                printWin.focus();
+                printWin.print();
+              }, 400);
+            };
+            toast("\u2713 Print dialog opened — choose \'Save as PDF\'", "success");
+          };
+          reader.readAsDataURL(blob);
         }, "image/png");
       }
 
@@ -3890,100 +3949,135 @@
         draw();
       })();
 
-      // ── Scene 4: Server racks rising ───────────────────────────────────────────
+      // ── Scene 4: Server racks rising from grid ─────────────────────────────
       (function() {
         const c = makeCanvas('sc-wrap-3'); if (!c) return;
         const ctx = c.getContext('2d');
-        const RACKS=[
-          {x:0.18,w:0.10,color:'#3485c8',h:0,targetH:0.55,phase:0},
-          {x:0.31,w:0.10,color:'#ffa01e',h:0,targetH:0.68,phase:0.5},
-          {x:0.44,w:0.10,color:'#4ade80',h:0,targetH:0.48,phase:1.0},
-          {x:0.57,w:0.10,color:'#a78bfa',h:0,targetH:0.60,phase:1.5},
-          {x:0.70,w:0.10,color:'#3485c8',h:0,targetH:0.52,phase:2.0},
+        const RACKS = [
+          {x:0.15, w:0.11, color:'#3485c8', h:0, targetH:0.55, phase:0.0},
+          {x:0.29, w:0.11, color:'#ffa01e', h:0, targetH:0.68, phase:0.6},
+          {x:0.43, w:0.11, color:'#4ade80', h:0, targetH:0.48, phase:1.2},
+          {x:0.57, w:0.11, color:'#a78bfa', h:0, targetH:0.60, phase:1.8},
+          {x:0.71, w:0.11, color:'#3485c8', h:0, targetH:0.52, phase:2.4},
         ];
-        let t=0;
-        function draw(){
-          requestAnimationFrame(draw); t+=0.014;
-          const W=c.width, H=c.height;
-          ctx.fillStyle='rgba(6,8,16,0.22)'; ctx.fillRect(0,0,W,H);
+        let t = 0;
+        function parseHex(hex) {
+          const m = [hex.slice(1,3), hex.slice(3,5), hex.slice(5,7)];
+          return m.map(x => parseInt(x, 16));
+        }
+        function draw() {
+          requestAnimationFrame(draw); t += 0.014;
+          const W = c.width, H = c.height;
 
-          // Grid floor
-          const gY=H*0.82;
-          ctx.strokeStyle='rgba(52,133,200,0.15)'; ctx.lineWidth=1;
-          for(let x=0;x<W;x+=30){
-            const px=((x-t*8)%W+W)%W;
-            ctx.beginPath(); ctx.moveTo(px,gY);
-            ctx.lineTo(cx2(px,gY,W,H)); ctx.stroke();
+          // Dark fade trail
+          ctx.fillStyle = 'rgba(6,8,16,0.3)';
+          ctx.fillRect(0, 0, W, H);
+
+          const gY = H * 0.84;
+
+          // Animated perspective grid floor
+          ctx.strokeStyle = 'rgba(52,133,200,0.18)';
+          ctx.lineWidth = 0.8;
+          // Horizontal lines receding to vanishing point
+          for (let i = 0; i <= 8; i++) {
+            const progress = i / 8;
+            const y = gY + progress * (H - gY);
+            const alpha = progress * 0.5;
+            ctx.strokeStyle = 'rgba(52,133,200,' + alpha + ')';
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
           }
-          for(let y=0;y<H-gY;y+=20){
-            ctx.globalAlpha=0.3*(y/(H-gY));
-            ctx.beginPath(); ctx.moveTo(0,gY+y); ctx.lineTo(W,gY+y); ctx.stroke();
-            ctx.globalAlpha=1;
+          // Vertical lines converging to vanishing point
+          const vx = W / 2, vy = gY;
+          ctx.strokeStyle = 'rgba(52,133,200,0.12)';
+          for (let i = 0; i <= 10; i++) {
+            const bx = (i / 10) * W;
+            ctx.beginPath(); ctx.moveTo(bx, H); ctx.lineTo(vx, vy); ctx.stroke();
           }
 
-          RACKS.forEach(rack=>{
-            if(rack.h<rack.targetH) rack.h=Math.min(rack.targetH, rack.h+0.008);
-            const rx=rack.x*W, rw=rack.w*W, rh=rack.h*H;
-            const ry=gY-rh;
-            const pulse=0.5+0.3*Math.sin(t*1.5+rack.phase);
+          // Draw each rack
+          RACKS.forEach(function(rack) {
+            if (rack.h < rack.targetH) rack.h = Math.min(rack.targetH, rack.h + 0.007);
+            const rx = rack.x * W;
+            const rw = rack.w * W;
+            const rh = rack.h * H;
+            const ry = gY - rh;
+            const pulse = 0.5 + 0.35 * Math.sin(t * 1.5 + rack.phase);
+            const rgb = parseHex(rack.color);
+            const r = rgb[0], g = rgb[1], b = rgb[2];
 
-            // Shadow
-            ctx.fillStyle='rgba(0,0,0,0.4)';
-            ctx.beginPath(); ctx.ellipse(rx+rw/2,gY+4,rw*0.5,6,0,0,Math.PI*2); ctx.fill();
+            // Ground shadow ellipse
+            ctx.fillStyle = 'rgba(0,0,0,0.5)';
+            ctx.beginPath();
+            ctx.ellipse(rx + rw/2, gY + 3, rw * 0.55, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Top glow bloom
+            const bloom = ctx.createRadialGradient(rx+rw/2, ry, 0, rx+rw/2, ry, rw*2);
+            bloom.addColorStop(0, 'rgba('+r+','+g+','+b+','+(0.18+0.1*pulse)+')');
+            bloom.addColorStop(1, 'transparent');
+            ctx.fillStyle = bloom;
+            ctx.fillRect(rx - rw, ry - rw*1.5, rw*3, rw*2);
 
             // Cabinet body
-            ctx.fillStyle='rgba(10,16,34,0.95)';
-            roundRect2d(ctx,rx,ry,rw,rh,3); ctx.fill();
+            ctx.fillStyle = 'rgba(10,16,34,0.95)';
+            roundRect2d(ctx, rx, ry, rw, rh, 4);
+            ctx.fill();
 
-            // Color border glow
-            ctx.strokeStyle=rack.color;
-            ctx.lineWidth=1.5+pulse;
-            ctx.globalAlpha=0.4+0.3*pulse;
-            roundRect2d(ctx,rx,ry,rw,rh,3); ctx.stroke();
-            ctx.globalAlpha=1;
+            // Glowing border
+            ctx.strokeStyle = 'rgba('+r+','+g+','+b+','+(0.55+0.3*pulse)+')';
+            ctx.lineWidth = 1.5;
+            roundRect2d(ctx, rx, ry, rw, rh, 4);
+            ctx.stroke();
 
-            // Top cap
-            ctx.fillStyle=rack.color;
-            ctx.globalAlpha=0.8+0.2*pulse;
-            ctx.fillRect(rx,ry,rw,4);
-            ctx.globalAlpha=1;
+            // Top accent cap
+            ctx.fillStyle = 'rgba('+r+','+g+','+b+','+(0.85+0.15*pulse)+')';
+            ctx.fillRect(rx+1, ry, rw-2, 3);
 
-            // LED rows
-            const rows=Math.floor(rh/16)-1;
-            for(let r=0;r<rows;r++){
-              ctx.fillStyle=rack.color;
-              ctx.globalAlpha=(0.2+0.5*Math.abs(Math.sin(t*2+rack.phase+r*0.5)))*rack.h/rack.targetH;
-              ctx.fillRect(rx+4,ry+8+r*14,rw-8,8);
-              ctx.globalAlpha=1;
+            // LED rows inside cabinet
+            const numRows = Math.max(1, Math.floor(rh / 14) - 1);
+            for (let row = 0; row < numRows; row++) {
+              const ledAlpha = (0.15 + 0.55 * Math.abs(Math.sin(t*2 + rack.phase + row*0.6))) * (rack.h / rack.targetH);
+              ctx.fillStyle = 'rgba('+r+','+g+','+b+','+ledAlpha+')';
+              ctx.fillRect(rx+4, ry+6+row*12, rw-8, 7);
             }
 
-            // Glow on top
-            const tg=ctx.createRadialGradient(rx+rw/2,ry,0,rx+rw/2,ry,rw);
-            tg.addColorStop(0,rack.color.replace('#','rgba(')+','+((0.15+0.1*pulse)+')').replace('rgba(','rgba(').replace('#',''));
-            tg.addColorStop(1,'transparent');
-            try {
-              const [r2,g2,b2]=rack.color.match(/\w\w/g).map(x=>parseInt(x,16));
-              const tg2=ctx.createRadialGradient(rx+rw/2,ry,0,rx+rw/2,ry,rw*1.5);
-              tg2.addColorStop(0,`rgba(${r2},${g2},${b2},${0.12+0.08*pulse})`);
-              tg2.addColorStop(1,'transparent');
-              ctx.fillStyle=tg2; ctx.fillRect(rx-rw,ry-rw,rw*3,rw*2);
-            } catch(e){}
+            // Cabinet label
+            ctx.fillStyle = 'rgba('+r+','+g+','+b+',0.9)';
+            ctx.font = 'bold 8px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(['SRV','IO1','IO2','OPS','NET'][RACKS.indexOf(rack)], rx+rw/2, gY+14);
+            ctx.textAlign = 'left';
           });
 
           // Connection beams between racks
-          ctx.setLineDash([4,4]);
-          ctx.lineWidth=1;
-          for(let i=0;i<RACKS.length-1;i++){
-            const a=RACKS[i], b=RACKS[i+1];
-            const ax=a.x*W+a.w*W/2, ay=gY-a.h*H*0.5;
-            const bx=b.x*W+b.w*W/2, by=gY-b.h*H*0.5;
-            const alpha=Math.min(a.h/a.targetH,b.h/b.targetH);
-            ctx.strokeStyle=`rgba(52,133,200,${0.2+0.2*Math.abs(Math.sin(t+i))*alpha})`;
-            ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+          ctx.setLineDash([4, 5]);
+          ctx.lineWidth = 1;
+          for (let i = 0; i < RACKS.length - 1; i++) {
+            const a = RACKS[i], b = RACKS[i+1];
+            const ax2 = a.x*W + a.w*W/2;
+            const ay2 = gY - a.h*H * 0.5;
+            const bx2 = b.x*W + b.w*W/2;
+            const by2 = gY - b.h*H * 0.5;
+            const connAlpha = Math.min(a.h/a.targetH, b.h/b.targetH);
+            ctx.strokeStyle = 'rgba(52,133,200,' + (0.15 + 0.2*Math.abs(Math.sin(t+i))*connAlpha) + ')';
+            ctx.beginPath(); ctx.moveTo(ax2, ay2); ctx.lineTo(bx2, by2); ctx.stroke();
           }
           ctx.setLineDash([]);
+
+          // Animated data packet travelling between racks
+          const pIdx = Math.floor(t * 0.8) % (RACKS.length - 1);
+          const pProg = (t * 0.8) % 1;
+          const pa = RACKS[pIdx], pb = RACKS[pIdx+1];
+          if (pa && pb) {
+            const px3 = (pa.x + pa.w/2)*W + pProg*((pb.x + pb.w/2 - pa.x - pa.w/2)*W);
+            const py3 = gY - (pa.h*H*0.5 + pProg*(pb.h*H*0.5 - pa.h*H*0.5));
+            ctx.beginPath(); ctx.arc(px3, py3, 3, 0, Math.PI*2);
+            ctx.fillStyle = '#ffa01e'; ctx.fill();
+            // Trail
+            ctx.beginPath(); ctx.arc(px3, py3, 6, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(255,160,30,0.2)'; ctx.fill();
+          }
         }
-        function cx2(x,y,W,H){ return W/2+(x-W/2)*0.3+W*0.5*(1-0.3); }
         draw();
       })();
 
@@ -3991,105 +4085,142 @@
       (function() {
         const c = makeCanvas('sc-wrap-4'); if (!c) return;
         const ctx = c.getContext('2d');
-        const CITY=[
+        const CITY = [
           {col:0.15,row:0,color:'#3485c8'},{col:0.30,row:0,color:'#ffa01e'},{col:0.45,row:0,color:'#4ade80'},
           {col:0.60,row:0,color:'#a78bfa'},{col:0.75,row:0,color:'#3485c8'},
-          {col:0.22,row:1,color:'#ffa01e'},{col:0.37,row:1,color:'#4ade80'},{col:0.52,row:1,color:'#3485c8'},{col:0.67,row:1,color:'#ffa01e'},
+          {col:0.22,row:1,color:'#ffa01e'},{col:0.37,row:1,color:'#4ade80'},
+          {col:0.52,row:1,color:'#3485c8'},{col:0.67,row:1,color:'#ffa01e'},
           {col:0.30,row:2,color:'#4ade80'},{col:0.45,row:2,color:'#3485c8'},{col:0.60,row:2,color:'#a78bfa'},
           {col:0.45,row:3,color:'#4ade80'},
         ];
-        const heights=CITY.map(()=>0);
-        const targetH=CITY.map(()=>0.08+Math.random()*0.18);
-        const phases=CITY.map(()=>Math.random()*Math.PI*2);
-        // Floating panels
-        const panels=[{x:0.08,y:0.15},{x:0.82,y:0.12},{x:0.15,y:0.55}];
-        let t=0;
-        function draw(){
-          requestAnimationFrame(draw); t+=0.011;
-          const W=c.width, H=c.height;
-          ctx.fillStyle='rgba(5,7,14,0.2)'; ctx.fillRect(0,0,W,H);
+        const heights = CITY.map(function() { return 0; });
+        const targetH = CITY.map(function() { return 0.06 + Math.random() * 0.16; });
+        const phases  = CITY.map(function() { return Math.random() * Math.PI * 2; });
+        const panels  = [{x:0.04,y:0.12},{x:0.80,y:0.10},{x:0.10,y:0.52}];
+        let t = 0;
 
-          // Grid
-          ctx.strokeStyle='rgba(13,30,48,0.8)'; ctx.lineWidth=1;
-          for(let x=0;x<W;x+=35){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-          for(let y=0;y<H;y+=35){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+        function parseHex(hex) {
+          return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)];
+        }
 
-          const baseY=H*0.85;
-          const RW=W*0.055, GAP=W*0.005;
+        function draw() {
+          requestAnimationFrame(draw); t += 0.011;
+          const W = c.width, H = c.height;
 
-          CITY.forEach((rack,i)=>{
-            if(heights[i]<targetH[i]) heights[i]=Math.min(targetH[i],heights[i]+0.003);
-            const rx=rack.col*W - RW/2;
-            const rh=heights[i]*H;
-            const ry=baseY - rh - rack.row*H*0.18;
-            const pulse=0.5+0.3*Math.sin(t*1.4+phases[i]);
+          ctx.fillStyle = 'rgba(5,7,14,0.25)';
+          ctx.fillRect(0, 0, W, H);
+
+          // Background grid
+          ctx.strokeStyle = 'rgba(13,30,48,0.9)';
+          ctx.lineWidth = 0.7;
+          for (let x = 0; x < W; x += 32) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+          for (let y = 0; y < H; y += 32) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+          const baseY = H * 0.88;
+          const RW = W * 0.048;
+
+          // Grow and draw each rack
+          CITY.forEach(function(rack, i) {
+            if (heights[i] < targetH[i]) heights[i] = Math.min(targetH[i], heights[i] + 0.0025);
+            const rgb = parseHex(rack.color);
+            const r = rgb[0], g = rgb[1], b = rgb[2];
+            const rx = rack.col * W - RW/2;
+            const rh = heights[i] * H;
+            const ry = baseY - rh - rack.row * H * 0.20;
+            const pulse = 0.5 + 0.3 * Math.sin(t * 1.4 + phases[i]);
+
+            // Top glow
+            const bloom = ctx.createRadialGradient(rx+RW/2, ry, 0, rx+RW/2, ry, RW*2.5);
+            bloom.addColorStop(0, 'rgba('+r+','+g+','+b+','+(0.12+0.07*pulse)+')');
+            bloom.addColorStop(1, 'transparent');
+            ctx.fillStyle = bloom;
+            ctx.fillRect(rx - RW, ry - RW*2, RW*3, RW*2.5);
 
             // Body
-            ctx.fillStyle='rgba(10,16,34,0.92)';
-            roundRect2d(ctx,rx,ry,RW,rh,2); ctx.fill();
+            ctx.fillStyle = 'rgba(10,16,34,0.92)';
+            roundRect2d(ctx, rx, ry, RW, rh, 2);
+            ctx.fill();
 
-            // Glow border
-            const [r2,g2,b2]=rack.color.match(/\w\w/g).map(x=>parseInt(x,16));
-            ctx.strokeStyle=`rgba(${r2},${g2},${b2},${0.5+0.3*pulse})`;
-            ctx.lineWidth=1;
-            roundRect2d(ctx,rx,ry,RW,rh,2); ctx.stroke();
+            // Border
+            ctx.strokeStyle = 'rgba('+r+','+g+','+b+','+(0.5+0.3*pulse)+')';
+            ctx.lineWidth = 1;
+            roundRect2d(ctx, rx, ry, RW, rh, 2);
+            ctx.stroke();
 
-            // Top glow cap
-            ctx.fillStyle=`rgba(${r2},${g2},${b2},${0.6+0.3*pulse})`;
-            ctx.fillRect(rx,ry,RW,2);
+            // Top cap
+            ctx.fillStyle = 'rgba('+r+','+g+','+b+','+(0.7+0.25*pulse)+')';
+            ctx.fillRect(rx, ry, RW, 2);
 
             // LED blink
-            ctx.fillStyle=`rgba(${r2},${g2},${b2},${0.2+0.5*Math.abs(Math.sin(t*2+phases[i]))})`;
-            ctx.fillRect(rx+2,ry+4,RW-4,Math.max(2,rh*0.15));
-
-            // Top light bloom
-            const bloom=ctx.createRadialGradient(rx+RW/2,ry,0,rx+RW/2,ry,RW*2);
-            bloom.addColorStop(0,`rgba(${r2},${g2},${b2},${0.08+0.06*pulse})`);
-            bloom.addColorStop(1,'transparent');
-            ctx.fillStyle=bloom; ctx.fillRect(rx-RW,ry-RW*1.5,RW*3,RW*2);
+            const ledA = (0.2 + 0.55 * Math.abs(Math.sin(t*2 + phases[i]))) * (heights[i]/targetH[i]);
+            ctx.fillStyle = 'rgba('+r+','+g+','+b+','+ledA+')';
+            ctx.fillRect(rx+2, ry+4, RW-4, Math.max(2, rh*0.12));
           });
 
-          // Connecting network lines
-          ctx.setLineDash([3,5]); ctx.lineWidth=0.8;
-          for(let i=0;i<CITY.length;i++){
-            for(let j=i+1;j<CITY.length;j++){
-              if(Math.abs(CITY[i].row-CITY[j].row)>1) continue;
-              if(Math.abs(CITY[i].col-CITY[j].col)>0.2) continue;
-              const ax=CITY[i].col*W, ay=H*0.85-heights[i]*H-CITY[i].row*H*0.18;
-              const bx=CITY[j].col*W, by=H*0.85-heights[j]*H-CITY[j].row*H*0.18;
-              ctx.strokeStyle=`rgba(52,133,200,${0.08+0.12*Math.abs(Math.sin(t+i*0.3))})`;
-              ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+          // Connecting network lines between adjacent racks
+          ctx.setLineDash([3, 5]);
+          ctx.lineWidth = 0.7;
+          for (let i = 0; i < CITY.length; i++) {
+            for (let j = i+1; j < CITY.length; j++) {
+              if (Math.abs(CITY[i].row - CITY[j].row) > 1) continue;
+              if (Math.abs(CITY[i].col - CITY[j].col) > 0.22) continue;
+              const ax = CITY[i].col * W;
+              const ay = baseY - heights[i]*H - CITY[i].row * H * 0.20;
+              const bx = CITY[j].col * W;
+              const by2 = baseY - heights[j]*H - CITY[j].row * H * 0.20;
+              const netAlpha = 0.06 + 0.12 * Math.abs(Math.sin(t + i*0.3));
+              ctx.strokeStyle = 'rgba(52,133,200,' + netAlpha + ')';
+              ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by2); ctx.stroke();
             }
           }
           ctx.setLineDash([]);
 
-          // HUD panels floating
-          panels.forEach((p,i)=>{
-            const px=p.x*W, py=(p.y+Math.sin(t*0.6+i)*0.02)*H;
-            const pw=W*0.13, ph=H*0.12;
-            ctx.fillStyle='rgba(6,24,40,0.85)';
-            roundRect2d(ctx,px,py,pw,ph,4); ctx.fill();
-            ctx.strokeStyle='rgba(52,133,200,0.4)';
-            ctx.lineWidth=1;
-            roundRect2d(ctx,px,py,pw,ph,4); ctx.stroke();
-            ctx.fillStyle='rgba(74,222,128,0.8)'; ctx.font='7px monospace';
-            ctx.fillText(['SYSTEM OK','ONLINE','READY'][i],px+5,py+12);
-            ctx.fillStyle='rgba(74,222,128,0.4)';
-            ctx.fillRect(px+4,py+16,pw-8,3);
-            ctx.fillStyle='rgba(74,222,128,0.9)';
-            ctx.fillRect(px+4,py+16,(pw-8)*(0.7+0.3*Math.sin(t+i)),3);
+          // Floating HUD panels
+          panels.forEach(function(p, i) {
+            const px = p.x * W;
+            const py = (p.y + Math.sin(t * 0.55 + i) * 0.018) * H;
+            const pw = W * 0.14, ph = H * 0.11;
+            ctx.fillStyle = 'rgba(6,24,40,0.88)';
+            roundRect2d(ctx, px, py, pw, ph, 4); ctx.fill();
+            ctx.strokeStyle = 'rgba(52,133,200,0.45)';
+            ctx.lineWidth = 1;
+            roundRect2d(ctx, px, py, pw, ph, 4); ctx.stroke();
+            ctx.fillStyle = 'rgba(74,222,128,0.85)';
+            ctx.font = 'bold 7px monospace';
+            ctx.fillText(['SYSTEM OK','ALL ONLINE','READY'][i], px+5, py+11);
+            // Progress bar bg
+            ctx.fillStyle = 'rgba(255,255,255,0.07)';
+            ctx.fillRect(px+4, py+15, pw-8, 3);
+            // Progress bar fill
+            ctx.fillStyle = 'rgba(74,222,128,0.85)';
+            const barW = (pw-8) * (0.65 + 0.3 * Math.sin(t * 0.7 + i));
+            ctx.fillRect(px+4, py+15, barW, 3);
+            // Mini line chart
+            ctx.strokeStyle = 'rgba(52,133,200,0.6)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let k = 0; k < 8; k++) {
+              const kx = px + 4 + k*(pw-8)/7;
+              const ky = py + ph - 6 - Math.abs(Math.sin(t*0.8+i+k*0.7)) * (ph*0.35);
+              k === 0 ? ctx.moveTo(kx, ky) : ctx.lineTo(kx, ky);
+            }
+            ctx.stroke();
           });
 
-          // Green "complete" pulse at center top
-          const checkX=W/2, checkY=H*0.08;
-          const cpg=ctx.createRadialGradient(checkX,checkY,0,checkX,checkY,40);
-          cpg.addColorStop(0,`rgba(74,222,128,${0.2+0.15*Math.abs(Math.sin(t*0.8))})`);
-          cpg.addColorStop(1,'transparent');
-          ctx.fillStyle=cpg; ctx.fillRect(checkX-40,checkY-40,80,80);
-          ctx.fillStyle=`rgba(74,222,128,${0.8+0.2*Math.sin(t*0.8)})`;
-          ctx.font='bold 14px monospace'; ctx.textAlign='center';
-          ctx.fillText('✓ SYSTEM ONLINE', checkX, checkY);
-          ctx.textAlign='left';
+          // "System Online" banner at top center
+          const bx = W/2, by3 = H * 0.07;
+          const bgA = 0.5 + 0.2 * Math.abs(Math.sin(t * 0.8));
+          const bloom2 = ctx.createRadialGradient(bx, by3, 0, bx, by3, 60);
+          bloom2.addColorStop(0, 'rgba(74,222,128,' + bgA * 0.3 + ')');
+          bloom2.addColorStop(1, 'transparent');
+          ctx.fillStyle = bloom2;
+          ctx.fillRect(bx-60, by3-20, 120, 40);
+
+          ctx.fillStyle = 'rgba(74,222,128,' + (0.85 + 0.15*Math.sin(t*0.8)) + ')';
+          ctx.font = 'bold 11px monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText('✓ SYSTEM ONLINE', bx, by3 + 4);
+          ctx.textAlign = 'left';
         }
         draw();
       })();
